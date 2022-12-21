@@ -5,8 +5,51 @@ from fuzzywuzzy import process
 # Importing csv file
 data = pd.read_csv('Food and Calories - Sheet1.csv')
 
+# load string from text file
+with open('category.txt', 'r') as f:
+    categories = f.read()
+
+# split string into list with newline as separator
+categories = categories.splitlines()
+
+# Lower each category in list
+categories = [category.lower() for category in categories]
+
+desiredCategories =data['Food'].tolist()
+
+# lower each category in desiredCategories
+desiredCategories = [category.lower() for category in desiredCategories]
+
+commonCategories = []
+missing_categories = []
+# for every missing category in missing categories extractOne from data['food'] if score is greater than 90 add to common categories
+for category in categories:
+    if process.extractOne(category, desiredCategories)[1] >= 75:
+        commonCategories.append(category)
+    else:
+        missing_categories.append(category) # add category from missing categories
+
+# # for every missing category in missing categories extractOne from data['food']
+# i=1
+# for category in missing_categories:
+#     print(i,' ',category,' ', process.extractOne(category, data['Food']))
+#     i+=1
+
+# print common categories length
+print(len(commonCategories))
+
+# print missing categories length
+print(len(missing_categories))
+
+
+label = input('Enter the food name: ').lower()
+
+#check if label is in missing categories
+if process.extractOne(label, missing_categories)[1] >= 90 and label not in commonCategories:
+    print('Food not found')
+    exit()  # exit program
+
 # Matching label to closest match
-label = input('Enter the food name: ').capitalize()
 label = process.extractOne(label, data['Food'])[0]
 
 # Retriving data from csv
@@ -20,7 +63,6 @@ serving = int((int, re.findall(r'\d+', serving))[1][1])
 
 # Estimation Equation
 estimated_calories = calories * weight / serving
-print(f'Estimated calories: {estimated_calories}')
 
-# print estimated_calories with 2 decimal places
-print(f'Estimated calories: {estimated_calories:.2f}')
+# print estimated_calories with 1 decimal places
+print(f'Estimated calories: {estimated_calories:.1f}')
