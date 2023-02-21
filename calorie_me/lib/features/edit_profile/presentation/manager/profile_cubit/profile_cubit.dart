@@ -14,6 +14,7 @@ part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileStates> {
   ProfileCubit() : super(ProfileInitialState());
+
   static ProfileCubit get(context) => BlocProvider.of(context);
   final ImagePicker profileImagePicker = ImagePicker();
   File? profileImagePath;
@@ -27,9 +28,9 @@ class ProfileCubit extends Cubit<ProfileStates> {
     });
   }
 
-  String? profileImageUrl = '';
+  String? profileImageUrl;
 
-  void updateProfilePhoto() {
+  Future<void> updateProfilePhoto({required UserModel userModel}) async {
     emit(UploadProfileImageLoadingState());
     FirebaseStorage.instance
         .ref()
@@ -38,8 +39,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         profileImageUrl = value;
-        print(profileImageUrl);
-        // profileImagePath = null;
+        updateProfile(userModel: userModel);
         emit(UploadProfileImageSuccessState());
       }).catchError((error) {});
     }).catchError((error) {
@@ -47,30 +47,29 @@ class ProfileCubit extends Cubit<ProfileStates> {
     });
   }
 
-  void updateProfile({
-    String? username,
-    String? email,
-    String? password,
-    String? age,
-    String? weight,
-    String? height,
-    required UserModel userLogged,
-  }) {
+  Future<void> updateProfile({
+    required UserModel userModel,
+    UserModel? currentUser,
+  }) async {
     emit(UpdateUserDataLoadingState());
 
-    FirebaseAuth.instance.currentUser!.updateEmail(email!);
-    FirebaseAuth.instance.currentUser!.updatePassword(password!);
+    if (userModel.email != userModel.email) {
+      FirebaseAuth.instance.currentUser!.updateEmail(userModel.email);
+    }
+    if (userModel.password != userModel.password) {
+      FirebaseAuth.instance.currentUser!.updatePassword(userModel.password!);
+    }
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
-      'username': username,
-      'email': email,
-      'password': password,
-      'age': age,
-      'weight': weight,
-      'height': height,
-      'profilePhoto': profileImageUrl ?? userLogged.profilePhoto,
+      'username': userModel.userName,
+      'email': userModel.email,
+      'password': userModel.password,
+      'age': userModel.age,
+      'weight': userModel.weight,
+      'height': userModel.height,
+      'profilePhoto': profileImageUrl ?? currentUser!.profilePhoto,
     }).then((value) {
       emit(UpdateUserDataSuccessState());
     }).catchError((error) {

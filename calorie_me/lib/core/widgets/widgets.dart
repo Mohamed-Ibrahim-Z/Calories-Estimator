@@ -28,11 +28,15 @@ Widget splashScreen({required Widget nextScreen}) => AnimatedSplashScreen(
     );
 
 Widget defaultText(
-        {required String text, TextStyle? style, TextAlign? textAlign}) =>
+        {required String text,
+        TextStyle? style,
+        TextAlign? textAlign,
+        int maxLines = 1}) =>
     Text(
       text,
       textAlign: textAlign,
       style: style,
+      maxLines: maxLines,
     );
 
 Widget defaultIconButton(
@@ -46,7 +50,10 @@ Widget defaultIconButton(
           onPressed();
         });
 
-Widget defaultButton({required String text, required Function() onPressed}) =>
+Widget defaultButton({
+  required String text,
+  required Function() onPressed,
+}) =>
     MaterialButton(
       onPressed: onPressed,
       color: defaultColor,
@@ -76,6 +83,7 @@ Widget defaultTextFormField({
       decoration: InputDecoration(
         hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
             ),
         prefixIcon: prefixIcon,
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -106,31 +114,53 @@ Widget defaultTextFormField({
 Widget logoImage() => Image.asset(
       logoImagePath,
       width: 67.w,
+      color: defaultColor,
     );
 
 Future<bool?> defaultToast(
-        {required String msg,
-        Color textColor = Colors.white,
-        double fontSize = 16,
-        Color backgroundColor = defaultColor,
-        Toast toastLength = Toast.LENGTH_SHORT}) =>
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: toastLength,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: backgroundColor,
-        textColor: textColor,
-        fontSize: fontSize);
+    {required String msg,
+    Color textColor = Colors.white,
+    double fontSize = 16,
+    Color backgroundColor = defaultColor,
+    Toast toastLength = Toast.LENGTH_SHORT}) {
+  Fluttertoast.cancel();
+  return Fluttertoast.showToast(
+    msg: msg,
+    toastLength: toastLength,
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: backgroundColor,
+    textColor: textColor,
+    fontSize: fontSize,
 
-ListView textFormFieldsListView({required List<Widget> textFormFieldsList}) {
-  return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return textFormFieldsList[index];
-      },
-      separatorBuilder: (context, index) {
-        return SizedBox(height: 3.h);
-      },
-      itemCount: textFormFieldsList.length);
+  );
+}
+
+Widget textFormFieldsListView(
+    {required List<Widget> textFormFieldsList, required BuildContext context}) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
+    decoration: BoxDecoration(
+      color: Theme.of(context).cardColor,
+      borderRadius: BorderRadius.circular(15),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 8,
+          blurRadius: 7,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
+    child: ListView.separated(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return textFormFieldsList[index];
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 3.h);
+        },
+        itemCount: textFormFieldsList.length),
+  );
 }

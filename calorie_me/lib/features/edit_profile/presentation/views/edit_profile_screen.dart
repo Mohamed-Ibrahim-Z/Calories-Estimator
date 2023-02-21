@@ -1,4 +1,4 @@
-import 'package:calorie_me/features/profile/presentation/views/widgets/edit_profile_screen_body.dart';
+import 'package:calorie_me/features/edit_profile/presentation/views/widgets/edit_profile_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatelessWidget {

@@ -11,7 +11,7 @@ Widget editProfileBtn({required context}) => Center(
       child: TextButton.icon(
         onPressed: () {
           navigateTo(nextPage: const EditProfileScreen(), context: context,
-              pageTransitionType: PageTransitionType.fade);
+              pageTransitionType: PageTransitionType.bottomToTop);
         },
         icon: const Icon(
           Icons.edit,

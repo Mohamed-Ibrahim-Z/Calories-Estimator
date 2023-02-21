@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../constants.dart';
 
 ThemeData darkMode = ThemeData(
   scaffoldBackgroundColor: const Color(0xff242527),
   canvasColor: Colors.black,
+  cardColor: Colors.black,
   // default Color for Whole the App
   primarySwatch: defaultColor,
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.black,
   ),
   appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light,
+      ),
       backgroundColor: Color(0xff242527),
       elevation: 0,
       foregroundColor: Colors.white,
@@ -48,7 +52,10 @@ ThemeData lightMode = ThemeData(
   primarySwatch: defaultColor,
   scaffoldBackgroundColor: Colors.white,
   canvasColor: Colors.grey[300],
-  iconTheme: const IconThemeData(color: Colors.black),
+  cardColor: Colors.white.withOpacity(0.8),
+  iconTheme: const IconThemeData(
+    color: Colors.black,
+  ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 25,
@@ -72,6 +79,10 @@ ThemeData lightMode = ThemeData(
     ),
   ),
   appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       backgroundColor: Colors.white,
       elevation: 0,
       titleTextStyle: TextStyle(

@@ -61,6 +61,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       if (errorMessage.contains('network')) {
         errorMessage = 'No Internet Connection';
       }
+
       emit(RegisterErrorState());
     });
   }

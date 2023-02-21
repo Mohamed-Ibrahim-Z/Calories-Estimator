@@ -29,4 +29,19 @@ class BottomNavCubit extends Cubit<BottomNavStates> {
     currentIndex = index;
     emit(BottomNavChangeState());
   }
+
+  int numOfTabs = 0;
+
+  bool doubleTapped() {
+    if (currentIndex == 0) {
+      numOfTabs++;
+      if (numOfTabs == 2) {
+        numOfTabs = 0;
+        return true;
+      }
+    } else {
+      numOfTabs = 0;
+    }
+    return false;
+  }
 }

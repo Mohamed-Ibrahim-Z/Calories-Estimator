@@ -14,3 +14,15 @@ void navigateTo(
           ctx: context,
           duration: Duration(milliseconds: duration),
         ));
+
+void navigateToAndRemoveUntil(
+        {required nextPage,
+        required BuildContext context,
+        PageTransitionType transition = PageTransitionType.rightToLeft,
+        int duration = 500}) =>
+    Navigator.of(context).pushAndRemoveUntil(
+        PageTransition(
+            child: nextPage,
+            type: transition,
+            duration: Duration(milliseconds: duration)),
+        (route) => false);

@@ -2,8 +2,6 @@ import 'package:calorie_me/core/utils/theme.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/login/presentation/views/login_screen.dart';
-import 'package:calorie_me/features/profile/presentation/manager/profile_cubit/profile_cubit.dart';
-import 'package:calorie_me/features/profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:calorie_me/features/register/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:calorie_me/features/settings/data/presentation/manager/app_theme_cubit/app_theme_cubit.dart';
 import 'package:calorie_me/features/settings/data/presentation/manager/app_theme_cubit/app_theme_states.dart';
@@ -11,9 +9,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'features/home_layout/presentation/manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home_layout/presentation/manager/camera_cubit/camera_cubit.dart';
-import 'features/home_layout/presentation/views/home_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

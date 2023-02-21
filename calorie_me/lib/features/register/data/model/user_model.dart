@@ -14,20 +14,21 @@ class UserModel {
       required this.email,
       this.password,
       required this.weight,
-      required this.uId,
-      required this.profilePhoto,
+      this.uId,
+      this.profilePhoto,
       required this.height,
       this.age,
       this.gender});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     userName = json['username'];
-    uId = json['uId'];
-    email = json['email'];
     password = json['password'];
+    email = json['email'];
     age = json['age'];
     weight = json['weight'];
     height = json['height'];
+    uId = json['uId'];
+    gender = json['gender'];
     profilePhoto = json['profilePhoto'];
   }
 
@@ -42,4 +43,5 @@ class UserModel {
         'password': password,
         'profilePhoto': profilePhoto,
       };
+
 }

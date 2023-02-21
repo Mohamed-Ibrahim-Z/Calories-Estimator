@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 part 'login_states.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -39,6 +38,8 @@ class LoginCubit extends Cubit<LoginStates> {
       errorMessage = error.toString().split(']')[1];
       if (errorMessage.contains('network')) {
         errorMessage = 'No Internet Connection';
+      } else if (errorMessage.contains('password')) {
+        errorMessage = 'Wrong Password';
       }
       emit(LoginErrorState());
     });
@@ -59,6 +60,4 @@ class LoginCubit extends Cubit<LoginStates> {
       emit(GetUserDataErrorState());
     });
   }
-
-
 }
