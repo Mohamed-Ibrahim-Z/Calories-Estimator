@@ -1,0 +1,1 @@
+#food model class to be written here
