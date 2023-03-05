@@ -1,6 +1,5 @@
-import 'package:calorie_me/features/register/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:flutter/material.dart';
-
+import 'package:calorie_me/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 
 List<Widget> regTextFormFieldsList(
@@ -28,6 +27,7 @@ List<Widget> regTextFormFieldsList(
         prefixIcon: const Icon(Icons.email_outlined),
         controller: emailController,
         validationString: 'Email',
+        enableEditing: isGoogleAccount ? false : true,
       ),
       defaultTextFormField(
         hintText: 'Password',

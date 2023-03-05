@@ -1,8 +1,12 @@
+import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../../../../constants.dart';
 
 part 'login_states.dart';
 
@@ -32,6 +36,8 @@ class LoginCubit extends Cubit<LoginStates> {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
+      CacheHelper.saveData(key: 'token', value: value.user!.uid);
+      loggedUserID = value.user!.uid;
       emit(LoginSuccessState());
     }).catchError((error) {
       // split the error message to get the error message only
@@ -45,19 +51,87 @@ class LoginCubit extends Cubit<LoginStates> {
     });
   }
 
+  final googleSignIn = GoogleSignIn();
+  String googleUserId = '';
+
+  void loginWithGmail() async {
+
+    googleSignIn.signIn().then((user) {
+      // authenticate user
+      user!.authentication.then((googleKey) async {
+        emit(LoginLoadingState());
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleKey.accessToken,
+          idToken: googleKey.idToken,
+        );
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      }).then((value) {
+        googleUserId = user.id;
+        isGoogleAccount = true;
+        UserModel userModel = UserModel(
+          userName: user.displayName,
+          email: user.email,
+          password: 'password',
+          gender: 'Male',
+          uId: user.id,
+          age: '-',
+          profilePhoto: user.photoUrl,
+          weight: '-',
+          height: '-',
+        );
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.id)
+            .get()
+            .then((value) {
+          CacheHelper.saveData(key: 'token', value: user.id);
+          loggedUserID = user.id;
+          if (value.exists) {
+            emit(LoginSuccessState());
+          } else {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.id)
+                .set(userModel.toMap())
+                .then((value) {
+              emit(LoginSuccessState());
+            });
+          }
+        });
+      });
+    });
+  }
+
+  void signOutFromGmail() async {
+    await googleSignIn.signOut();
+    googleUserId = '';
+    isGoogleAccount = false;
+  }
+
   UserModel? userLogged;
 
   void getUserData() {
-    emit(GetUserDataLoadingState());
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      userLogged = UserModel.fromJson(value.data()!);
-      emit(GetUserDataSuccessState());
+    if (loggedUserID != null) {
+      emit(GetUserDataLoadingState());
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(loggedUserID)
+          .get()
+          .then((value) {
+        userLogged = UserModel.fromJson(value.data()!);
+        emit(GetUserDataSuccessState());
+      }).catchError((error) {
+        emit(GetUserDataErrorState());
+      });
+    }
+  }
+
+  void resetPassword({required String email}) {
+    emit(ResetPasswordLoadingState());
+    FirebaseAuth.instance.sendPasswordResetEmail(email: email).then((value) {
+      emit(ResetPasswordSuccessState());
     }).catchError((error) {
-      emit(GetUserDataErrorState());
+      emit(ResetPasswordErrorState());
     });
   }
 }

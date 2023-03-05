@@ -11,4 +11,7 @@ class LoginErrorState extends LoginStates {}
 class GetUserDataLoadingState extends LoginStates {}
 class GetUserDataSuccessState extends LoginStates {}
 class GetUserDataErrorState extends LoginStates {}
+class ResetPasswordLoadingState extends LoginStates {}
+class ResetPasswordSuccessState extends LoginStates {}
+class ResetPasswordErrorState extends LoginStates {}
 

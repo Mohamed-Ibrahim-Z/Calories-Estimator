@@ -10,6 +10,8 @@ Widget settingsContainer(
     required IconData icon,
     required Function() onTap}) {
   return InkWell(
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
     onTap: () {
       onTap();
     },
@@ -46,8 +48,6 @@ Widget settingsContainer(
     ),
   );
 }
-
-
 
 Widget appearanceContainer(AppThemeCubit cubit, context) {
   return Padding(

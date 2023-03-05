@@ -59,9 +59,11 @@ class ProfileCubit extends Cubit<ProfileStates> {
     if (userModel.password != userModel.password) {
       FirebaseAuth.instance.currentUser!.updatePassword(userModel.password!);
     }
+
+
     FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(currentUser!.uId)
         .update({
       'username': userModel.userName,
       'email': userModel.email,
@@ -69,7 +71,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
       'age': userModel.age,
       'weight': userModel.weight,
       'height': userModel.height,
-      'profilePhoto': profileImageUrl ?? currentUser!.profilePhoto,
+      'profilePhoto': profileImageUrl ?? currentUser.profilePhoto,
     }).then((value) {
       emit(UpdateUserDataSuccessState());
     }).catchError((error) {

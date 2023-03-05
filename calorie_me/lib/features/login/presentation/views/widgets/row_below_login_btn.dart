@@ -6,7 +6,7 @@ import '../../../../../core/utils/page_transition.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../register/presentation/views/register_screen.dart';
 
-Widget rowBelowLoginBtn(context) => Column(
+Widget rowBelowLoginBtn(context, cubit) => Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,18 +43,54 @@ Widget rowBelowLoginBtn(context) => Column(
                     .textTheme
                     .bodySmall!
                     .copyWith(color: const Color(0xff979797), fontSize: 16.sp)),
-            const Expanded(child: Divider(color: Color(0xff979797), thickness: 1)),
+            const Expanded(
+                child: Divider(color: Color(0xff979797), thickness: 1)),
           ],
         ),
         SizedBox(height: 2.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Image(image: AssetImage(googleImagePath)),
+            InkWell(
+                onTap: () {
+                  cubit.loginWithGmail();
+                },
+                child: Image(
+                  image: AssetImage(googleImagePath),
+                )),
             SizedBox(
-              width:5.w,
+              width: 5.w,
             ),
-            const Image(image: AssetImage(facebookImagePath)),
+            IconButton(
+              icon: Icon(Icons.phone, color: Colors.black),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Phone Number'),
+                        content: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter your phone number',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: defaultText(text: 'Cancel')),
+                          TextButton(
+                              onPressed: () {},
+                              child: defaultText(text: 'Send')),
+                        ],
+                      );
+                    });
+              },
+            ),
           ],
         ),
       ],

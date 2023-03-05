@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:rive/rive.dart';
 
 import '../../constants.dart';
 
@@ -31,7 +34,7 @@ Widget defaultText(
         {required String text,
         TextStyle? style,
         TextAlign? textAlign,
-        int maxLines = 1}) =>
+        int maxLines = 2}) =>
     Text(
       text,
       textAlign: textAlign,
@@ -45,7 +48,7 @@ Widget defaultIconButton(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         icon: Icon(icon),
-        color: Colors.white,
+        // color: Colors.white,
         onPressed: () {
           onPressed();
         });
@@ -63,7 +66,7 @@ Widget defaultButton({
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      child: defaultText(text: text, style: TextStyle(fontSize: 18.sp)),
+      child: defaultText(text: text, style: TextStyle(fontSize: 17.sp)),
     );
 
 Widget defaultTextFormField({
@@ -75,15 +78,20 @@ Widget defaultTextFormField({
   required TextInputType keyboardType,
   String? validationString,
   required BuildContext context,
+  Color borderColor = Colors.grey,
+  bool enableEditing = true,
 }) =>
     TextFormField(
       style: Theme.of(context).textTheme.bodySmall,
       obscureText: isPassword,
       keyboardType: keyboardType,
+      enabled: enableEditing,
       decoration: InputDecoration(
+        filled: true,
+        fillColor:
+            enableEditing ? Colors.transparent : Theme.of(context).disabledColor,
         hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w400,
             ),
         prefixIcon: prefixIcon,
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -95,11 +103,11 @@ Widget defaultTextFormField({
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: borderColor),
         ),
       ),
       controller: controller,
@@ -131,7 +139,6 @@ Future<bool?> defaultToast(
     backgroundColor: backgroundColor,
     textColor: textColor,
     fontSize: fontSize,
-
   );
 }
 
@@ -164,3 +171,29 @@ Widget textFormFieldsListView(
         itemCount: textFormFieldsList.length),
   );
 }
+
+Widget backgroundAnimationStack({required Widget screenBody}) => Stack(
+      children: [
+        const RiveAnimation.asset(
+          'assets/shapes.riv',
+        ),
+        Positioned.fill(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 15,
+              sigmaY: 15,
+            ),
+            child: Container(
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ),
+        ),
+        screenBody
+      ],
+    );
+
+Widget defaultCircularProgressIndicator() => const Center(
+      child: SpinKitFadingCircle(
+        color: defaultColor,
+      ),
+    );

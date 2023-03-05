@@ -1,6 +1,8 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
+import 'package:calorie_me/features/home_layout/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'widgets/meals_list_view.dart';
 
@@ -24,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    var cameraCubit = CameraCubit.get(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -40,18 +43,39 @@ class _HomeScreenState extends State<HomeScreen>
         SizedBox(
           height: 1.h,
         ),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.only(top: 1.5.h),
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: shaderMask(),
-          ),
+        BlocConsumer<CameraCubit, CameraStates>(
+          listener: (context, state) {
+            if (state is AddMealSuccessState) {
+              // cameraCubit.getMealsList();
+              defaultToast(
+                msg: 'Meal Added Successfully',
+              );
+            }
+          },
+          builder: (context, state) {
+            return Expanded(
+              child: Container(
+                  padding: EdgeInsets.only(top: 1.5.h),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: cameraCubit.mealsList.isNotEmpty
+                      ? shaderMask(
+                          cameraCubit: cameraCubit,
+                          state: state,
+                        )
+                      : Center(
+                          child: defaultText(
+                            text: 'No Meals Found',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        )),
+            );
+          },
         )
       ],
     );
