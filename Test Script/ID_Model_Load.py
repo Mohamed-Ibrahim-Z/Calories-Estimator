@@ -37,7 +37,7 @@ class IdModel:
         predict = model.predict(img.reshape(1,256,256,3))
         output = predict[0]
         output = cv2.resize(output, (card_w,card_h))
-        plt.imsave('output.jpg', output, cmap='gray')
+        plt.imsave('IDMaskoutput.jpg', output, cmap='gray')
         plt.imshow(output)
         white_pixels = np.count_nonzero(output == 1)
         return white_pixels
