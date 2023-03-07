@@ -16,9 +16,12 @@ foodModel= Food_Model_Load.FoodModel(Food_modelpath, imgpath)
 foodModel.predict()
 
 
-#Id card real dimensions in mm
-id_card_width = 85.6
-id_card_height = 53.98
+#Id card real dimensions in cm
+id_card_width = 8.56
+id_card_height = 5.398
 
 #Equation to calculate food volume
-#food_volume = (id_card_height * id_card_width) * Food_pixel_count / id_pixel_count
+
+Reference_Volume = id_card_height * id_card_width * 0.1
+Food_Size = (Food Pixel Size / Reference Pixel Size) * Reference Size
+Food_Weight = Food_Size³ * Density / Reference Volume
