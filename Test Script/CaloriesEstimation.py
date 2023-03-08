@@ -47,13 +47,14 @@ def getCalories(labels):
     # label = input('Enter the food name: ').lower()
 
     # how to get all labels values
+    
 
 
     #check if label is in missing categories
     for label in labels.keys():
         if process.extractOne(label, missing_categories)[1] >= 90 and label not in commonCategories:
             print(label,'not found')
-            exit()  # exit program
+            labels.pop(label)
 
     # Matching label to closest match
     # label = process.extractOne(label, data['Food'])[0]
