@@ -1,5 +1,6 @@
 class MealModel {
   String imageUrl = "", title = "", calories = "", dateTime = "";
+  List<String> ingredients = [];
 
   MealModel(
       {required this.imageUrl,

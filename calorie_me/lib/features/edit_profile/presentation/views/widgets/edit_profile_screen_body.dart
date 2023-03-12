@@ -19,7 +19,7 @@ class EditProfileScreenBody extends StatelessWidget {
     var profileCubit = ProfileCubit.get(context);
     var loginCubit = LoginCubit.get(context);
     var currentUser = loginCubit.userLogged;
-
+  GlobalKey key = GlobalKey();
     return Scaffold(
       appBar: AppBar(
         title: defaultText(text: 'Edit Profile'),

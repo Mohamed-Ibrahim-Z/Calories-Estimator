@@ -1,9 +1,9 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
-import 'package:calorie_me/features/home_layout/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'widgets/meals_list_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     var cameraCubit = CameraCubit.get(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen>
         BlocConsumer<CameraCubit, CameraStates>(
           listener: (context, state) {
             if (state is AddMealSuccessState) {
-              // cameraCubit.getMealsList();
               defaultToast(
                 msg: 'Meal Added Successfully',
               );

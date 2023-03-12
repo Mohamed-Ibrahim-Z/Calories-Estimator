@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import '../../../../../constants.dart';
 import '../../../../../core/utils/page_transition.dart';
 import '../../../../../core/widgets/widgets.dart';
@@ -13,85 +12,66 @@ Widget rowBelowLoginBtn(context, cubit) => Column(
           children: [
             defaultText(
                 text: 'Don\'t have an account? ',
-                style: Theme.of(context).textTheme.bodySmall),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 16.sp,
+                    )),
+            SizedBox(
+              width: 1.w,
+            ),
             TextButton(
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: const BorderSide(color: defaultColor),
+                  ),
+                ),
                 onPressed: () {
                   navigateTo(
                       nextPage: const RegisterScreen(), context: context);
                 },
                 child: defaultText(
-                  text: 'Register',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: defaultColor,
-                        fontSize: 18.sp,
-                      ),
-                )),
-          ],
-        ),
-        SizedBox(height: 3.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Expanded(
-                child: Divider(
-              color: Color(0xff979797),
-              thickness: 1,
-            )),
-            defaultText(
-                text: ' or continue with ',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: const Color(0xff979797), fontSize: 16.sp)),
-            const Expanded(
-                child: Divider(color: Color(0xff979797), thickness: 1)),
+                    text: 'Register',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 17.sp,
+                          color: defaultColor,
+                        ))),
           ],
         ),
         SizedBox(height: 2.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-                onTap: () {
-                  cubit.loginWithGmail();
-                },
-                child: Image(
-                  image: AssetImage(googleImagePath),
-                )),
-            SizedBox(
-              width: 5.w,
+        Container(
+          width: 80.w,
+          height: 7.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                defaultColor,
+                Colors.blue[900]!,
+              ],
             ),
-            IconButton(
-              icon: Icon(Icons.phone, color: Colors.black),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Phone Number'),
-                        content: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your phone number',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: defaultText(text: 'Cancel')),
-                          TextButton(
-                              onPressed: () {},
-                              child: defaultText(text: 'Send')),
-                        ],
-                      );
-                    });
-              },
+          ),
+          child: InkWell(
+            onTap: () {
+              cubit.loginWithGmail();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  googleImagePath,
+                  width: 5.w,
+                  height: 5.w,
+                ),
+                SizedBox(width: 2.w),
+                defaultText(
+                    text: 'Continue with Google',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                        )),
+              ],
             ),
-          ],
-        ),
+          ),
+        )
       ],
     );

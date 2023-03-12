@@ -1,7 +1,7 @@
-import 'package:calorie_me/features/home_layout/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'meals_item_shimmer.dart';
 import 'meals_list_view_item.dart';
 

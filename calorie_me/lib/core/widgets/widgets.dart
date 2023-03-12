@@ -34,20 +34,29 @@ Widget defaultText(
         {required String text,
         TextStyle? style,
         TextAlign? textAlign,
-        int maxLines = 2}) =>
+        int maxLines = 2,
+        Key? textKey}) =>
     Text(
       text,
+      key: textKey,
       textAlign: textAlign,
       style: style,
       maxLines: maxLines,
     );
 
 Widget defaultIconButton(
-        {required IconData icon, required Function() onPressed}) =>
+        {required IconData icon,
+        required Function() onPressed,
+        Color? color,
+        double? iconSize}) =>
     IconButton(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        icon: Icon(icon),
+        icon: Icon(
+          icon,
+          color: color,
+          size: iconSize,
+        ),
         // color: Colors.white,
         onPressed: () {
           onPressed();
@@ -88,8 +97,9 @@ Widget defaultTextFormField({
       enabled: enableEditing,
       decoration: InputDecoration(
         filled: true,
-        fillColor:
-            enableEditing ? Colors.transparent : Theme.of(context).disabledColor,
+        fillColor: enableEditing
+            ? Colors.transparent
+            : Theme.of(context).disabledColor,
         hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.w400,
             ),

@@ -4,7 +4,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../constants.dart';
 import '../../../../../core/widgets/widgets.dart';
-import '../../manager/camera_cubit/camera_cubit.dart';
+import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 
 Future chooseImageDialog({required context, required CameraCubit cubit}) =>
     showModal(
@@ -42,7 +42,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
                         )),
                 onTap: () {
                   Navigator.pop(context);
-                  cubit.pickImageFromCamera();
+                  cubit.pickImageFromCamera(context);
                 },
               ),
               SizedBox(height: 1.h),

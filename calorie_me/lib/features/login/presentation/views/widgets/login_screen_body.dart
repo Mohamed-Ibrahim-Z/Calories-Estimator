@@ -10,7 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/widgets/widgets.dart';
-import '../../../../home_layout/presentation/manager/camera_cubit/camera_cubit.dart';
+import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import '../../manager/login_cubit/login_cubit.dart';
 
 class LoginScreenBody extends StatelessWidget {
@@ -41,10 +41,12 @@ class LoginScreenBody extends StatelessWidget {
             padding:
                 EdgeInsets.only(top: 10.h, left: 5.w, right: 5.w, bottom: 5.h),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 logoImage(),
-                SizedBox(height: 6.h),
+                SizedBox(
+                  height: 5.h,
+                ),
                 textFormFieldsListView(
                     context: context,
                     textFormFieldsList: loginTextFormFieldsList(
@@ -52,9 +54,18 @@ class LoginScreenBody extends StatelessWidget {
                         emailController: emailController,
                         passwordController: passwordController,
                         cubit: cubit)),
+                SizedBox(
+                  height: 1.h,
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 3.w),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(color: Colors.black)),
+                      ),
                       onPressed: () {
                         navigateTo(
                             nextPage: const ResetPasswordScreen(),
@@ -67,7 +78,9 @@ class LoginScreenBody extends StatelessWidget {
                                     fontSize: 17.sp,
                                   ))),
                 ),
-                SizedBox(height: 6.h),
+                SizedBox(
+                  height: 3.h,
+                ),
                 if (state is LoginLoadingState)
                   defaultCircularProgressIndicator(),
                 if (state is! LoginLoadingState)
@@ -78,7 +91,9 @@ class LoginScreenBody extends StatelessWidget {
                             email: emailController.text,
                             password: passwordController.text);
                       }),
-                SizedBox(height: 3.h),
+                SizedBox(
+                  height: 1.h,
+                ),
                 rowBelowLoginBtn(context, cubit),
               ],
             ),

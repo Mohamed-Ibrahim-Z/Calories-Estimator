@@ -1,16 +1,15 @@
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:calorie_me/constants.dart';
-import 'package:calorie_me/features/register/data/model/user_model.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 
-import '../../../data/models/meal_model.dart';
-
+import '../../../../home_layout/data/models/meal_model.dart';
 part 'camera_state.dart';
 
 class CameraCubit extends Cubit<CameraStates> {
@@ -21,15 +20,19 @@ class CameraCubit extends Cubit<CameraStates> {
   dynamic imagePath;
 
   String? cameraImageUrl;
-
-  void pickImageFromCamera() {
-    cameraImagePicker.pickImage(source: ImageSource.camera).then((value) {
+  void pickImageFromCamera(context) {
+    cameraImagePicker.pickImage(source: ImageSource.camera,).then((value) {
       if (value == null) return;
       imagePath = File(value.path);
+
       emit(CameraImagePickedSuccessState());
     });
   }
 
+  void pickPhotoFromCamera(XFile photo) {
+    imagePath = File(photo.path);
+    emit(CameraImagePickedSuccessState());
+  }
   final ImagePicker galleryImagePicker = ImagePicker();
   String? galleryImageUrl;
 
@@ -37,14 +40,9 @@ class CameraCubit extends Cubit<CameraStates> {
     galleryImagePicker.pickImage(source: ImageSource.gallery).then((value) {
       if (value == null) return;
       imagePath = File(value.path);
+      // splitImage();
       emit(GalleryImagePickedSuccessState());
     });
-  }
-
-  void clearImagePaths() {
-    imageUrl = null;
-    imagePath = null;
-    emit(ClearImagePathsSuccessState());
   }
 
   String? imageUrl;
@@ -74,13 +72,14 @@ class CameraCubit extends Cubit<CameraStates> {
       imageUrl: imageUrl!,
       dateTime: DateTime.now().toString(),
     );
+
+    // predictImage();
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
         .collection('meals')
         .add(mealModel.toMap())
         .then((value) {
-      clearImagePaths();
       emit(AddMealSuccessState());
     }).catchError((error) {
       emit(AddMealErrorState());
@@ -99,11 +98,54 @@ class CameraCubit extends Cubit<CameraStates> {
           .orderBy('dateTime', descending: true)
           .snapshots()
           .listen((event) {
-        for (var element in event.docChanges) {
-          mealsList.insert(0, MealModel.fromJson(element.doc.data()!));
+        mealsList.clear();
+        for (var element in event.docs) {
+          mealsList.add(MealModel.fromJson(element.data()));
         }
         emit(GetMealsSuccessState());
       });
     }
+  }
+
+  // void predictImage() {
+  //   emit(PredictImageLoadingState());
+  //   DioHelper.postData(endPoint: '/predict', data: {
+  //     'image': imageInBytes,
+  //   }).then((value) {
+  //     print(value.data);
+  //     emit(PredictImageSuccessState());
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //     emit(PredictImageErrorState());
+  //   });
+  // }
+
+  Image? halfImage;
+  Image? halfImage2;
+  Uint8List? part1OfImage;
+  Uint8List? part2OfImage;
+
+  void splitImage() {
+    Image image = decodeImage(imagePath.readAsBytesSync())!;
+
+    halfImage = copyCrop(image,
+        x: 0, y: 0, width: image.width, height: 3 * image.height ~/ 4);
+    halfImage2 = copyCrop(image,
+        x: 0,
+        y: 3 * image.height ~/ 4,
+        width: image.width,
+        height: image.height);
+
+    part1OfImage = encodeJpg(halfImage!);
+    part2OfImage = encodeJpg(halfImage2!);
+  }
+
+  bool flash = false;
+  material.IconData flashIcon = material.Icons.flash_off;
+  void toggleFlash(CameraController cameraController) {
+    flash = !flash;
+    cameraController.setFlashMode(flash ? FlashMode.torch : FlashMode.off);
+    flashIcon = flash ? material.Icons.flash_on : material.Icons.flash_off;
+    emit(ToggleFlashState());
   }
 }

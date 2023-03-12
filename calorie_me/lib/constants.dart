@@ -11,3 +11,5 @@ String defaultFemaleProfilePhoto =
     'https://www.nicepng.com/png/full/249-2491703_contact-profile-user-default-female-suit-comments-default.png';
 bool isGoogleAccount = false;
 dynamic loggedUserID = '';
+const baseUrl = '';
+// const baseUrl = 'http://127.0.0.1:5000/api';
