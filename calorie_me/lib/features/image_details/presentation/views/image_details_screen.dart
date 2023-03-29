@@ -21,7 +21,7 @@ class ImageDetailsScreen extends StatelessWidget {
               screenBody: CustomScrollView(
                 slivers: [
                   SliverAppBar(
-                    expandedHeight: 55.h,
+                    expandedHeight: cubit.cameraHeight,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Image.file(

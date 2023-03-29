@@ -32,10 +32,8 @@ class CameraScreenBody extends StatelessWidget {
           children: [
             // camera preview
             Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              height: cubit.cameraHeight,
+              width: 100.w,
               child: CameraPreview(
                 cameraController,
               ),
@@ -58,7 +56,7 @@ class CameraScreenBody extends StatelessWidget {
             ),
             // black background
             Positioned(
-              top: 71.h,
+              top: cubit.cameraHeight,
               left: 0,
               child: Container(
                 height: 60.h,
@@ -121,7 +119,7 @@ class CameraScreenBody extends StatelessWidget {
             ),
             // Photo text
             Positioned(
-              top: 73.h,
+              top: 74.h,
               left: 41.w,
               child: defaultText(
                   text: "Photo",
@@ -130,14 +128,15 @@ class CameraScreenBody extends StatelessWidget {
                       fontSize: 19.sp,
                       fontWeight: FontWeight.bold)),
             ),
+
             // Horizontal line
             Positioned(
-              top: 54.h,
+              top: (3 / 4) * cubit.cameraHeight,
               left: 0,
+              right: 0,
               child: Container(
-                height: 1.h,
-                width: 100.w,
-                color: Colors.grey,
+                height: .5.h,
+                color: Colors.red,
               ),
             ),
             // Dish Zone
@@ -153,7 +152,7 @@ class CameraScreenBody extends StatelessWidget {
                 showArrow: true,
                 scaleAnimationCurve: Curves.easeInOut,
                 child: SizedBox(
-                  height: 55.h,
+                  height: 54.5.h,
                   width: 100.h,
                 ),
               ),

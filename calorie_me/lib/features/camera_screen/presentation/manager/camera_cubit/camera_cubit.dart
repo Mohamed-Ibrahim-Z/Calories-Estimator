@@ -8,8 +8,10 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../home_layout/data/models/meal_model.dart';
+
 part 'camera_state.dart';
 
 class CameraCubit extends Cubit<CameraStates> {
@@ -20,8 +22,13 @@ class CameraCubit extends Cubit<CameraStates> {
   dynamic imagePath;
 
   String? cameraImageUrl;
+
   void pickImageFromCamera(context) {
-    cameraImagePicker.pickImage(source: ImageSource.camera,).then((value) {
+    cameraImagePicker
+        .pickImage(
+      source: ImageSource.camera,
+    )
+        .then((value) {
       if (value == null) return;
       imagePath = File(value.path);
 
@@ -31,8 +38,10 @@ class CameraCubit extends Cubit<CameraStates> {
 
   void pickPhotoFromCamera(XFile photo) {
     imagePath = File(photo.path);
+    splitImage();
     emit(CameraImagePickedSuccessState());
   }
+
   final ImagePicker galleryImagePicker = ImagePicker();
   String? galleryImageUrl;
 
@@ -40,7 +49,7 @@ class CameraCubit extends Cubit<CameraStates> {
     galleryImagePicker.pickImage(source: ImageSource.gallery).then((value) {
       if (value == null) return;
       imagePath = File(value.path);
-      // splitImage();
+      splitImage();
       emit(GalleryImagePickedSuccessState());
     });
   }
@@ -49,6 +58,7 @@ class CameraCubit extends Cubit<CameraStates> {
 
   void uploadImage() {
     emit(UploadImageLoadingState());
+
     FirebaseStorage.instance
         .ref()
         .child('meals/${Uri.file(imagePath!.path).pathSegments.last}')
@@ -120,15 +130,25 @@ class CameraCubit extends Cubit<CameraStates> {
   //   });
   // }
 
-  Image? halfImage;
+  Image? halfImage1;
   Image? halfImage2;
-  Uint8List? part1OfImage;
-  Uint8List? part2OfImage;
+  Uint8List? foodImageBytes;
+  Uint8List? creditCardImageBytes;
+
+  // double linePosition = 54.h;
+  double cameraHeight = 72.h;
+
+  // void changeLinePosition(double position) {
+  //   if (linePosition + position < 70.h && linePosition + position > 6.h) {
+  //     linePosition += position;
+  //     emit(ChangeLinePositionState());
+  //   }
+  // }
 
   void splitImage() {
     Image image = decodeImage(imagePath.readAsBytesSync())!;
 
-    halfImage = copyCrop(image,
+    halfImage1 = copyCrop(image,
         x: 0, y: 0, width: image.width, height: 3 * image.height ~/ 4);
     halfImage2 = copyCrop(image,
         x: 0,
@@ -136,12 +156,35 @@ class CameraCubit extends Cubit<CameraStates> {
         width: image.width,
         height: image.height);
 
-    part1OfImage = encodeJpg(halfImage!);
-    part2OfImage = encodeJpg(halfImage2!);
+    foodImageBytes = encodeJpg(halfImage1!);
+    creditCardImageBytes = encodeJpg(halfImage2!);
+
+    FirebaseStorage.instance
+        .ref()
+        .child('meals/${DateTime.now()} FoodImage.jpg')
+        .putData(foodImageBytes!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        FirebaseStorage.instance
+            .ref()
+            .child('meals/${DateTime.now()} CreditCardImage.jpg')
+            .putData(creditCardImageBytes!)
+            .then((value) {
+          value.ref.getDownloadURL().then((value) {
+            // call api to predict
+
+            emit(UploadImageSuccessState());
+          }).catchError((error) {});
+        });
+      }).catchError((error) {});
+    }).catchError((error) {
+      emit(UploadImageErrorState());
+    });
   }
 
   bool flash = false;
   material.IconData flashIcon = material.Icons.flash_off;
+
   void toggleFlash(CameraController cameraController) {
     flash = !flash;
     cameraController.setFlashMode(flash ? FlashMode.torch : FlashMode.off);
