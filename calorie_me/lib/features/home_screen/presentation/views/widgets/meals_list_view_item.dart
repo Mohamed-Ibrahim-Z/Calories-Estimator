@@ -35,10 +35,10 @@ Widget mealsItem({required MealModel meal, context}) => Container(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 defaultText(
-                    text: meal.title,
+                    text: meal.ingredients.join(', ').toString(),
                     style: Theme.of(context).textTheme.bodyMedium),
                 defaultText(
-                    text: '${meal.calories} Calories',
+                    text: meal.calories.join(', ').toString(),
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey[700], fontStyle: FontStyle.italic)),
               ],

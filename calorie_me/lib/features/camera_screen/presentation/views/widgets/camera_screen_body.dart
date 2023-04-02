@@ -128,7 +128,6 @@ class CameraScreenBody extends StatelessWidget {
                       fontSize: 19.sp,
                       fontWeight: FontWeight.bold)),
             ),
-
             // Horizontal line
             Positioned(
               top: (3 / 4) * cubit.cameraHeight,
@@ -153,25 +152,36 @@ class CameraScreenBody extends StatelessWidget {
                 scaleAnimationCurve: Curves.easeInOut,
                 child: SizedBox(
                   height: 54.5.h,
-                  width: 100.h,
+                  width: 100.w,
                 ),
               ),
             ),
             // Credit Card Zone
             Positioned(
-              top: 54.h,
-              right: 0,
-              left: 0,
+              top: 57.h,
+              left: 32.w,
+              height: 12.h,
+              width: 36.w,
               child: Showcase(
                 key: creditCardKey,
                 description: "Put your Credit Card in this zone",
                 showArrow: true,
+                targetPadding: EdgeInsets.zero,
                 tooltipBackgroundColor: defaultColor,
-                textColor: Colors.white,
                 scaleAnimationCurve: Curves.easeInOut,
-                child: SizedBox(
-                  height: 17.h,
-                  width: 100.w,
+                child: Container(
+                  height: 12.h,
+                  width: 36.w,
+                  margin: EdgeInsets.zero,
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.5),
+                      width: 3,
+                    ),
+                  ),
                 ),
               ),
             ),

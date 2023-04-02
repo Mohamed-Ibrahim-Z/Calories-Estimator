@@ -32,28 +32,26 @@ class ProfileScreenBody extends StatelessWidget {
               '${currentUser.age} years',
               '${currentUser.gender}',
             ];
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 4.5.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                        child: profilePhoto(
-                            cubit: profileCubit, userLogged: currentUser)),
-                    defaultText(
-                      text: 'Personal Information',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: defaultColor,
-                            fontSize: 20.sp,
-                            letterSpacing: 1.5,
-                          ),
-                    ),
-                    SizedBox(height: 2.h),
-                    PersonalInfo(userInfoTexts: userInfoTexts),
-                    editProfileBtn(context: context),
-                  ],
-                ),
+            return Padding(
+              padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 4.5.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: profilePhoto(
+                          cubit: profileCubit, userLogged: currentUser)),
+                  defaultText(
+                    text: 'Personal Information',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: defaultColor,
+                          fontSize: 20.sp,
+                          letterSpacing: 1.5,
+                        ),
+                  ),
+                  SizedBox(height: 2.h),
+                  PersonalInfo(userInfoTexts: userInfoTexts),
+                  editProfileBtn(context: context),
+                ],
               ),
             );
           },

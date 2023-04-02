@@ -30,7 +30,7 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
                   text: 'Add to Meals',
                   onPressed: () {
                     BottomNavCubit.get(context).changeBottomNavScreen(0);
-                    cameraCubit.uploadImage();
+                    cameraCubit.uploadFullImage();
                     navigateToAndRemoveUntil(
                         nextPage: const HomeLayout(), context: context);
                   })),

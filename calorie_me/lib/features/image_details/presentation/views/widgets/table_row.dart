@@ -30,9 +30,4 @@ TableRow tableRow({required String ingredient, required String calories}) =>
         ),
       ),
     ]);
-List<TableRow> tableRows = [
-  tableRow(ingredient: 'ingredient', calories: 'calories'),
-  tableRow(ingredient: 'ingredient', calories: 'calories'),
-  tableRow(ingredient: 'ingredient', calories: 'calories'),
-  tableRow(ingredient: 'ingredient', calories: 'calories'),
-];
+

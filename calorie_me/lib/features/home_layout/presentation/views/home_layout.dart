@@ -73,15 +73,18 @@ class HomeLayout extends StatelessWidget {
                   listener: (context, state) {
                     if (state is CameraImagePickedSuccessState ||
                         state is GalleryImagePickedSuccessState) {
-                      navigateTo(
-                          nextPage: const ImageDetailsScreen(), context: context);
+                      CameraCubit.get(context).uploadCutImage();
+                      navigateToAndRemoveUntil(
+                          nextPage: const ImageDetailsScreen(),
+                          context: context);
                     }
                   },
                   child: FloatingActionButton(
                     backgroundColor: defaultColor,
                     child: const Icon(Icons.camera_alt, size: 30),
                     onPressed: () {
-                      navigateTo(nextPage: const CameraScreen(), context: context);
+                      navigateTo(
+                          nextPage: const CameraScreen(), context: context);
                       // chooseImageDialog(context: context, cubit: cameraCubit);
                     },
                   ),

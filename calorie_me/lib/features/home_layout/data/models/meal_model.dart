@@ -1,23 +1,26 @@
 class MealModel {
-  String imageUrl = "", title = "", calories = "", dateTime = "";
+  String imageUrl = "", dateTime = "";
   List<String> ingredients = [];
+  List<String> calories = [];
 
   MealModel(
       {required this.imageUrl,
-      required this.title,
+      required this.ingredients,
       required this.calories,
       required this.dateTime});
 
   MealModel.fromJson(Map<String, dynamic> json) {
-    imageUrl = json['imageUrl'];
-    title = json['title'];
-    calories = json['calories'];
-    dateTime = json['dateTime'];
+    json['ingredients'].forEach((ingredient) {
+      ingredients.add(ingredient);
+    });
+    json['calories'].forEach((calorie) {
+      calories.add(calorie);
+    });
   }
 
   Map<String, dynamic> toMap() => {
         'imageUrl': imageUrl,
-        'title': title,
+        'ingredients': ingredients,
         'calories': calories,
         'dateTime': dateTime,
       };

@@ -30,7 +30,7 @@ Widget imageDetailsBody({required context, required CameraCubit cameraCubit}) =>
           border: TableBorder.all(
             color: Theme.of(context).iconTheme.color!,
           ),
-          children: tableRows,
+          children: cameraCubit.tableRows,
         ),
         SizedBox(
           height: 4.h,
