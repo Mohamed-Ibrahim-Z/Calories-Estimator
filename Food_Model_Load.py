@@ -6,7 +6,7 @@ from keras.models import load_model
 from keras.optimizers import  SGD
 import numpy as np
 from keras import backend as K
-import matplotlib.pyplot as plt
+import requests
 
 class FoodModel:
     def __init__(self ,modelpath , imgpath):
@@ -18,12 +18,12 @@ class FoodModel:
         model = keras.models.load_model(self.modelpath)
         return model
 
-    def read_image(self,image_path):
+    def read_image(self,image_url):
     
         #image = tf.io.read_file(image_path)
         # load img from internet
-        image = tf.keras.utils.get_file('image.jpg', image_path)
-        image = tf.io.read_file(image)
+        response = requests.get(image_url)
+        image = response.content
         image = tf.image.decode_png(image, channels=3)
         image = tf.image.convert_image_dtype(image, tf.float32)
         image = tf.image.resize(image, self.imgSize, method='nearest')
@@ -36,32 +36,6 @@ class FoodModel:
         pred_mask = pred_mask[..., tf.newaxis]
         return pred_mask[0]
     
-    def plot_mask_predictions(self, dataset, model, examples=1):
-        plt.figure(figsize=(21, 7 * examples))
-
-        for i, (image, mask) in enumerate(dataset.take(examples)):
-            ax = plt.subplot(examples, 3, 3*i+1)
-            plt.title("Input Image")
-            plt.imshow(image[0])
-            plt.axis("off")
-
-            ax = plt.subplot(examples, 3, 3*i+2)
-            plt.title("True Mask")
-            print(np.unique(mask[0].numpy().astype("uint8").squeeze(axis=2)))
-            plt.imshow(mask[0].numpy().astype("uint8").squeeze(axis=2), cmap='gray', vmin=0, vmax=tf.math.reduce_max(mask[0]))
-            plt.axis("off")
-
-
-            pred_mask = self.create_mask(model.predict(image))
-
-            ax = plt.subplot(examples, 3, 3*i+3)
-            plt.title("Predicted Mask")
-            plt.imshow(pred_mask.numpy().astype("uint8").squeeze(axis=2), cmap='gray', vmin=0, vmax=tf.math.reduce_max(pred_mask))
-            plt.axis("off")
-
-        plt.show()
-
-        return pred_mask.numpy().astype("uint8").squeeze(axis=2)
     
     def get_mask(self, image, model):
             pred_mask = self.create_mask(model.predict(image))
