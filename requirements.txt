@@ -1,0 +1,8 @@
+Flask
+pandas
+fuzzywuzzy
+numpy
+python-Levenshtein
+tensorflow-cpu
+opencv-python-headless
+Keras
