@@ -39,7 +39,7 @@ class ImageDetailsScreen extends StatelessWidget {
                       delegate: SliverChildListDelegate(
                         [
                           ConditionalBuilder(
-                            condition: cubit.mealModel != null,
+                            condition: cubit.tableRows.isNotEmpty,
                             builder: (context) => imageDetailsBody(
                               context: context,
                               cameraCubit: cubit,

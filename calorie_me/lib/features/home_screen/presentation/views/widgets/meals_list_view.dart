@@ -1,3 +1,4 @@
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -5,7 +6,7 @@ import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit
 import 'meals_item_shimmer.dart';
 import 'meals_list_view_item.dart';
 
-Widget shaderMask({required CameraCubit cameraCubit, required state}) =>
+Widget shaderMask({required HomeScreenCubit homeScreenCubit, required state}) =>
     ShaderMask(
       shaderCallback: (Rect bounds) {
         return const LinearGradient(
@@ -22,12 +23,12 @@ Widget shaderMask({required CameraCubit cameraCubit, required state}) =>
       },
       blendMode: BlendMode.dstIn,
       child: mealsListView(
-        cameraCubit: cameraCubit,
+        homeScreenCubit: homeScreenCubit,
         state: state,
       ),
     );
 
-Widget mealsListView({required CameraCubit cameraCubit, required state}) =>
+Widget mealsListView({required HomeScreenCubit homeScreenCubit, required state}) =>
     ListView.separated(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 4.5.w),
@@ -42,9 +43,9 @@ Widget mealsListView({required CameraCubit cameraCubit, required state}) =>
             child: state is UploadImageLoadingState
                 ? mealsItemShimmer()
                 : mealsItem(
-                    meal: cameraCubit.mealsList[index], context: context),
+                    meal: homeScreenCubit.mealsList[index], context: context),
           ),
         );
       },
-      itemCount: cameraCubit.mealsList.length,
+      itemCount: homeScreenCubit.mealsList.length,
     );

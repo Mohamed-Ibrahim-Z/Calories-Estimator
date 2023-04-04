@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
-import 'package:calorie_me/features/home_layout/data/models/meal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../../../../image_details/data/models/meal_model.dart';
 
 Widget mealsItem({required MealModel meal, context}) => Container(
       decoration: BoxDecoration(
@@ -35,10 +36,10 @@ Widget mealsItem({required MealModel meal, context}) => Container(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 defaultText(
-                    text: meal.ingredients.join(', ').toString(),
+                    text: meal.ingredients.keys.join(', ').toString(),
                     style: Theme.of(context).textTheme.bodyMedium),
                 defaultText(
-                    text: meal.calories.join(', ').toString(),
+                    text: meal.ingredients.values.join(', ').toString(),
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey[700], fontStyle: FontStyle.italic)),
               ],
@@ -47,4 +48,3 @@ Widget mealsItem({required MealModel meal, context}) => Container(
         ),
       ),
     );
-

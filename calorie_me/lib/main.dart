@@ -2,6 +2,7 @@ import 'package:calorie_me/constants.dart';
 import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/core/utils/theme.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/login/presentation/views/login_screen.dart';
 import 'package:calorie_me/features/register/presentation/manager/register_cubit/register_cubit.dart';
@@ -23,7 +24,6 @@ void main() async {
   await CacheHelper.init();
   await DioHelper.init();
   loggedUserID = CacheHelper.getData(key: 'token');
-  print(loggedUserID);
   runApp(const MyApp());
 }
 
@@ -40,12 +40,13 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<BottomNavCubit>(create: (context) => BottomNavCubit()),
         BlocProvider<AppThemeCubit>(create: (context) => AppThemeCubit()),
-        BlocProvider<CameraCubit>(
-            create: (context) => CameraCubit()..getMealsList()),
+        BlocProvider<CameraCubit>(create: (context) => CameraCubit()),
         BlocProvider<LoginCubit>(
             create: (context) => LoginCubit()..getUserData()),
         BlocProvider<RegisterCubit>(create: (context) => RegisterCubit()),
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
+        BlocProvider<HomeScreenCubit>(
+            create: (context) => HomeScreenCubit()..getMealsList()),
       ],
       child: ResponsiveSizer(
         builder: (context, p0, p1) =>
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               home: splashScreen(
-                  nextScreen: screen,),
+                nextScreen: screen,
+              ),
               themeMode: AppThemeCubit.get(context).isDark
                   ? ThemeMode.dark
                   : ThemeMode.light,

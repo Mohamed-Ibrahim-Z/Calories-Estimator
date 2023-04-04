@@ -1,10 +1,7 @@
-import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/features/camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'package:calorie_me/features/camera_screen/presentation/views/widgets/camera_screen_body.dart';
-import 'package:calorie_me/features/image_details/presentation/views/image_details_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -35,15 +32,15 @@ class _CameraScreenState extends State<CameraScreen> {
     var cubit = CameraCubit.get(context);
     return cameraController != null
         ? Scaffold(
-          body: ShowCaseWidget(
-            builder: Builder(
-              builder: (context) => CameraScreenBody(
-                cameraController: cameraController!,
-                cubit: cubit,
+            body: ShowCaseWidget(
+              builder: Builder(
+                builder: (context) => CameraScreenBody(
+                  cameraController: cameraController!,
+                  cubit: cubit,
+                ),
               ),
             ),
-          ),
-        )
+          )
         : Container();
   }
 
@@ -52,6 +49,7 @@ class _CameraScreenState extends State<CameraScreen> {
     cameraController = CameraController(cameras[0], ResolutionPreset.medium,
         enableAudio: false);
     await cameraController!.initialize();
+    await cameraController!.setFlashMode(FlashMode.off);
     setState(() {});
   }
 }

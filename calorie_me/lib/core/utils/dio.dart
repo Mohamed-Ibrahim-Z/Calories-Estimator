@@ -8,10 +8,10 @@ class DioHelper {
   static init() {
     dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      receiveDataWhenStatusError: true,
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // },
+      // receiveDataWhenStatusError: true,
     ));
   }
 
@@ -27,11 +27,16 @@ class DioHelper {
 
   static Future<Response> postData({
     required String endPoint,
-    required Map<String, dynamic> data,
+    required FormData data,
     String? token,
   }) async {
     // dio!.options.headers={
     //   'authorization' : 'Bearer $token',
+    // };
+    // dio!.options.headers = {
+    //   'Content-Type': 'application/json',
+    //   'Connection': 'keep-alive',
+    //   'Accept': '*/*',
     // };
     return await dio!.post(endPoint, data: data);
   }
