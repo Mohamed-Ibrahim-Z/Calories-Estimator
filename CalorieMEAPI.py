@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import os
 import Test, CaloriesEstimation
 app = Flask(__name__)
 
@@ -20,11 +21,19 @@ def predict():
             label = Test.getFoodWeight(img_link, img_pixels)
             json = CaloriesEstimation.getCalories(label)
             return jsonify(json)
-            return jsonify({'msg': 'success', 'size': [img_link, img_pixels]})
     
     except Exception as e:
         return jsonify({'msg': 'error', 'error': str(e)})
 
+@app.route('/refresh', methods=['GET'])
+def refresh():
+    try:
+        if request.method == 'GET':
+            # run linux command to refresh the model
+            os.system('sudo reboot')
+            return jsonify({'msg': 'success'})
+    except Exception as e:
+        return jsonify({'msg': 'error', 'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000 ,debug=True)
