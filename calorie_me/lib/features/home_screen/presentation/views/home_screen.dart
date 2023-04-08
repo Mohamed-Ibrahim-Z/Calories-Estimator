@@ -15,15 +15,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  AnimationController? controller;
-  Animation<double>? _animation;
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  AnimationController? iconController;
+  Animation<double>? animationOfIcon;
+  AnimationController? listController;
+  Animation<Offset>? evenItemOfListAnimation;
+  Animation<Offset>? oddItemOfListAnimation;
 
   @override
   void initState() {
     super.initState();
     iconAnimation();
+    listViewAnimation();
   }
 
   @override
@@ -50,9 +53,13 @@ class _HomeScreenState extends State<HomeScreen>
                 builder: (context) {
                   var currentUser = homeScreenCubit.userLogged;
                   return customPercentIndicator(
-                      _animation, context, currentUser!);
+                      animationOfIcon, context, currentUser!);
                 },
-                fallback: (context) => defaultCircularProgressIndicator(),
+                fallback: (context) => SizedBox(
+                    height: 37.h, child: defaultCircularProgressIndicator()),
+              ),
+              SizedBox(
+                height: 2.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -79,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen>
                         ? shaderMask(
                             homeScreenCubit: homeScreenCubit,
                             state: state,
-                          )
+                            listViewAnimationController: listController!,
+                            evenItem: evenItemOfListAnimation!,
+                            oddItem: oddItemOfListAnimation!)
                         : Center(
                             child: defaultText(
                               text: 'No Meals Found',
@@ -96,21 +105,44 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    controller!.dispose();
+    iconController!.dispose();
+    listController!.dispose();
     super.dispose();
   }
 
   void iconAnimation() {
-    controller = AnimationController(
+    iconController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    controller!.repeat(reverse: true);
-    _animation = Tween<double>(begin: 2, end: 50).animate(controller!)
+    iconController!.repeat(reverse: true);
+    animationOfIcon = Tween<double>(begin: 2, end: 50).animate(iconController!)
       ..addListener(() {
         setState(() {
           // The state that has changed here is the animation object’s value.
         });
       });
+  }
+
+  void listViewAnimation() {
+    listController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    evenItemOfListAnimation = Tween<Offset>(
+      begin: const Offset(-1, 0),
+      end: Offset.zero,
+    ).animate(listController!);
+    oddItemOfListAnimation = Tween<Offset>(
+      begin: const Offset(1, 0),
+      end: Offset.zero,
+    ).animate(listController!);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    listController!.forward();
   }
 }

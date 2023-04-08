@@ -98,7 +98,7 @@ class CameraCubit extends Cubit<CameraStates> {
   void addMealToList() {
     emit(AddMealLoadingState());
     MealModel addMealModel = MealModel(
-      dateTime: DateTime.now().toString(),
+      dateTime: DateTime.now().toIso8601String(),
       ingredients: mealModel.ingredients,
       imageUrl: imageUrl,
       mealCalories: totalMealCalories,

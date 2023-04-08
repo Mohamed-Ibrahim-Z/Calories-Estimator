@@ -185,7 +185,7 @@ Widget textFormFieldsListView(
 Widget backgroundAnimationStack({required Widget screenBody}) => Stack(
       children: [
         const RiveAnimation.asset(
-          'assets/shapes.riv',
+          shapesRivePath,
         ),
         Positioned.fill(
           child: BackdropFilter(

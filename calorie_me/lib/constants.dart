@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const defaultColor = Colors.deepOrange;
 const logoImagePath = 'assets/images/logo.png';
 const googleImagePath = 'assets/images/Google.png';
+const shapesRivePath = 'assets/shapes.riv';
 
 String defaultMaleProfilePhoto =
     'https://www.pngitem.com/pimgs/m/419-4196791_transparent-confused-man-png-default-profile-png-download.png';

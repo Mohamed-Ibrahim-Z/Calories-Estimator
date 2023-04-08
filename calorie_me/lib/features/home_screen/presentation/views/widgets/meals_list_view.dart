@@ -6,7 +6,13 @@ import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit
 import 'meals_item_shimmer.dart';
 import 'meals_list_view_item.dart';
 
-Widget shaderMask({required HomeScreenCubit homeScreenCubit, required state}) =>
+Widget shaderMask({
+  required HomeScreenCubit homeScreenCubit,
+  required state,
+  required AnimationController listViewAnimationController,
+  required Animation<Offset> evenItem,
+  required Animation<Offset> oddItem,
+}) =>
     ShaderMask(
       shaderCallback: (Rect bounds) {
         return const LinearGradient(
@@ -18,35 +24,50 @@ Widget shaderMask({required HomeScreenCubit homeScreenCubit, required state}) =>
             Colors.white,
             Colors.transparent
           ],
-          stops: [0.01, 0.05, 0.95, 1.0],
+          stops: [0.0, 0.03, 0.9, 1.0],
         ).createShader(bounds);
       },
       blendMode: BlendMode.dstIn,
       child: mealsListView(
         homeScreenCubit: homeScreenCubit,
         state: state,
+        listViewAnimationController: listViewAnimationController,
+        evenItem: evenItem,
+        oddItem: oddItem,
       ),
     );
 
-Widget mealsListView(
-        {required HomeScreenCubit homeScreenCubit, required state}) =>
+Widget mealsListView({
+  required HomeScreenCubit homeScreenCubit,
+  required state,
+  required AnimationController listViewAnimationController,
+  required Animation<Offset> evenItem,
+  required Animation<Offset> oddItem,
+}) =>
     ListView.separated(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 4.5.w),
       separatorBuilder: (context, index) => SizedBox(
-        height: 2.h,
+        height: 3.h,
       ),
       itemBuilder: (context, index) {
-        return AnimationConfiguration.staggeredList(
-          position: index,
-          child: FadeInAnimation(
-            curve: Curves.easeIn,
-            child: state is UploadImageLoadingState
-                ? mealsItemShimmer()
-                : mealsItem(
-                    meal: homeScreenCubit.mealsList[index], context: context),
-          ),
-        );
+        bool isEven = index % 2 == 0;
+        return state is UploadImageLoadingState
+            ? mealsItemShimmer()
+            : isEven
+                ? SlideTransition(
+                    position: evenItem,
+                    child: mealsItem(
+                        meal: homeScreenCubit.mealsList[index],
+                        context: context,
+                        homeScreenCubit: homeScreenCubit),
+                  )
+                : SlideTransition(
+                    position: oddItem,
+                    child: mealsItem(
+                        meal: homeScreenCubit.mealsList[index],
+                        context: context,
+                        homeScreenCubit: homeScreenCubit));
       },
       itemCount: homeScreenCubit.mealsList.length,
     );

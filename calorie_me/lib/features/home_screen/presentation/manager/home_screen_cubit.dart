@@ -32,6 +32,7 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
       });
     }
   }
+
   void getMealsList() {
     if (loggedUserID != null) {
       emit(GetMealsLoadingState());
@@ -51,5 +52,38 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
         emit(GetMealsSuccessState());
       });
     }
+  }
+
+  String getTimeDifference({required String dateTime}) {
+    String time = "";
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inSeconds == 0) {
+      time = 'Just now';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inMinutes < 1 &&
+        DateTime.now().difference(DateTime.parse(dateTime)).inSeconds > 0) {
+      time =
+          '${DateTime.now().difference(DateTime.parse(dateTime)).inSeconds}s';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inMinutes >= 1) {
+      time =
+          '${DateTime.now().difference(DateTime.parse(dateTime)).inMinutes}m';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inHours >= 1) {
+      time = '${DateTime.now().difference(DateTime.parse(dateTime)).inHours}h';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inDays >= 1) {
+      time = '${DateTime.now().difference(DateTime.parse(dateTime)).inDays}d';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inDays >= 1 &&
+        DateTime.now().difference(DateTime.parse(dateTime)).inDays % 7 == 0) {
+      time =
+          '${(DateTime.now().difference(DateTime.parse(dateTime)).inDays / 7).floor()}w';
+    }
+    if (DateTime.now().difference(DateTime.parse(dateTime)).inDays >= 1 &&
+        DateTime.now().difference(DateTime.parse(dateTime)).inDays % 30 == 0) {
+      time =
+          '${(DateTime.now().difference(DateTime.parse(dateTime)).inDays / 30).floor()}m';
+    }
+    return time;
   }
 }
