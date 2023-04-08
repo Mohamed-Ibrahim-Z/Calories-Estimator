@@ -1,18 +1,12 @@
-import cv2
 import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import tensorflow as tf
 from tensorflow import keras
-from keras.models import load_model
-from keras.optimizers import  SGD
 import numpy as np
-from keras import backend as K
 import requests
 import warnings
 warnings.filterwarnings("ignore")
-from io import BytesIO
-from PIL import Image
 
 class FoodModel:
     def __init__(self ,modelpath , imgpath):

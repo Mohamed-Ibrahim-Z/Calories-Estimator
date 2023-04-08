@@ -10,7 +10,7 @@ def getCalories(labels):
     data = pd.read_csv('Food and Calories - Sheet1.csv')
 
     # load string from text file
-    with open('Food_Model/category.txt', 'r') as f:
+    with open('category.txt', 'r') as f:
         categories = f.read()
 
     # split string into list with newline as separator

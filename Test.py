@@ -5,8 +5,8 @@ import tensorflow
 import os
 import Food_Model_Load
 import sys 
-sys.path.insert(1, 'yolov5') 
-from detect import run
+#sys.path.insert(1, '/home/calorieME/CalorieMe-aws/yolov5') 
+#from detect import run
 
 def getFoodWeight(foodImgPath='',id_pixel_count=0):
     # imgpath = 'Images/mid2.png'
@@ -31,7 +31,7 @@ def getFoodWeight(foodImgPath='',id_pixel_count=0):
     labels = {}
     categories = {}
 
-    with open('/mnt/00F26D4EF26D494C/college/gp/Calories-Estimator/Food_Model/category.txt', 'r') as f:
+    with open('category.txt', 'r') as f:
         categories = dict(enumerate(f.read().splitlines()))
 
     #Id card real dimensions in cm
@@ -77,8 +77,8 @@ def getFoodWeightV2(imgLink, ref_pixels):
     if not os.path.exists('Food_Model/img.jpg'):
         print("Image not found")
         return
-    # os.system('python yolov5/detect.py --source Food_Model/img.jpg --weights Food_Model/yolov5_best_2.pt --img 413 --augment --save-txt')
-    run(source = "Food_Model/img.jpg", weights = "Food_Model/yolov5_best_2.pt", imgsz= (413,413), save_txt= True, augment= True)
+    os.system('python3 yolov5/detect.py --source Food_Model/img.jpg --weights Food_Model/yolov5_best_2.pt --img 413 --augment --save-txt')
+ #   run(source = "Food_Model/img.jpg", weights = "Food_Model/yolov5_best_2.pt", imgsz= (413,413), save_txt= True, augment= True)
 
     modelpath = 'Food_Model/cp2.h5'
     yolo_dir = 'yolov5'
@@ -103,7 +103,7 @@ def getFoodWeightV2(imgLink, ref_pixels):
     labels = {}
     categories = {}
 
-    with open('/mnt/00F26D4EF26D494C/college/gp/Calories-Estimator/Food_Model/category.txt', 'r') as f:
+    with open('category.txt', 'r') as f:
         categories = dict(enumerate(f.read().splitlines()))
 
     cat_values = np.unique(mask)
@@ -116,6 +116,9 @@ def getFoodWeightV2(imgLink, ref_pixels):
         white_pixels_percentage = foodmodel.get_cat_percentage(mask, cat)
         print("percentage of category {}: {}%".format(cat, white_pixels_percentage))
 
+        if white_pixels_percentage < 0.1:
+            continue
+
         pixels = np.count_nonzero(mask == cat)
         Reference_Volume = id_card_height * id_card_width * 0.1
         Food_Size = (pixels / int(ref_pixels)) * id_card_height * id_card_width
@@ -127,5 +130,3 @@ def getFoodWeightV2(imgLink, ref_pixels):
 
     print("label", labels)
     return labels
-
-
