@@ -87,9 +87,9 @@ class RegisterScreenBody extends StatelessWidget {
                                 userName: usernameController.text,
                                 email: emailController.text,
                                 password: passwordController.text,
-                                age: ageController.text,
-                                weight: weightController.text,
-                                height: heightController.text,
+                                age: int.parse(ageController.text),
+                                weight: double.parse(weightController.text),
+                                height: double.parse(heightController.text),
                               );
                             } else {
                               defaultToast(

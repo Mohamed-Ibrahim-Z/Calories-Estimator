@@ -1,3 +1,4 @@
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/profile/presentation/views/widgets/personal_info.dart';
 import 'package:calorie_me/features/profile/presentation/views/widgets/profile_photo.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -7,7 +8,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
-import '../../../../login/presentation/manager/login_cubit/login_cubit.dart';
 import '../../../../edit_profile/presentation/views/widgets/edit_profile_btn.dart';
 
 class ProfileScreenBody extends StatelessWidget {
@@ -15,15 +15,15 @@ class ProfileScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var loginCubit = LoginCubit.get(context);
+    var homeScreenCubit = HomeScreenCubit.get(context);
     var profileCubit = ProfileCubit.get(context);
 
-    return BlocBuilder<LoginCubit, LoginStates>(
+    return BlocBuilder<HomeScreenCubit, HomeScreenStates>(
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: loginCubit.userLogged != null,
+          condition: homeScreenCubit.userLogged != null,
           builder: (context) {
-            var currentUser = loginCubit.userLogged!;
+            var currentUser = homeScreenCubit.userLogged!;
             List<String> userInfoTexts = [
               currentUser.userName!,
               currentUser.email,
@@ -39,7 +39,7 @@ class ProfileScreenBody extends StatelessWidget {
                 children: [
                   Center(
                       child: profilePhoto(
-                          cubit: profileCubit, userLogged: currentUser)),
+                          cubit: profileCubit, currentUser: currentUser,context: context)),
                   defaultText(
                     text: 'Personal Information',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(

@@ -1,6 +1,7 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -30,32 +31,41 @@ class _HomeScreenState extends State<HomeScreen>
     var homeScreenCubit = HomeScreenCubit.get(context);
 
     return BlocListener<CameraCubit, CameraStates>(
-      listener: (context, state) {
-        if (state is AddMealSuccessState) {
+      listener: (context, cameraState) {
+        if (cameraState is AddMealSuccessState) {
           defaultToast(
             msg: 'Meal Added Successfully',
           );
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          customPercentIndicator(_animation, context),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-                padding: EdgeInsets.only(left: 4.w),
-                child: defaultText(
-                    text: 'Meals',
-                    style: Theme.of(context).textTheme.bodyMedium)),
-          ),
-          SizedBox(
-            height: 1.h,
-          ),
-          BlocBuilder<HomeScreenCubit, HomeScreenStates>(
-            builder: (context, state) {
-              return Expanded(
+      child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ConditionalBuilder(
+                condition: homeScreenCubit.userLogged != null &&
+                    state is! GetMealsLoadingState,
+                builder: (context) {
+                  var currentUser = homeScreenCubit.userLogged;
+                  return customPercentIndicator(
+                      _animation, context, currentUser!);
+                },
+                fallback: (context) => defaultCircularProgressIndicator(),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 4.w),
+                    child: defaultText(
+                        text: 'Meals',
+                        style: Theme.of(context).textTheme.bodyMedium)),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Expanded(
                 child: Container(
                     padding: EdgeInsets.only(top: 1.5.h),
                     decoration: BoxDecoration(
@@ -76,10 +86,10 @@ class _HomeScreenState extends State<HomeScreen>
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           )),
-              );
-            },
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }

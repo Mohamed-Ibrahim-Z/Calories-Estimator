@@ -36,12 +36,13 @@ class RegisterCubit extends Cubit<RegisterStates> {
       {required String email,
       required String userName,
       required String password,
-      required String age,
-      required String weight,
-      required String height}) {
+      required int age,
+      required double weight,
+      required double height}) {
     emit(RegisterLoadingState());
 
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
       createUser(
           uId: value.user!.uid,
@@ -64,15 +65,17 @@ class RegisterCubit extends Cubit<RegisterStates> {
     });
   }
 
+  UserModel? userModel;
+
   void createUser(
       {required String email,
       required String userName,
       required String password,
       required String uId,
-      required String age,
-      required String weight,
-      required String height}) {
-    UserModel userModel = UserModel(
+      required int age,
+      required double weight,
+      required double height}) {
+    userModel = UserModel(
       userName: userName,
       email: email,
       password: password,
@@ -84,16 +87,33 @@ class RegisterCubit extends Cubit<RegisterStates> {
           : defaultFemaleProfilePhoto,
       weight: weight,
       height: height,
+      bmr: 0,
     );
+    calculateBMR();
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
-        .set(userModel.toMap())
+        .set(userModel!.toMap())
         .then((value) {
       emit(RegisterCreateUserSuccessState());
     }).catchError((error) {
+      print(error.toString());
       emit(RegisterCreateUserErrorState());
     });
+  }
+
+  void calculateBMR() {
+    if (userModel!.gender == "Male") {
+      userModel!.bmr = 88.362 +
+          (13.397 * userModel!.weight) +
+          (4.799 * userModel!.height) -
+          (5.677 * userModel!.age!.toInt());
+    } else {
+      userModel!.bmr = 447.593 +
+          (9.247 * userModel!.weight) +
+          (3.098 * userModel!.height) -
+          (4.330 * userModel!.age!.toInt());
+    }
   }
 
   void clearGender() {

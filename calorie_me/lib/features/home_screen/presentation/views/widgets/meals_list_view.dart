@@ -28,7 +28,8 @@ Widget shaderMask({required HomeScreenCubit homeScreenCubit, required state}) =>
       ),
     );
 
-Widget mealsListView({required HomeScreenCubit homeScreenCubit, required state}) =>
+Widget mealsListView(
+        {required HomeScreenCubit homeScreenCubit, required state}) =>
     ListView.separated(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 4.5.w),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../constants.dart';
 import '../../../image_details/data/models/meal_model.dart';
+import '../../../register/data/model/user_model.dart';
 
 part 'home_screen_state.dart';
 
@@ -14,6 +15,23 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
 
   List<MealModel> mealsList = [];
 
+  UserModel? userLogged;
+
+  void getUserData() {
+    if (loggedUserID != null) {
+      emit(GetUserDataLoadingState());
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(loggedUserID)
+          .get()
+          .then((value) {
+        userLogged = UserModel.fromFireStore(value.data()!);
+        emit(GetUserDataSuccessState());
+      }).catchError((error) {
+        emit(GetUserDataErrorState());
+      });
+    }
+  }
   void getMealsList() {
     if (loggedUserID != null) {
       emit(GetMealsLoadingState());
@@ -25,8 +43,10 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
           .snapshots()
           .listen((event) {
         mealsList.clear();
+        caloriesConsumed = 0;
         for (var element in event.docs) {
           mealsList.add(MealModel.fromFireStore(element.data()));
+          caloriesConsumed += mealsList.last.mealCalories;
         }
         emit(GetMealsSuccessState());
       });

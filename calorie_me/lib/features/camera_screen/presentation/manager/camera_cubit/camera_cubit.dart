@@ -14,7 +14,7 @@ import '../../../../../core/utils/dio.dart';
 import '../../../../image_details/data/models/meal_model.dart';
 import '../../../../image_details/presentation/views/widgets/table_row.dart';
 
-part 'camera_state.dart';
+part 'camera_states.dart';
 
 class CameraCubit extends Cubit<CameraStates> {
   CameraCubit() : super(CameraInitial());
@@ -32,6 +32,17 @@ class CameraCubit extends Cubit<CameraStates> {
     emit(CameraImagePickedSuccessState());
   }
 
+  final ImagePicker galleryImagePicker = ImagePicker();
+
+  void pickImageFromGallery() {
+    galleryImagePicker.pickImage(source: ImageSource.gallery).then((value) {
+      if (value == null) return;
+      image = File(value.path);
+      convertImageToPng(value);
+      emit(GalleryImagePickedSuccessState());
+    });
+  }
+
   void convertImageToPng(XFile photo) {
     Uint8List bytes = image.readAsBytesSync();
     Image? decImage = decodeImage(bytes);
@@ -40,19 +51,9 @@ class CameraCubit extends Cubit<CameraStates> {
     image = pngFile..writeAsBytesSync(pngBytes);
   }
 
-  final ImagePicker galleryImagePicker = ImagePicker();
-
-  void pickImageFromGallery() {
-    galleryImagePicker.pickImage(source: ImageSource.gallery).then((value) {
-      if (value == null) return;
-      image = File(value.path);
-      emit(GalleryImagePickedSuccessState());
-    });
-  }
-
-  String? imageUrl;
-  String? imageCutUrl;
+  String imageUrl = "";
   final fireStorage = FirebaseStorage.instance;
+  Uint8List imageCutBytes = Uint8List(0);
 
   void uploadCutImage() {
     emit(UploadImageLoadingState());
@@ -65,23 +66,10 @@ class CameraCubit extends Cubit<CameraStates> {
         decodedImage.setPixelRgba(x, y, 0, 0, 0, 255);
       }
     }
-    Uint8List encodedImage = encodeJpg(decodedImage);
+    imageCutBytes = encodePng(decodedImage);
 
-    fireStorage
-        .ref()
-        .child('meals/${Uri.file(image.path).pathSegments.last}')
-        .putData(encodedImage)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        imageCutUrl = value;
-        print(imageCutUrl);
-        // predictImage();
-        fillTableRows();
-        emit(UploadImageSuccessState());
-      });
-    }).catchError((error) {
-      emit(UploadImageErrorState());
-    });
+    predictImage();
+    fillTableRows();
   }
 
   void uploadFullImage() {
@@ -109,11 +97,17 @@ class CameraCubit extends Cubit<CameraStates> {
 
   void addMealToList() {
     emit(AddMealLoadingState());
+    MealModel addMealModel = MealModel(
+      dateTime: DateTime.now().toString(),
+      ingredients: mealModel.ingredients,
+      imageUrl: imageUrl,
+      mealCalories: totalMealCalories,
+    );
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
         .collection('meals')
-        .add(mealModel.toMap())
+        .add(addMealModel.toMap())
         .then((value) {
       emit(AddMealSuccessState());
     }).catchError((error) {
@@ -126,13 +120,12 @@ class CameraCubit extends Cubit<CameraStates> {
 
     creditCardPixels = creditCardWidth * creditCardHeight;
     FormData formData = FormData.fromMap({
-      "img_link": imageCutUrl,
+      "img_bytes": imageCutBytes,
       "img_pixels": creditCardPixels.round(),
     });
-    // print("Pixels ${creditCardPixels.round()}");
     DioHelper.postData(endPoint: "/CalorieMe", data: formData).then((value) {
       print(value.data);
-      mealModel = MealModel.fromJson(value.data, imageUrl!);
+      mealModel = MealModel.fromJson(value.data);
       fillTableRows();
       emit(PredictImageSuccessState());
     }).catchError((error) {
@@ -144,16 +137,17 @@ class CameraCubit extends Cubit<CameraStates> {
   double cameraHeight = 72.h;
 
   List<material.TableRow> tableRows = [];
+  int totalMealCalories = 0;
 
   void fillTableRows() {
     tableRows.clear();
-    // mealModel.ingredients.forEach((key, value) {
-    //   tableRows.add(tableRow(ingredient: key, calories: value));
-    // });
-    for(int i = 0;i<3;i++)
-      {
-        tableRows.add(tableRow(ingredient: 'asdasdasdasd', calories: '123123'));
-      }
+
+    mealModel.ingredients.forEach((key, value) {
+      tableRows.add(tableRow(ingredient: key, calories: value));
+      totalMealCalories += int.parse(value);
+    });
+    tableRows.add(
+        tableRow(ingredient: 'Total Calories', calories: totalMealCalories));
   }
 
   bool flash = false;

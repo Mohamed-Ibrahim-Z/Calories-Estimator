@@ -19,11 +19,12 @@ class LoginScreenBody extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     var cubit = LoginCubit.get(context);
+    var homeScreenCubit = HomeScreenCubit.get(context);
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
-          cubit.getUserData();
-          HomeScreenCubit.get(context).getMealsList();
+          homeScreenCubit.getUserData();
+          homeScreenCubit.getMealsList();
           navigateTo(
               context: context,
               nextPage: const HomeLayout(),

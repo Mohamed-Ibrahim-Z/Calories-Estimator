@@ -1,16 +1,14 @@
 import 'dart:io';
-
-import 'package:bloc/bloc.dart';
-import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 
-part 'profile_state.dart';
+
+part 'profile_states.dart';
 
 class ProfileCubit extends Cubit<ProfileStates> {
   ProfileCubit() : super(ProfileInitialState());
@@ -23,14 +21,12 @@ class ProfileCubit extends Cubit<ProfileStates> {
     profileImagePicker.pickImage(source: ImageSource.gallery).then((value) {
       if (value == null) return;
       profileImagePath = File(value.path);
-
       emit(UploadProfileImageSuccessState());
     });
   }
 
-  String? profileImageUrl;
-
-  Future<void> updateProfilePhoto({required UserModel userModel}) async {
+  Future<void> updateProfilePhoto(
+      {required UserModel updateUserModel, UserModel? currentUser}) async {
     emit(UploadProfileImageLoadingState());
     FirebaseStorage.instance
         .ref()
@@ -38,8 +34,9 @@ class ProfileCubit extends Cubit<ProfileStates> {
         .putFile(profileImagePath!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
-        profileImageUrl = value;
-        updateProfile(userModel: userModel);
+        updateUserModel.profilePhoto = value;
+        updateProfile(
+            updateUserModel: updateUserModel, currentUserModel: currentUser);
         emit(UploadProfileImageSuccessState());
       }).catchError((error) {});
     }).catchError((error) {
@@ -48,34 +45,45 @@ class ProfileCubit extends Cubit<ProfileStates> {
   }
 
   Future<void> updateProfile({
-    required UserModel userModel,
-    UserModel? currentUser,
+    required UserModel updateUserModel,
+    UserModel? currentUserModel,
   }) async {
     emit(UpdateUserDataLoadingState());
 
-    if (userModel.email != userModel.email) {
-      FirebaseAuth.instance.currentUser!.updateEmail(userModel.email);
+    if (updateUserModel.email != updateUserModel.email) {
+      FirebaseAuth.instance.currentUser!.updateEmail(updateUserModel.email);
     }
-    if (userModel.password != userModel.password) {
-      FirebaseAuth.instance.currentUser!.updatePassword(userModel.password!);
+    if (updateUserModel.password != updateUserModel.password) {
+      FirebaseAuth.instance.currentUser!
+          .updatePassword(updateUserModel.password!);
     }
-
-
+    if (currentUserModel!.weight != updateUserModel.weight ||
+        currentUserModel.height != updateUserModel.height ||
+        currentUserModel.age != updateUserModel.age) {
+      updateBMR(updateUserModel: updateUserModel);
+    }
     FirebaseFirestore.instance
         .collection('users')
-        .doc(currentUser!.uId)
-        .update({
-      'username': userModel.userName,
-      'email': userModel.email,
-      'password': userModel.password,
-      'age': userModel.age,
-      'weight': userModel.weight,
-      'height': userModel.height,
-      'profilePhoto': profileImageUrl ?? currentUser.profilePhoto,
-    }).then((value) {
+        .doc(updateUserModel.uId)
+        .update(updateUserModel.toMap())
+        .then((value) {
       emit(UpdateUserDataSuccessState());
     }).catchError((error) {
       emit(UpdateUserDataErrorState());
     });
+  }
+
+  void updateBMR({required UserModel updateUserModel}) {
+    if (updateUserModel.gender == "Male") {
+      updateUserModel.bmr = 88.362 +
+          (13.397 * updateUserModel.weight) +
+          (4.799 * updateUserModel.height) -
+          (5.677 * updateUserModel.age!.toInt());
+    } else {
+      updateUserModel.bmr = 447.593 +
+          (9.247 * updateUserModel.weight) +
+          (3.098 * updateUserModel.height) -
+          (4.330 * updateUserModel.age!.toInt());
+    }
   }
 }

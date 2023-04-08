@@ -1,4 +1,4 @@
-import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/profile/presentation/views/widgets/profile_photo.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -7,19 +7,21 @@ import '../../../../edit_profile/presentation/manager/profile_cubit/profile_cubi
 
 AppBar homeAppBar(
         {required context,
-        required LoginCubit loginCubit,
+        required HomeScreenCubit homeScreenCubit,
         required ProfileCubit profileCubit}) =>
     AppBar(
       titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
       leading: Padding(
           padding: EdgeInsets.only(left: 4.w),
           child: profilePhoto(
-              cubit: profileCubit, userLogged: loginCubit.userLogged!,
-          radius: 5.w)),
+              cubit: profileCubit,
+              currentUser: homeScreenCubit.userLogged!,
+              context: context,
+              radius: 5.w)),
       title: Padding(
         padding: EdgeInsets.only(top: 1.h),
         child: Text(
-          'Hello ${loginCubit.userLogged!.userName}',
+          'Hello ${homeScreenCubit.userLogged!.userName}',
         ),
       ),
     );

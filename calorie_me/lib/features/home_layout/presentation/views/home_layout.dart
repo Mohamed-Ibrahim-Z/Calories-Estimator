@@ -6,13 +6,13 @@ import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/camera_screen/presentation/views/camera_screen.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/home_app_bar.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/shimmer_home_app_bar.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import '../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
+import '../../../home_screen/presentation/manager/home_screen_cubit.dart';
 import '../../../image_details/presentation/views/image_details_screen.dart';
-import '../../../login/presentation/manager/login_cubit/login_cubit.dart';
 import '../manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -23,91 +23,91 @@ class HomeLayout extends StatelessWidget {
     return BlocBuilder<BottomNavCubit, BottomNavStates>(
       builder: (context, bottomNavState) {
         var bottomNavCubit = BottomNavCubit.get(context);
-        var loginCubit = LoginCubit.get(context);
         var profileCubit = ProfileCubit.get(context);
-        return BlocConsumer<LoginCubit, LoginStates>(
-          listener: (context, loginState) {
-            // TODO: implement listener
-          },
-          builder: (context, loginState) {
-            return SafeArea(
-              child: Scaffold(
-                appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(9.h),
-                  child: loginCubit.userLogged != null
-                      ? homeAppBar(
+        var homeScreenCubit = HomeScreenCubit.get(context);
+        return SafeArea(
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(80),
+              child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
+                builder: (context, homeState) {
+                  return ConditionalBuilder(
+                    condition: homeScreenCubit.userLogged != null &&
+                        homeScreenCubit.userLogged!.profilePhoto != null,
+                    builder: (context) {
+                      return homeAppBar(
                           context: context,
-                          loginCubit: loginCubit,
-                          profileCubit: profileCubit)
-                      : shimmerHomeAppBar(),
-                ),
-                resizeToAvoidBottomInset: false,
-                body: WillPopScope(
-                  onWillPop: () async {
-                    bool isDoubleTapped = bottomNavCubit.doubleTapped();
-                    if (bottomNavCubit.currentIndex != 0) {
-                      bottomNavCubit.changeBottomNavScreen(0);
-                    } else if (isDoubleTapped) {
-                      return true;
-                    } else {
-                      defaultToast(
-                          msg: 'Double Tap To Exit',
-                          backgroundColor: Colors.grey[600]!);
-                    }
-                    return false;
-                  },
-                  child: PageTransitionSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    transitionBuilder: (child, animation, secondaryAnimation) {
-                      return FadeThroughTransition(
-                        fillColor: Colors.transparent,
-                        animation: animation,
-                        secondaryAnimation: secondaryAnimation,
-                        child: child,
-                      );
+                          homeScreenCubit: homeScreenCubit,
+                          profileCubit: profileCubit);
                     },
-                    child: bottomNavCubit.screens[bottomNavCubit.currentIndex],
-                  ),
-                ),
-                floatingActionButton: BlocListener<CameraCubit, CameraStates>(
-                  listener: (context, state) {
-                    if (state is CameraImagePickedSuccessState ||
-                        state is GalleryImagePickedSuccessState) {
-                      CameraCubit.get(context).uploadCutImage();
-                      navigateToAndRemoveUntil(
-                          nextPage: const ImageDetailsScreen(),
-                          context: context);
-                    }
-                  },
-                  child: FloatingActionButton(
-                    backgroundColor: defaultColor,
-                    child: const Icon(Icons.camera_alt, size: 30),
-                    onPressed: () {
-                      navigateTo(
-                          nextPage: const CameraScreen(), context: context);
-                      // chooseImageDialog(context: context, cubit: cameraCubit);
+                    fallback: (context) {
+                      return shimmerHomeAppBar();
                     },
-                  ),
-                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-                bottomNavigationBar: AnimatedBottomNavigationBar(
-                    borderColor: Colors.grey[300],
-                    backgroundColor: Theme.of(context)
-                        .bottomNavigationBarTheme
-                        .backgroundColor,
-                    iconSize: 25,
-                    activeColor: defaultColor,
-                    icons: bottomNavCubit.bottomNavIcons,
-                    gapLocation: GapLocation.center,
-                    notchSmoothness: NotchSmoothness.smoothEdge,
-                    activeIndex: bottomNavCubit.currentIndex,
-                    onTap: (index) {
-                      bottomNavCubit.changeBottomNavScreen(index);
-                    }),
+                  );
+                },
               ),
-            );
-          },
+            ),
+            resizeToAvoidBottomInset: false,
+            body: WillPopScope(
+              onWillPop: () async {
+                bool isDoubleTapped = bottomNavCubit.doubleTapped();
+                if (bottomNavCubit.currentIndex != 0) {
+                  bottomNavCubit.changeBottomNavScreen(0);
+                } else if (isDoubleTapped) {
+                  return true;
+                } else {
+                  defaultToast(
+                      msg: 'Double Tap To Exit',
+                      backgroundColor: Colors.grey[600]!);
+                }
+                return false;
+              },
+              child: PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation, secondaryAnimation) {
+                  return FadeThroughTransition(
+                    fillColor: Colors.transparent,
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  );
+                },
+                child: bottomNavCubit.screens[bottomNavCubit.currentIndex],
+              ),
+            ),
+            floatingActionButton: BlocListener<CameraCubit, CameraStates>(
+              listener: (context, state) {
+                if (state is CameraImagePickedSuccessState ||
+                    state is GalleryImagePickedSuccessState) {
+                  CameraCubit.get(context).uploadCutImage();
+                  navigateToAndRemoveUntil(
+                      nextPage: const ImageDetailsScreen(), context: context);
+                }
+              },
+              child: FloatingActionButton(
+                backgroundColor: defaultColor,
+                child: const Icon(Icons.camera_alt, size: 30),
+                onPressed: () {
+                  navigateTo(nextPage: const CameraScreen(), context: context);
+                },
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: AnimatedBottomNavigationBar(
+                borderColor: Colors.grey[300],
+                backgroundColor:
+                    Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+                iconSize: 25,
+                activeColor: defaultColor,
+                icons: bottomNavCubit.bottomNavIcons,
+                gapLocation: GapLocation.center,
+                notchSmoothness: NotchSmoothness.smoothEdge,
+                activeIndex: bottomNavCubit.currentIndex,
+                onTap: (index) {
+                  bottomNavCubit.changeBottomNavScreen(index);
+                }),
+          ),
         );
       },
     );

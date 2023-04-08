@@ -35,13 +35,36 @@ Widget mealsItem({required MealModel meal, context}) => Container(
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                defaultText(
-                    text: meal.ingredients.keys.join(', ').toString(),
-                    style: Theme.of(context).textTheme.bodyMedium),
-                defaultText(
-                    text: meal.ingredients.values.join(', ').toString(),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey[700], fontStyle: FontStyle.italic)),
+                SizedBox(
+                  width: 50.w,
+                  child: defaultText(
+                      text: meal.ingredients.keys.join(', ').toString(),
+                      style: Theme.of(context).textTheme.bodyMedium),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  children: [
+                    defaultText(
+                        text: "Calories: ",
+                        style: Theme.of(context).textTheme.bodySmall),
+                    SizedBox(
+                      width: 1.w,
+                    ),
+                    SizedBox(
+                      width: 40.w,
+                      child: defaultText(
+                          text: meal.ingredients.values.join(', ').toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  color: Colors.grey[700],
+                                  fontStyle: FontStyle.italic)),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

@@ -1,13 +1,14 @@
 class UserModel {
   String email = "";
-  String? userName;
-  String? age;
+  String? userName = "";
+  int? age = 0;
   String? gender;
   String? password;
   String? uId;
   String? profilePhoto;
-  String? weight;
-  String? height;
+  double weight = 0;
+  double height = 0;
+  double? bmr = 0;
 
   UserModel(
       {required this.userName,
@@ -18,18 +19,20 @@ class UserModel {
       this.profilePhoto,
       required this.height,
       this.age,
-      this.gender});
+      this.gender,
+      this.bmr = 0,});
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    userName = json['username'];
-    password = json['password'];
-    email = json['email'];
-    age = json['age'];
-    weight = json['weight'];
-    height = json['height'];
-    uId = json['uId'];
-    gender = json['gender'];
-    profilePhoto = json['profilePhoto'];
+  UserModel.fromFireStore(Map<String, dynamic> map) {
+    userName = map['username'];
+    password = map['password'];
+    email = map['email'];
+    age = map['age'];
+    weight = map['weight'];
+    height = map['height'];
+    bmr = map['bmr'];
+    uId = map['uId'];
+    gender = map['gender'];
+    profilePhoto = map['profilePhoto'];
   }
 
   Map<String, dynamic> toMap() => {
@@ -39,9 +42,9 @@ class UserModel {
         'gender': gender,
         'weight': weight,
         'height': height,
+        'bmr': bmr,
         'uId': uId,
         'password': password,
         'profilePhoto': profilePhoto,
       };
-
 }

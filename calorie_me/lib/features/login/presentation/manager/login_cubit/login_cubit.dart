@@ -1,6 +1,7 @@
 import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +56,6 @@ class LoginCubit extends Cubit<LoginStates> {
   String googleUserId = '';
 
   void loginWithGmail() async {
-
     googleSignIn.signIn().then((user) {
       // authenticate user
       user!.authentication.then((googleKey) async {
@@ -64,6 +64,7 @@ class LoginCubit extends Cubit<LoginStates> {
           accessToken: googleKey.accessToken,
           idToken: googleKey.idToken,
         );
+
         await FirebaseAuth.instance.signInWithCredential(credential);
       }).then((value) {
         googleUserId = user.id;
@@ -74,10 +75,10 @@ class LoginCubit extends Cubit<LoginStates> {
           password: 'password',
           gender: 'Male',
           uId: user.id,
-          age: '-',
+          age: 0,
           profilePhoto: user.photoUrl,
-          weight: '-',
-          height: '-',
+          weight: 0,
+          height: 0,
         );
         FirebaseFirestore.instance
             .collection('users')
@@ -85,6 +86,7 @@ class LoginCubit extends Cubit<LoginStates> {
             .get()
             .then((value) {
           CacheHelper.saveData(key: 'token', value: user.id);
+          CacheHelper.saveData(key: 'isGoogleAccount', value: true);
           loggedUserID = user.id;
           if (value.exists) {
             emit(LoginSuccessState());
@@ -106,24 +108,7 @@ class LoginCubit extends Cubit<LoginStates> {
     await googleSignIn.signOut();
     googleUserId = '';
     isGoogleAccount = false;
-  }
-
-  UserModel? userLogged;
-
-  void getUserData() {
-    if (loggedUserID != null) {
-      emit(GetUserDataLoadingState());
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(loggedUserID)
-          .get()
-          .then((value) {
-        userLogged = UserModel.fromJson(value.data()!);
-        emit(GetUserDataSuccessState());
-      }).catchError((error) {
-        emit(GetUserDataErrorState());
-      });
-    }
+    CacheHelper.sharedPreferences!.remove('isGoogleAccount');
   }
 
   void resetPassword({required String email}) {

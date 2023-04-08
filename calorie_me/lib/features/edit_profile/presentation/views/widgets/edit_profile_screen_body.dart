@@ -1,4 +1,5 @@
 import 'package:calorie_me/features/edit_profile/presentation/views/widgets/edit_profile_photo.dart';
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +19,19 @@ class EditProfileScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     var profileCubit = ProfileCubit.get(context);
     var loginCubit = LoginCubit.get(context);
-    var currentUser = loginCubit.userLogged;
-  GlobalKey key = GlobalKey();
+    var homeScreenCubit = HomeScreenCubit.get(context);
+    var currentUser = homeScreenCubit.userLogged;
     return Scaffold(
       appBar: AppBar(
         title: defaultText(text: 'Edit Profile'),
       ),
       body: BlocConsumer<ProfileCubit, ProfileStates>(
-        listener: (context, profileState) {
-          if (profileState is UpdateUserDataSuccessState) {
-            loginCubit.getUserData();
+        listener: (context, state) {
+          if (state is UpdateUserDataSuccessState) {
+            homeScreenCubit.getUserData();
             defaultToast(msg: 'Profile Updated Successfully');
             Navigator.pop(context);
-          } else if (profileState is UpdateUserDataErrorState &&
+          } else if (state is UpdateUserDataErrorState &&
               loginCubit.errorMessage != "") {
             defaultToast(
                 msg: loginCubit.errorMessage, backgroundColor: Colors.black);
@@ -38,7 +39,7 @@ class EditProfileScreenBody extends StatelessWidget {
         },
         builder: (context, profileState) {
           return ConditionalBuilder(
-            condition: loginCubit.userLogged != null,
+            condition: homeScreenCubit.userLogged != null,
             builder: (context) {
               TextEditingController usernameController =
                       TextEditingController(text: currentUser!.userName ?? ''),
@@ -52,11 +53,12 @@ class EditProfileScreenBody extends StatelessWidget {
                       text: currentUser.weight.toString()),
                   heightController = TextEditingController(
                       text: currentUser.height.toString());
+
               return SingleChildScrollView(
                 child: Column(
                   children: [
                     editProfilePhoto(
-                        profileCubit: profileCubit, currentUser: currentUser),
+                        profileCubit: profileCubit, currentUser: currentUser,context: context),
                     SizedBox(height: 3.h),
                     Container(
                       padding:
@@ -93,17 +95,26 @@ class EditProfileScreenBody extends StatelessWidget {
                                       userName: usernameController.text,
                                       password: passwordController.text,
                                       email: emailController.text,
-                                      age: ageController.text,
-                                      weight: weightController.text,
-                                      height: heightController.text,
+                                      age: int.parse(ageController.text),
+                                      weight:
+                                          double.parse(weightController.text),
+                                      height:
+                                          double.parse(heightController.text),
+                                      uId: currentUser.uId,
+                                      bmr: currentUser.bmr,
+                                      profilePhoto: currentUser.profilePhoto,
+                                      gender: currentUser.gender,
                                     );
                                     if (profileCubit.profileImagePath != null) {
                                       profileCubit.updateProfilePhoto(
-                                          userModel: updateUserModel);
+                                        updateUserModel: updateUserModel,
+                                        currentUser: currentUser,
+                                      );
                                     } else {
                                       profileCubit.updateProfile(
-                                          userModel: updateUserModel,
-                                          currentUser: currentUser);
+                                        updateUserModel: updateUserModel,
+                                        currentUserModel: currentUser,
+                                      );
                                     }
                                   }),
                             ),

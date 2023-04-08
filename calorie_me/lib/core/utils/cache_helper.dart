@@ -29,13 +29,15 @@ class CacheHelper {
   }
 
   static void signOut(context) {
+    navigateToAndRemoveUntil(nextPage: const LoginScreen(), context: context);
+
     loggedUserID = null;
     BottomNavCubit.get(context).changeBottomNavScreen(0);
     if (isGoogleAccount) {
       LoginCubit.get(context).signOutFromGmail();
+    } else {
+      sharedPreferences!.remove("token");
     }
     FirebaseAuth.instance.signOut();
-    navigateToAndRemoveUntil(nextPage: const LoginScreen(), context: context);
-    sharedPreferences!.remove("token");
   }
 }

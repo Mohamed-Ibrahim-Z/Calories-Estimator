@@ -24,6 +24,7 @@ void main() async {
   await CacheHelper.init();
   await DioHelper.init();
   loggedUserID = CacheHelper.getData(key: 'token');
+  isGoogleAccount = CacheHelper.getData(key: 'isGoogleAccount');
   runApp(const MyApp());
 }
 
@@ -36,17 +37,19 @@ class MyApp extends StatelessWidget {
     if (loggedUserID != null) {
       screen = const HomeLayout();
     }
+    isGoogleAccount ??= false;
     return MultiBlocProvider(
       providers: [
         BlocProvider<BottomNavCubit>(create: (context) => BottomNavCubit()),
         BlocProvider<AppThemeCubit>(create: (context) => AppThemeCubit()),
         BlocProvider<CameraCubit>(create: (context) => CameraCubit()),
-        BlocProvider<LoginCubit>(
-            create: (context) => LoginCubit()..getUserData()),
-        BlocProvider<RegisterCubit>(create: (context) => RegisterCubit()),
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
+        BlocProvider<RegisterCubit>(create: (context) => RegisterCubit()),
+        BlocProvider<LoginCubit>(create: (context) => LoginCubit()),
         BlocProvider<HomeScreenCubit>(
-            create: (context) => HomeScreenCubit()..getMealsList()),
+            create: (context) => HomeScreenCubit()
+              ..getUserData()
+              ..getMealsList()),
       ],
       child: ResponsiveSizer(
         builder: (context, p0, p1) =>
