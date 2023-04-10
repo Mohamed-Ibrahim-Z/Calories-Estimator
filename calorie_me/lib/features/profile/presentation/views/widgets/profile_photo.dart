@@ -4,7 +4,7 @@ import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../../../constants.dart';
+import '../../../../../core/constants/constants.dart';
 import '../../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 
 Widget profilePhoto(

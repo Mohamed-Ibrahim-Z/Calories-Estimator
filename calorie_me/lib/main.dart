@@ -1,4 +1,4 @@
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/core/utils/theme.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';

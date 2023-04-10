@@ -6,7 +6,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../../constants.dart';
+import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import '../../../../edit_profile/presentation/views/widgets/edit_profile_btn.dart';

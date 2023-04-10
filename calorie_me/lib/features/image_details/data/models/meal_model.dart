@@ -12,20 +12,20 @@ class MealModel {
 
   MealModel.fromJson(Map<String, dynamic> json) {
     ingredients = json;
-    dateTime = DateTime.now().toString();
+    dateTime = DateTime.now().toIso8601String();
   }
 
   MealModel.fromFireStore(Map<String, dynamic> map) {
     ingredients = map['ingredients'];
     imageUrl = map['imageUrl'];
     dateTime = map['dateTime'];
-    mealCalories = map['totalMealCalories'];
+    mealCalories = map['mealCalories'];
   }
 
   Map<String, dynamic> toMap() => {
         'imageUrl': imageUrl,
         'ingredients': ingredients,
         'dateTime': dateTime,
-        'totalMealCalories': mealCalories,
+        'mealCalories': mealCalories,
       };
 }

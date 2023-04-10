@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../../constants.dart';
+import '../../../../../core/constants/constants.dart';
 
 part 'login_states.dart';
 

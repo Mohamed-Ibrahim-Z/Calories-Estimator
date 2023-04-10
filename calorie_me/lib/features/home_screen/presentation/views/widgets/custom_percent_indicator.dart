@@ -3,7 +3,7 @@ import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../../constants.dart';
+import '../../../../../core/constants/constants.dart';
 
 Widget customPercentIndicator(animation, context, UserModel currentUser) {
   int caloriesRemaining = currentUser.bmr!.round() - caloriesConsumed;

@@ -1,7 +1,7 @@
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../constants.dart';
+import '../constants/constants.dart';
 import '../../features/home_layout/presentation/manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 import '../../features/login/presentation/manager/login_cubit/login_cubit.dart';
 import '../../features/login/presentation/views/login_screen.dart';

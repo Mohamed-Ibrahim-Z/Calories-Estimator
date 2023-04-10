@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../constants.dart';
+import '../constants/constants.dart';
 
 ThemeData darkMode = ThemeData(
   scaffoldBackgroundColor: const Color(0xff242527),

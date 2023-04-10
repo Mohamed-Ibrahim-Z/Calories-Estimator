@@ -1,9 +1,10 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:animations/animations.dart';
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/camera_screen/presentation/views/camera_screen.dart';
+import 'package:calorie_me/features/home_layout/presentation/views/widgets/choose_image_dialog.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/home_app_bar.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/shimmer_home_app_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -20,11 +21,18 @@ class HomeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavCubit, BottomNavStates>(
+    return BlocConsumer<BottomNavCubit, BottomNavStates>(
+      listener: (context, state) {
+        if (state is BottomNavDoubleTapState) {
+          defaultToast(
+              msg: 'Tap again to exit', backgroundColor: Colors.blueGrey);
+        }
+      },
       builder: (context, bottomNavState) {
         var bottomNavCubit = BottomNavCubit.get(context);
         var profileCubit = ProfileCubit.get(context);
         var homeScreenCubit = HomeScreenCubit.get(context);
+        var cameraCubit = CameraCubit.get(context);
         return SafeArea(
           child: Scaffold(
             appBar: PreferredSize(
@@ -50,17 +58,7 @@ class HomeLayout extends StatelessWidget {
             resizeToAvoidBottomInset: false,
             body: WillPopScope(
               onWillPop: () async {
-                bool isDoubleTapped = bottomNavCubit.doubleTapped();
-                if (bottomNavCubit.currentIndex != 0) {
-                  bottomNavCubit.changeBottomNavScreen(0);
-                } else if (isDoubleTapped) {
-                  return true;
-                } else {
-                  defaultToast(
-                      msg: 'Double Tap To Exit',
-                      backgroundColor: Colors.grey[600]!);
-                }
-                return false;
+                return bottomNavCubit.doubleTapped();
               },
               child: PageTransitionSwitcher(
                 duration: const Duration(milliseconds: 500),
@@ -79,7 +77,9 @@ class HomeLayout extends StatelessWidget {
               listener: (context, state) {
                 if (state is CameraImagePickedSuccessState ||
                     state is GalleryImagePickedSuccessState) {
-                  CameraCubit.get(context).uploadCutImage();
+                  !newVersion
+                      ? cameraCubit.uploadCutImage()
+                      : cameraCubit.uploadFullImage();
                   navigateToAndRemoveUntil(
                       nextPage: const ImageDetailsScreen(), context: context);
                 }
@@ -88,7 +88,13 @@ class HomeLayout extends StatelessWidget {
                 backgroundColor: defaultColor,
                 child: const Icon(Icons.camera_alt, size: 30),
                 onPressed: () {
-                  navigateTo(nextPage: const CameraScreen(), context: context);
+                  if (!newVersion) {
+                    navigateTo(
+                        nextPage: const CameraScreen(), context: context);
+                  } else {
+                    chooseImageDialog(
+                        context: context, cubit: CameraCubit.get(context));
+                  }
                 },
               ),
             ),

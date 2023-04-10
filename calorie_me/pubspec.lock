@@ -229,10 +229,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "3709d74615bba5e443eb141f6a7f4bcc4788f8fae6f743edadfb79c2a8e6287e"
+      sha256: "0894a098594263fe1caaba3520e3016d8a855caeb010a882273189cca10f11e9"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "5.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -382,14 +382,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
-  flutter_staggered_animations:
-    dependency: "direct main"
-    description:
-      name: flutter_staggered_animations
-      sha256: "81d3c816c9bb0dca9e8a5d5454610e21ffb068aedb2bde49d2f8d04f75538351"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

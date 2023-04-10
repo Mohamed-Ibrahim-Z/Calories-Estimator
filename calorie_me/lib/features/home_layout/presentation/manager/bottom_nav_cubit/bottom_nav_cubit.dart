@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:calorie_me/features/profile/presentation/views/profile_screen.dart';
 import 'package:calorie_me/features/settings/data/presentation/views/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,15 +35,21 @@ class BottomNavCubit extends Cubit<BottomNavStates> {
   int numOfTabs = 0;
 
   bool doubleTapped() {
-    if (currentIndex == 0) {
-      numOfTabs++;
-      if (numOfTabs == 2) {
-        numOfTabs = 0;
-        return true;
-      }
+    if (currentIndex != 0) {
+      changeBottomNavScreen(0);
+      return false;
     } else {
-      numOfTabs = 0;
+      if (numOfTabs == 1) {
+        numOfTabs = 0;
+      } else {
+        numOfTabs++;
+        emit(BottomNavDoubleTapState());
+        Timer(const Duration(seconds: 2), () {
+          numOfTabs = 0;
+        });
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 }

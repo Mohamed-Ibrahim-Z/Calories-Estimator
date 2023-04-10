@@ -11,5 +11,6 @@ String defaultFemaleProfilePhoto =
     'https://simg.nicepng.com/png/small/249-2492113_work-profile-user-default-female-suit-comments-default.png';
 dynamic isGoogleAccount = false;
 dynamic loggedUserID = '';
-const baseUrl = 'http://ec2-54-86-107-228.compute-1.amazonaws.com:5000';
+const baseUrl = 'http://calorieme.francecentral.cloudapp.azure.com';
 int caloriesConsumed = 0;
+bool newVersion = false;

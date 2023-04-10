@@ -1,4 +1,4 @@
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/features/camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,7 @@ class CameraScreenBody extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   cameraController.takePicture().then((value) {
-                    cubit.pickPhotoFromCamera(value);
+                    cubit.pickPhotoFromCameraPreview(value);
                   });
                 },
                 child: CircleAvatar(

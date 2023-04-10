@@ -1,3 +1,4 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/home_layout.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,11 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
                   text: 'Add to Meals',
                   onPressed: () {
                     BottomNavCubit.get(context).changeBottomNavScreen(0);
-                    cameraCubit.uploadFullImage();
+                    if (!newVersion) {
+                      cameraCubit.uploadFullImage();
+                    } else {
+                      cameraCubit.addMealToList();
+                    }
                     navigateToAndRemoveUntil(
                         nextPage: const HomeLayout(), context: context);
                   })),

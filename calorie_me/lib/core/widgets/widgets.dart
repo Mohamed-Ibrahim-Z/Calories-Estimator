@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:rive/rive.dart';
 
-import '../../constants.dart';
+import '../constants/constants.dart';
 
 Widget splashScreen({required Widget nextScreen}) => AnimatedSplashScreen(
       splash: Column(

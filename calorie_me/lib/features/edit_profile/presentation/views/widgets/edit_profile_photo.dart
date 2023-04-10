@@ -1,4 +1,4 @@
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/features/profile/presentation/views/widgets/profile_photo.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:flutter/material.dart';

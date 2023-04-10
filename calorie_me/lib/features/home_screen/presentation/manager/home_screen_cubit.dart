@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../constants.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../image_details/data/models/meal_model.dart';
 import '../../../register/data/model/user_model.dart';
 
@@ -12,8 +12,6 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   HomeScreenCubit() : super(HomeScreenInitial());
 
   static HomeScreenCubit get(context) => BlocProvider.of(context);
-
-  List<MealModel> mealsList = [];
 
   UserModel? userLogged;
 
@@ -32,6 +30,8 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
       });
     }
   }
+
+  List<MealModel> mealsList = [];
 
   void getMealsList() {
     if (loggedUserID != null) {

@@ -1,4 +1,4 @@
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

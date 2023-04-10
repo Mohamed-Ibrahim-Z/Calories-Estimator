@@ -8,7 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../../constants.dart';
+import '../../../../../core/constants/constants.dart';
 import '../../../../../core/utils/page_transition.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../login/presentation/views/login_screen.dart';

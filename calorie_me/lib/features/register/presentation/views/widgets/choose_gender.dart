@@ -1,4 +1,3 @@
-import 'package:calorie_me/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/widgets/widgets.dart';

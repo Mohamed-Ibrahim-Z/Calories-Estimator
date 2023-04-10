@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:calorie_me/constants.dart';
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -26,13 +26,23 @@ class CameraCubit extends Cubit<CameraStates> {
       creditCardHeight = 13.h,
       creditCardPixels = 0.0;
 
-  void pickPhotoFromCamera(XFile photo) {
+  void pickPhotoFromCameraPreview(XFile photo) {
     image = File(photo.path);
     convertImageToPng(photo);
     emit(CameraImagePickedSuccessState());
   }
 
+  final ImagePicker cameraImagePicker = ImagePicker();
   final ImagePicker galleryImagePicker = ImagePicker();
+
+  void pickImageFromCamera() {
+    cameraImagePicker.pickImage(source: ImageSource.camera).then((value) {
+      if (value == null) return;
+      image = File(value.path);
+      convertImageToPng(value);
+      emit(GalleryImagePickedSuccessState());
+    });
+  }
 
   void pickImageFromGallery() {
     galleryImagePicker.pickImage(source: ImageSource.gallery).then((value) {
@@ -52,6 +62,7 @@ class CameraCubit extends Cubit<CameraStates> {
   }
 
   String imageUrl = "";
+  String imageCutUrl = "";
   final fireStorage = FirebaseStorage.instance;
   Uint8List imageCutBytes = Uint8List(0);
 
@@ -67,9 +78,19 @@ class CameraCubit extends Cubit<CameraStates> {
       }
     }
     imageCutBytes = encodePng(decodedImage);
-
-    predictImage();
-    fillTableRows();
+    fireStorage
+        .ref()
+        .child('meals/${Uri.file(image.path).pathSegments.last}')
+        .putData(imageCutBytes)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        imageCutUrl = value;
+        predictImage();
+        emit(UploadImageSuccessState());
+      });
+    }).catchError((error) {
+      emit(UploadImageErrorState());
+    });
   }
 
   void uploadFullImage() {
@@ -81,7 +102,7 @@ class CameraCubit extends Cubit<CameraStates> {
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         imageUrl = value;
-        addMealToList();
+        predictImage();
         emit(UploadImageSuccessState());
       });
     }).catchError((error) {
@@ -115,23 +136,60 @@ class CameraCubit extends Cubit<CameraStates> {
     });
   }
 
+  FormData formData = FormData.fromMap({});
+  String errorMessage = "";
+
   void predictImage() async {
     emit(PredictImageLoadingState());
-
     creditCardPixels = creditCardWidth * creditCardHeight;
-    FormData formData = FormData.fromMap({
-      "img_bytes": imageCutBytes,
-      "img_pixels": creditCardPixels.round(),
-    });
-    DioHelper.postData(endPoint: "/CalorieMe", data: formData).then((value) {
-      print(value.data);
-      mealModel = MealModel.fromJson(value.data);
-      fillTableRows();
-      emit(PredictImageSuccessState());
-    }).catchError((error) {
-      print(error.toString());
+    !newVersion
+        ? formData = FormData.fromMap({
+            "img_link": "imageCutUrl",
+            "ref_pixels": creditCardPixels.round(),
+          })
+        : formData = FormData.fromMap({
+            "img_link": imageUrl,
+          });
+    try {
+      await DioHelper.postData(
+              endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
+              data: formData)
+          .then((value) {
+        mealModel = MealModel.fromJson(value.data);
+        emit(PredictImageSuccessState());
+      });
+    } on DioError catch (error) {
+      handleAPIError(error);
       emit(PredictImageErrorState());
-    });
+    }
+  }
+
+  void handleAPIError(DioError error) {
+    switch (error.type) {
+      case DioErrorType.sendTimeout:
+        errorMessage = "Send Timeout";
+        break;
+      case DioErrorType.receiveTimeout:
+        errorMessage = "Receive Timeout";
+        break;
+      case DioErrorType.cancel:
+        errorMessage = "Request Cancelled";
+        break;
+      case DioErrorType.connectionTimeout:
+        errorMessage = "Connection Timeout";
+        break;
+      case DioErrorType.badResponse:
+        errorMessage = "Bad Response";
+        break;
+      case DioErrorType.connectionError:
+        errorMessage = "Connection Error";
+        break;
+      case DioErrorType.badCertificate:
+        errorMessage = "Bad Certificate";
+        break;
+      default:
+        errorMessage = "No Internet Connection";
+    }
   }
 
   double cameraHeight = 72.h;
