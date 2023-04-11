@@ -22,7 +22,6 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
                         nextPage: const HomeLayout(),
                         context: context,
                         transition: PageTransitionType.fade);
-                    cameraCubit.clearTableRowsAndMealModel();
                   })),
           SizedBox(
             width: 3.w,

@@ -1,4 +1,3 @@
-import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/login/presentation/views/widgets/login_screen_body.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/widgets.dart';

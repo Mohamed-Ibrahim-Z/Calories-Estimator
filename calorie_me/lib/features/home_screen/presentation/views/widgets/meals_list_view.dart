@@ -45,7 +45,7 @@ Widget mealsListView({
 }) =>
     ListView.separated(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 4.5.w),
+      padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 3.h),
       separatorBuilder: (context, index) => SizedBox(
         height: 3.h,
       ),
@@ -59,14 +59,16 @@ Widget mealsListView({
                     child: mealsItem(
                         meal: homeScreenCubit.mealsList[index],
                         context: context,
-                        homeScreenCubit: homeScreenCubit),
+                        homeScreenCubit: homeScreenCubit,
+                        index: index),
                   )
                 : SlideTransition(
                     position: oddItem,
                     child: mealsItem(
                         meal: homeScreenCubit.mealsList[index],
                         context: context,
-                        homeScreenCubit: homeScreenCubit));
+                        homeScreenCubit: homeScreenCubit,
+                        index: index));
       },
       itemCount: homeScreenCubit.mealsList.length,
     );

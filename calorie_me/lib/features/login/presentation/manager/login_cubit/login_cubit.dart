@@ -1,12 +1,10 @@
 import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../../../../../core/constants/constants.dart';
 
 part 'login_states.dart';
@@ -53,7 +51,6 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   final googleSignIn = GoogleSignIn();
-  String googleUserId = '';
 
   void loginWithGmail() async {
     googleSignIn.signIn().then((user) {
@@ -67,7 +64,6 @@ class LoginCubit extends Cubit<LoginStates> {
 
         await FirebaseAuth.instance.signInWithCredential(credential);
       }).then((value) {
-        googleUserId = user.id;
         isGoogleAccount = true;
         UserModel userModel = UserModel(
           userName: user.displayName,
@@ -106,7 +102,6 @@ class LoginCubit extends Cubit<LoginStates> {
 
   void signOutFromGmail() async {
     await googleSignIn.signOut();
-    googleUserId = '';
     isGoogleAccount = false;
     CacheHelper.sharedPreferences!.remove('isGoogleAccount');
   }

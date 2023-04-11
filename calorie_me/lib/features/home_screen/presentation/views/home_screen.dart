@@ -41,7 +41,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         }
       },
-      child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
+      child: BlocConsumer<HomeScreenCubit, HomeScreenStates>(
+        listener: (context, state) {
+          if (state is DeleteMealSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                content: defaultText(text: "Meal Deleted Successfully"),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    homeScreenCubit.undoDeleteMeal();
+                  },
+                ),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               Expanded(
                 child: Container(
-                    padding: EdgeInsets.only(top: 1.5.h),
                     decoration: BoxDecoration(
                       color: Theme.of(context).canvasColor,
                       borderRadius: const BorderRadius.only(
@@ -91,10 +108,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             oddItem: oddItemOfListAnimation!)
                         : Center(
                             child: defaultText(
-                              text: 'No Meals Found',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          )),
+                                text: 'No Meals Added Yet',
+                                style:
+                                    Theme.of(context).textTheme.bodyMedium))),
               ),
             ],
           );
@@ -127,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void listViewAnimation() {
     listController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 600),
     );
     evenItemOfListAnimation = Tween<Offset>(
       begin: const Offset(-1, 0),

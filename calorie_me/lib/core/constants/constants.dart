@@ -14,4 +14,6 @@ dynamic loggedUserID = '';
 const baseUrl = 'http://calorieme.francecentral.cloudapp.azure.com:5000';
 // const baseUrl = 'http://192.168.1.10:5000';
 int caloriesConsumed = 0;
+int caloriesRemaining = 0;
 bool newVersion = false;
+int mealIndex = 0;

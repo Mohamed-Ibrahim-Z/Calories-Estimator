@@ -5,7 +5,6 @@ import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/login/presentation/views/login_screen.dart';
-import 'package:calorie_me/features/register/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:calorie_me/features/settings/data/presentation/manager/app_theme_cubit/app_theme_cubit.dart';
 import 'package:calorie_me/features/settings/data/presentation/manager/app_theme_cubit/app_theme_states.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,7 +43,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<AppThemeCubit>(create: (context) => AppThemeCubit()),
         BlocProvider<CameraCubit>(create: (context) => CameraCubit()),
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
-        BlocProvider<RegisterCubit>(create: (context) => RegisterCubit()),
         BlocProvider<LoginCubit>(create: (context) => LoginCubit()),
         BlocProvider<HomeScreenCubit>(
             create: (context) => HomeScreenCubit()

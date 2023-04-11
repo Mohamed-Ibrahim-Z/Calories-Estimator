@@ -64,7 +64,7 @@ Widget rowBelowLoginBtn(context, cubit) => Column(
                 ),
                 SizedBox(width: 2.w),
                 defaultText(
-                    text: 'Continue with Google',
+                    text: 'Continue with Gmail',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: Colors.white,
                           fontSize: 16.sp,

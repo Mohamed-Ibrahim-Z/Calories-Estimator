@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -118,19 +117,20 @@ class CameraCubit extends Cubit<CameraStates> {
   void addMealToList() {
     emit(AddMealLoadingState());
     MealModel addMealModel = MealModel(
-      dateTime: DateTime.now().toIso8601String(),
-      ingredients: mealModel.ingredients,
+      dateTime: DateTime.now().toString(),
+      ingredients: {"mealModel.ingredients": 123},
       imageUrl: imageUrl,
-      mealCalories: totalMealCalories,
+      mealCalories: 150,
     );
+    mealModel = addMealModel;
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
         .collection('meals')
         .add(addMealModel.toMap())
         .then((value) {
+      fillTableRows();
       emit(AddMealSuccessState());
-      clearTableRowsAndMealModel();
     }).catchError((error) {
       emit(AddMealErrorState());
     });

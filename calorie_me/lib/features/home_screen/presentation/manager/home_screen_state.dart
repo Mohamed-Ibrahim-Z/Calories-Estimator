@@ -10,3 +10,9 @@ class GetMealsErrorState extends HomeScreenStates {}
 class GetUserDataLoadingState extends HomeScreenStates {}
 class GetUserDataSuccessState extends HomeScreenStates {}
 class GetUserDataErrorState extends HomeScreenStates {}
+class DeleteMealLoadingState extends HomeScreenStates {}
+class DeleteMealSuccessState extends HomeScreenStates {}
+class DeleteMealErrorState extends HomeScreenStates {}
+class UndoDeleteMealLoadingState extends HomeScreenStates {}
+class UndoDeleteMealSuccessState extends HomeScreenStates {}
+class UndoDeleteMealErrorState extends HomeScreenStates {}

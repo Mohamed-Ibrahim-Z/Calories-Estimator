@@ -1,5 +1,5 @@
 class MealModel {
-  String imageUrl = "", dateTime = "";
+  String imageUrl = "", dateTime = "", mealID = "";
   Map<String, dynamic> ingredients = {};
   int mealCalories = 0;
 
@@ -15,10 +15,11 @@ class MealModel {
     dateTime = DateTime.now().toIso8601String();
   }
 
-  MealModel.fromFireStore(Map<String, dynamic> map) {
+  MealModel.fromFireStore(Map<String, dynamic> map,String mealId) {
     ingredients = map['ingredients'];
     imageUrl = map['imageUrl'];
     dateTime = map['dateTime'];
+    mealID = mealId;
     mealCalories = map['mealCalories'];
   }
 

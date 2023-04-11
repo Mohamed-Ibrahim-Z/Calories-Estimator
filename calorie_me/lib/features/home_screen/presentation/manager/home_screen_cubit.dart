@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../core/constants/constants.dart';
 import '../../../image_details/data/models/meal_model.dart';
 import '../../../register/data/model/user_model.dart';
@@ -32,6 +33,7 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   }
 
   List<MealModel> mealsList = [];
+  List<String> mealsIDs = [];
 
   void getMealsList() {
     if (loggedUserID != null) {
@@ -43,15 +45,57 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
           .orderBy('dateTime', descending: true)
           .snapshots()
           .listen((event) {
-        mealsList.clear();
-        caloriesConsumed = 0;
-        for (var element in event.docs) {
-          mealsList.add(MealModel.fromFireStore(element.data()));
-          caloriesConsumed += mealsList.last.mealCalories;
+        for (var change in event.docChanges) {
+          if (change.type == DocumentChangeType.added) {
+            // to avoid adding the same meal twice when undoing delete
+            if (deletedMeal == null) {
+              mealsList.add(
+                  MealModel.fromFireStore(change.doc.data()!, change.doc.id));
+            }
+            caloriesConsumed += mealsList.last.mealCalories;
+            mealsIDs.add(change.doc.id);
+          }
         }
         emit(GetMealsSuccessState());
       });
     }
+  }
+
+  MealModel? deletedMeal;
+
+  void deleteMeal({required int index}) {
+    deletedMeal = mealsList[index];
+    caloriesConsumed -= mealsList[index].mealCalories;
+    mealsList.removeAt(index);
+    mealIndex = index;
+    emit(DeleteMealLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(loggedUserID)
+        .collection('meals')
+        .doc(mealsIDs[index])
+        .delete()
+        .then((value) {
+      mealsIDs.removeAt(index);
+      emit(DeleteMealSuccessState());
+    }).catchError((error) {
+      emit(DeleteMealErrorState());
+    });
+  }
+
+  void undoDeleteMeal() {
+    emit(UndoDeleteMealLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(loggedUserID)
+        .collection('meals')
+        .doc()
+        .set(deletedMeal!.toMap())
+        .then((value) {
+      mealsList.insert(mealIndex, deletedMeal!);
+      deletedMeal = null;
+      emit(UndoDeleteMealSuccessState());
+    });
   }
 
   String getTimeDifference({required String dateTime}) {

@@ -78,15 +78,17 @@ class HomeLayout extends StatelessWidget {
                 if (state is ImagePickedSuccessState) {
                   navigateToAndRemoveUntil(
                       nextPage: const ImageDetailsScreen(), context: context);
-                  !newVersion
-                      ? cameraCubit.uploadCutImage()
-                      : cameraCubit.predictImage();
+                  // !newVersion
+                  //     ? cameraCubit.uploadCutImage()
+                  //     : cameraCubit.predictImage();
+                  cameraCubit.uploadFullImage();
                 }
               },
               child: FloatingActionButton(
                 backgroundColor: defaultColor,
                 child: const Icon(Icons.camera_alt, size: 30),
                 onPressed: () {
+                  cameraCubit.clearTableRowsAndMealModel();
                   if (!newVersion) {
                     navigateTo(
                         nextPage: const CameraScreen(), context: context);
