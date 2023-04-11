@@ -42,7 +42,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
                     )),
                 onTap: () {
                   Navigator.pop(context);
-                  cubit.pickImageFromCamera();
+                  cubit.pickImage(isCamera: true);
                 },
               ),
               SizedBox(height: 1.h),
@@ -63,7 +63,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
                     )),
                 onTap: () {
                   Navigator.pop(context);
-                  cubit.pickImageFromGallery();
+                  cubit.pickImage(isCamera: false);
                 },
               ),
             ],

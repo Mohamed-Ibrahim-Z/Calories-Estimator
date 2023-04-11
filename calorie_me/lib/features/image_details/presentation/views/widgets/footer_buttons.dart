@@ -22,6 +22,7 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
                         nextPage: const HomeLayout(),
                         context: context,
                         transition: PageTransitionType.fade);
+                    cameraCubit.clearTableRowsAndMealModel();
                   })),
           SizedBox(
             width: 3.w,
@@ -31,11 +32,7 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
                   text: 'Add to Meals',
                   onPressed: () {
                     BottomNavCubit.get(context).changeBottomNavScreen(0);
-                    if (!newVersion) {
-                      cameraCubit.uploadFullImage();
-                    } else {
-                      cameraCubit.addMealToList();
-                    }
+                    cameraCubit.uploadFullImage();
                     navigateToAndRemoveUntil(
                         nextPage: const HomeLayout(), context: context);
                   })),

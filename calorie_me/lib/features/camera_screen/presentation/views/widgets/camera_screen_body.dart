@@ -111,7 +111,7 @@ class CameraScreenBody extends StatelessWidget {
                   icon: Icons.image,
                   color: Colors.white,
                   onPressed: () {
-                    cubit.pickImageFromGallery();
+                    cubit.pickImage(isCamera: false);
                   },
                   iconSize: 24.sp,
                 ),

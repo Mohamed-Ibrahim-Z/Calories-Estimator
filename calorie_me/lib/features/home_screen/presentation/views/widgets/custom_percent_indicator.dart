@@ -6,7 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/constants/constants.dart';
 
 Widget customPercentIndicator(animation, context, UserModel currentUser) {
-  int caloriesRemaining = currentUser.bmr!.round() - caloriesConsumed;
+  num caloriesRemaining = currentUser.bmr!.round() - caloriesConsumed;
   if (caloriesRemaining < 0) caloriesRemaining = 0;
   return Center(
     child: CircularPercentIndicator(

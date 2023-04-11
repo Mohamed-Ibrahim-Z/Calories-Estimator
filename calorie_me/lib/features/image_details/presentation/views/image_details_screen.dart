@@ -5,6 +5,7 @@ import 'package:calorie_me/features/image_details/presentation/views/widgets/ima
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 
@@ -17,8 +18,12 @@ class ImageDetailsScreen extends StatelessWidget {
     return BlocConsumer<CameraCubit, CameraStates>(
       listener: (context, state) {
         if (state is PredictImageErrorState) {
-          defaultToast(msg: cubit.errorMessage, backgroundColor: Colors.red);
-          navigateToAndRemoveUntil(nextPage: HomeLayout(), context: context);
+          defaultToast(
+              msg: cubit.errorMessage,
+              backgroundColor: Colors.red,
+              toastLength: Toast.LENGTH_LONG);
+          navigateToAndRemoveUntil(
+              nextPage: const HomeLayout(), context: context);
         }
       },
       builder: (context, state) {
@@ -26,7 +31,7 @@ class ImageDetailsScreen extends StatelessWidget {
           onWillPop: () async {
             defaultToast(
                 msg: 'Please use the back button to go back',
-                backgroundColor: Colors.grey[600]!);
+                backgroundColor: Colors.blueGrey);
             return false;
           },
           child: SafeArea(

@@ -1,5 +1,4 @@
 import 'package:calorie_me/features/image_details/presentation/views/widgets/footer_buttons.dart';
-import 'package:calorie_me/features/image_details/presentation/views/widgets/table_row.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/widgets/widgets.dart';

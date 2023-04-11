@@ -3,6 +3,7 @@ import 'package:calorie_me/features/profile/presentation/views/widgets/profile_p
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../../../core/widgets/widgets.dart';
 import '../../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 
 AppBar homeAppBar(
@@ -20,8 +21,8 @@ AppBar homeAppBar(
               radius: 5.w)),
       title: Padding(
         padding: EdgeInsets.only(top: 1.h),
-        child: Text(
-          'Hello ${homeScreenCubit.userLogged!.userName}',
+        child: defaultText(
+          text: homeScreenCubit.userLogged!.userName!,
         ),
       ),
     );

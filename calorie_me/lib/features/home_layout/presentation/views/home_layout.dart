@@ -75,13 +75,12 @@ class HomeLayout extends StatelessWidget {
             ),
             floatingActionButton: BlocListener<CameraCubit, CameraStates>(
               listener: (context, state) {
-                if (state is CameraImagePickedSuccessState ||
-                    state is GalleryImagePickedSuccessState) {
-                  !newVersion
-                      ? cameraCubit.uploadCutImage()
-                      : cameraCubit.uploadFullImage();
+                if (state is ImagePickedSuccessState) {
                   navigateToAndRemoveUntil(
                       nextPage: const ImageDetailsScreen(), context: context);
+                  !newVersion
+                      ? cameraCubit.uploadCutImage()
+                      : cameraCubit.predictImage();
                 }
               },
               child: FloatingActionButton(

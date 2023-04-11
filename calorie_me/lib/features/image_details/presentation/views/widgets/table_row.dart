@@ -3,7 +3,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../core/widgets/widgets.dart';
 
-TableRow tableRow({required String ingredient, required int calories}) =>
+TableRow tableRow({required String ingredient, required dynamic calories}) =>
     TableRow(children: [
       Padding(
         padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
@@ -27,7 +27,7 @@ TableRow tableRow({required String ingredient, required int calories}) =>
         padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
         child: Center(
           child: defaultText(
-            text: calories.toString(),
+            text: "$calories",
             textAlign: TextAlign.center,
             style: ingredient == "Total Calories"
                 ? TextStyle(
