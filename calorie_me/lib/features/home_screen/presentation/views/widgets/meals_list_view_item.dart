@@ -41,7 +41,7 @@ Widget mealsItem(
               children: [
                 mealImage(meal: meal),
                 SizedBox(
-                  width: 2.w,
+                  width: 3.w,
                 ),
                 Expanded(
                   child: Column(
@@ -68,11 +68,11 @@ Widget mealsItem(
                             width: 1.w,
                           ),
                           defaultText(
-                            text: meal.mealCalories.toString(),
+                            text: "${meal.mealCalories} Kcal",
                             style:
                                 Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      color: Colors.grey[700],
-                                      fontStyle: FontStyle.italic,
+                                      color: defaultColor,
+
                                     ),
                           ),
                         ],

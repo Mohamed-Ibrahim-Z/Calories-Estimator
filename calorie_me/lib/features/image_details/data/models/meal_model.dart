@@ -1,7 +1,7 @@
 class MealModel {
   String imageUrl = "", dateTime = "", mealID = "";
   Map<String, dynamic> ingredients = {};
-  int mealCalories = 0;
+  dynamic mealCalories = 0;
 
   MealModel({
     required this.imageUrl,
@@ -12,6 +12,9 @@ class MealModel {
 
   MealModel.fromJson(Map<String, dynamic> json) {
     ingredients = json;
+    ingredients.forEach((key, value) {
+      mealCalories += value;
+    });
     dateTime = DateTime.now().toIso8601String();
   }
 

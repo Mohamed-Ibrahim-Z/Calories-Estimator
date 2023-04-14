@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,15 +43,17 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
           .orderBy('dateTime', descending: true)
           .snapshots()
           .listen((event) {
-        for (var change in event.docChanges) {
-          if (change.type == DocumentChangeType.added) {
-            // to avoid adding the same meal twice when undoing delete
-            if (deletedMeal == null) {
-              mealsList.add(
-                  MealModel.fromFireStore(change.doc.data()!, change.doc.id));
-            }
+        for (var element in event.docChanges) {
+          if (element.type == DocumentChangeType.added) {
+            mealIndex == -1
+                ? mealsList.add(MealModel.fromFireStore(
+                    element.doc.data()!, element.doc.id))
+                : mealsList.insert(
+                    mealIndex,
+                    MealModel.fromFireStore(
+                        element.doc.data()!, element.doc.id));
             caloriesConsumed += mealsList.last.mealCalories;
-            mealsIDs.add(change.doc.id);
+            mealsIDs.add(element.doc.id);
           }
         }
         emit(GetMealsSuccessState());
@@ -92,10 +92,16 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
         .doc()
         .set(deletedMeal!.toMap())
         .then((value) {
-      mealsList.insert(mealIndex, deletedMeal!);
-      deletedMeal = null;
+      mealIndex = -1;
       emit(UndoDeleteMealSuccessState());
     });
+  }
+
+  void clearUserData() {
+    mealsList.clear();
+    mealsIDs.clear();
+    userLogged = null;
+    caloriesConsumed = 0;
   }
 
   String getTimeDifference({required String dateTime}) {

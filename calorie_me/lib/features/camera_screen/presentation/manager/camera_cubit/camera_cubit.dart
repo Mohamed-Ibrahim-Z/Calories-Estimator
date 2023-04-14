@@ -31,6 +31,8 @@ class CameraCubit extends Cubit<CameraStates> {
     emit(ImagePickedSuccessState());
   }
 
+  Uint8List imageBytes = Uint8List(0);
+
   void pickImage({
     required bool isCamera,
   }) {
@@ -44,27 +46,11 @@ class CameraCubit extends Cubit<CameraStates> {
     });
   }
 
-  Uint8List imageBytes = Uint8List(0);
-
-  // void compressImage() async {
-  //   FlutterImageCompress.compressWithFile(
-  //     image.path,
-  //     quality: 50,
-  //   ).then((value) async {
-  //     image = File(image.path)..writeAsBytes(value!);
-  //     imageBytes = await image.readAsBytes();
-  //     print("Bytes: $imageBytes");
-  //     print("BytesLength: ${imageBytes.length}");
-  //     emit(ImagePickedSuccessState());
-  //   });
-  // }
-
   String imageUrl = "";
-  String imageCutUrl = "";
   final fireStorage = FirebaseStorage.instance;
   Uint8List imageCutBytes = Uint8List(0);
 
-  void uploadCutImage() {
+  void cutImage() {
     emit(UploadImageLoadingState());
     Image decodedImage = decodeImage(image.readAsBytesSync())!;
     final width = decodedImage.width;
@@ -76,19 +62,8 @@ class CameraCubit extends Cubit<CameraStates> {
       }
     }
     imageCutBytes = encodePng(decodedImage);
-    fireStorage
-        .ref()
-        .child('meals/${Uri.file(image.path).pathSegments.last}')
-        .putData(imageCutBytes)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        imageCutUrl = value;
-        predictImage();
-        emit(UploadImageSuccessState());
-      });
-    }).catchError((error) {
-      emit(UploadImageErrorState());
-    });
+    creditCardPixels = creditCardWidth * creditCardHeight;
+    predictImage();
   }
 
   void uploadFullImage() {
@@ -118,18 +93,16 @@ class CameraCubit extends Cubit<CameraStates> {
     emit(AddMealLoadingState());
     MealModel addMealModel = MealModel(
       dateTime: DateTime.now().toString(),
-      ingredients: {"mealModel.ingredients": 123},
+      ingredients: mealModel.ingredients,
       imageUrl: imageUrl,
-      mealCalories: 150,
+      mealCalories: mealModel.mealCalories,
     );
-    mealModel = addMealModel;
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
         .collection('meals')
         .add(addMealModel.toMap())
         .then((value) {
-      fillTableRows();
       emit(AddMealSuccessState());
     }).catchError((error) {
       emit(AddMealErrorState());
@@ -138,14 +111,33 @@ class CameraCubit extends Cubit<CameraStates> {
 
   FormData formData = FormData.fromMap({});
   String errorMessage = "";
+  int numOfTabs = 0;
+
+  bool doubleTapped() {
+    numOfTabs++;
+    if (numOfTabs < 2) {
+      emit(DoubleTapState());
+    } else if (numOfTabs == 2) {
+      numOfTabs = 0;
+      // cancel request if it's still loading
+      if (mealModel.ingredients.isEmpty) {
+        cancelToken.cancel();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  CancelToken cancelToken = CancelToken();
 
   void predictImage() async {
+    cancelToken = CancelToken();
     emit(PredictImageLoadingState());
     print("Predicting Image");
-    creditCardPixels = creditCardWidth * creditCardHeight;
     !newVersion
         ? formData = FormData.fromMap({
-            "img_link": imageCutUrl,
+            "img_bytes": MultipartFile.fromBytes(imageCutBytes,
+                filename: Uri.file(image.path).pathSegments.last),
             "ref_pixels": creditCardPixels.round(),
           })
         : formData = FormData.fromMap({
@@ -155,13 +147,14 @@ class CameraCubit extends Cubit<CameraStates> {
     try {
       await DioHelper.postData(
               endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
-              data: formData)
+              data: formData,
+              cancelToken: cancelToken)
           .then((value) {
-        if (value.data['error'] != null) {
-          errorMessage = value.data['error'];
-          emit(PredictImageErrorState());
-          return;
-        }
+        // if (value.data['error'] != null) {
+        //   print("HEREEEE");
+        //   print(value.data['error']);
+        //   emit(PredictImageErrorState());
+        // }
         mealModel = MealModel.fromJson(value.data);
         fillTableRows();
         emit(PredictImageSuccessState());
@@ -208,12 +201,14 @@ class CameraCubit extends Cubit<CameraStates> {
   dynamic totalMealCalories = 0;
 
   void fillTableRows() {
+    totalMealCalories = 0;
     mealModel.ingredients.forEach((key, value) {
       tableRows.add(tableRow(ingredient: key, calories: value));
-      totalMealCalories = value;
+      totalMealCalories += value;
     });
     tableRows.add(
-        tableRow(ingredient: 'Total Calories', calories: totalMealCalories));
+        tableRow(ingredient: "Total Calories", calories: totalMealCalories));
+    emit(FillTableSuccessState());
   }
 
   void clearTableRowsAndMealModel() {

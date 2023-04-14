@@ -14,3 +14,7 @@ class PredictImageLoadingState extends CameraStates {}
 class PredictImageSuccessState extends CameraStates {}
 class PredictImageErrorState extends CameraStates {}
 class ToggleFlashState extends CameraStates {}
+class FillTableLoadingState extends CameraStates {}
+class FillTableSuccessState extends CameraStates {}
+class FillTableErrorState extends CameraStates {}
+class DoubleTapState extends CameraStates {}

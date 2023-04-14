@@ -1,4 +1,5 @@
 import 'package:calorie_me/core/utils/page_transition.dart';
+import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/constants.dart';
@@ -34,6 +35,7 @@ class CacheHelper {
     if (isGoogleAccount) {
       LoginCubit.get(context).signOutFromGmail();
     }
+    HomeScreenCubit.get(context).clearUserData();
     sharedPreferences!.remove("token");
     FirebaseAuth.instance.signOut();
     navigateToAndRemoveUntil(nextPage: const LoginScreen(), context: context);

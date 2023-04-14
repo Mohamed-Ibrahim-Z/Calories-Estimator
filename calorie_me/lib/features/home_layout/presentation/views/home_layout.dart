@@ -77,11 +77,10 @@ class HomeLayout extends StatelessWidget {
               listener: (context, state) {
                 if (state is ImagePickedSuccessState) {
                   navigateToAndRemoveUntil(
-                      nextPage: const ImageDetailsScreen(), context: context);
-                  // !newVersion
-                  //     ? cameraCubit.uploadCutImage()
-                  //     : cameraCubit.predictImage();
-                  cameraCubit.uploadFullImage();
+                      nextPage: ImageDetailsScreen(), context: context);
+                  !newVersion
+                      ? cameraCubit.cutImage()
+                      : cameraCubit.predictImage();
                 }
               },
               child: FloatingActionButton(

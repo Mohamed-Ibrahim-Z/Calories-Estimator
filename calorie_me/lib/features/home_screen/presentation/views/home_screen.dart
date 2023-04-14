@@ -1,12 +1,13 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/meals_container.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/undo_meal_snack_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
-import 'widgets/meals_list_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,8 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var homeScreenCubit = HomeScreenCubit.get(context);
-
-    return BlocListener<CameraCubit, CameraStates>(
+    return BlocConsumer<CameraCubit, CameraStates>(
       listener: (context, cameraState) {
         if (cameraState is AddMealSuccessState) {
           defaultToast(
@@ -41,81 +41,58 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         }
       },
-      child: BlocConsumer<HomeScreenCubit, HomeScreenStates>(
-        listener: (context, state) {
-          if (state is DeleteMealSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                behavior: SnackBarBehavior.floating,
-                margin: EdgeInsets.zero,
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                content: defaultText(text: "Meal Deleted Successfully"),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    homeScreenCubit.undoDeleteMeal();
-                  },
-                ),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ConditionalBuilder(
-                condition: homeScreenCubit.userLogged != null &&
-                    state is! GetMealsLoadingState,
-                builder: (context) {
-                  var currentUser = homeScreenCubit.userLogged;
-                  return customPercentIndicator(
-                      animationOfIcon, context, currentUser!);
-                },
-                fallback: (context) => SizedBox(
-                    height: 37.h, child: defaultCircularProgressIndicator()),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 4.w),
-                    child: defaultText(
-                        text: 'Meals',
-                        style: Theme.of(context).textTheme.bodyMedium)),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
+      builder: (context,cameraState)
+      {
+        return BlocConsumer<HomeScreenCubit, HomeScreenStates>(
+          listener: (context, state) {
+            if (state is DeleteMealSuccessState) {
+              undoMealSnackBar(
+                  homeScreenCubit: homeScreenCubit, context: context);
+            }
+          },
+          builder: (context, state) {
+            return ConditionalBuilder(
+              condition: homeScreenCubit.userLogged != null &&
+                  state is! GetUserDataLoadingState &&
+                  state is! GetMealsLoadingState,
+              builder: (context) {
+                var currentUser = homeScreenCubit.userLogged;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    customPercentIndicator(
+                        animationOfIcon, context, currentUser!),
+                    SizedBox(
+                      height: 2.h,
                     ),
-                    child: homeScreenCubit.mealsList.isNotEmpty
-                        ? shaderMask(
-                            homeScreenCubit: homeScreenCubit,
-                            state: state,
-                            listViewAnimationController: listController!,
-                            evenItem: evenItemOfListAnimation!,
-                            oddItem: oddItemOfListAnimation!)
-                        : Center(
-                            child: defaultText(
-                                text: 'No Meals Added Yet',
-                                style:
-                                    Theme.of(context).textTheme.bodyMedium))),
-              ),
-            ],
-          );
-        },
-      ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 4.w),
+                          child: defaultText(
+                              text: 'Meals',
+                              style: Theme.of(context).textTheme.bodyMedium)),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    mealsContainer(
+                        context: context,
+                        homeScreenCubit: homeScreenCubit,
+                        screenState: state,
+                        cameraState: cameraState,
+                        listController: listController!,
+                        evenItemOfListAnimation: evenItemOfListAnimation!,
+                        oddItemOfListAnimation: oddItemOfListAnimation!),
+                  ],
+                );
+              },
+              fallback: (context) => defaultCircularProgressIndicator(),
+            );
+          },
+        );
+      },
     );
   }
 

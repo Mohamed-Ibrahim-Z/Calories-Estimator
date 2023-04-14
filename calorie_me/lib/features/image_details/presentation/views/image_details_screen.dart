@@ -10,7 +10,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 
 class ImageDetailsScreen extends StatelessWidget {
-  const ImageDetailsScreen({Key? key}) : super(key: key);
+  ImageDetailsScreen({Key? key}) : super(key: key);
+  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +26,29 @@ class ImageDetailsScreen extends StatelessWidget {
           navigateToAndRemoveUntil(
               nextPage: const HomeLayout(), context: context);
         }
+        if (state is DoubleTapState) {
+          defaultToast(
+            msg: 'Press again to exit',
+            backgroundColor: Colors.blueGrey,
+            textColor: Colors.white,
+          );
+        }
       },
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            defaultToast(
-                msg: 'Please use the back button to go back',
-                backgroundColor: Colors.blueGrey);
+            bool isDoubleTap = cubit.doubleTapped();
+            if (isDoubleTap) {
+              navigateToAndRemoveUntil(
+                  nextPage: const HomeLayout(), context: context);
+            }
             return false;
           },
           child: SafeArea(
             child: Scaffold(
               body: backgroundAnimationStack(
                 screenBody: CustomScrollView(
+                  controller: scrollController,
                   slivers: [
                     SliverAppBar(
                       expandedHeight: cubit.cameraHeight,
@@ -54,10 +65,15 @@ class ImageDetailsScreen extends StatelessWidget {
                         [
                           ConditionalBuilder(
                             condition: cubit.tableRows.isNotEmpty,
-                            builder: (context) => imageDetailsBody(
-                              context: context,
-                              cameraCubit: cubit,
-                            ),
+                            builder: (context) {
+                              // To wait for the table to be built before scrolling to the bottom
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => scrollToBottom());
+                              return imageDetailsBody(
+                                context: context,
+                                cameraCubit: cubit,
+                              );
+                            },
                             fallback: (context) => Padding(
                               padding: EdgeInsets.only(top: 7.h),
                               child: defaultCircularProgressIndicator(),
@@ -74,5 +90,10 @@ class ImageDetailsScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 }

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "150405689389-04jgo08lufm1lj4038sji0jb9jlne63r.apps.googleusercontent.com",
+          "client_id": "150405689389-0hl2d3sac39r870ft2856u4gi04u56t8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.calorie_me",
+            "certificate_hash": "d5867ced7ab703536e55775e7c8027c30cf063ed"
+          }
+        },
+        {
+          "client_id": "150405689389-2l4q3c2uj2cph2350b235jg6m1hhnuui.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +37,13 @@
             {
               "client_id": "150405689389-04jgo08lufm1lj4038sji0jb9jlne63r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "150405689389-n1ldcq25hde24s452ap73turbbj5rg2c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.calorieMe"
+              }
             }
           ]
         }

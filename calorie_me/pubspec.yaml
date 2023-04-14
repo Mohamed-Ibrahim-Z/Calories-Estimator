@@ -44,7 +44,7 @@ dependencies:
   flutter_spinkit: ^5.1.0
   avatar_glow: ^2.0.2
   rive: ^0.10.2
-  google_sign_in: ^6.0.2
+  google_sign_in: ^6.1.0
   cached_network_image: ^3.2.3
   shared_preferences: ^2.0.18
   dio: ^5.1.1

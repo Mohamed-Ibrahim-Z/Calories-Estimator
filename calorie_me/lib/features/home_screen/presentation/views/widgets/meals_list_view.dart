@@ -7,10 +7,10 @@ import 'meals_list_view_item.dart';
 
 Widget shaderMask({
   required HomeScreenCubit homeScreenCubit,
-  required state,
   required AnimationController listViewAnimationController,
   required Animation<Offset> evenItem,
   required Animation<Offset> oddItem,
+  required CameraStates cameraState,
 }) =>
     ShaderMask(
       shaderCallback: (Rect bounds) {
@@ -29,46 +29,48 @@ Widget shaderMask({
       blendMode: BlendMode.dstIn,
       child: mealsListView(
         homeScreenCubit: homeScreenCubit,
-        state: state,
         listViewAnimationController: listViewAnimationController,
         evenItem: evenItem,
         oddItem: oddItem,
+        cameraState: cameraState,
       ),
     );
 
 Widget mealsListView({
   required HomeScreenCubit homeScreenCubit,
-  required state,
   required AnimationController listViewAnimationController,
   required Animation<Offset> evenItem,
   required Animation<Offset> oddItem,
-}) =>
-    ListView.separated(
-      physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 3.h),
-      separatorBuilder: (context, index) => SizedBox(
-        height: 3.h,
-      ),
-      itemBuilder: (context, index) {
-        bool isEven = index % 2 == 0;
-        return state is UploadImageLoadingState
-            ? mealsItemShimmer()
-            : isEven
-                ? SlideTransition(
-                    position: evenItem,
-                    child: mealsItem(
-                        meal: homeScreenCubit.mealsList[index],
-                        context: context,
-                        homeScreenCubit: homeScreenCubit,
-                        index: index),
-                  )
-                : SlideTransition(
-                    position: oddItem,
-                    child: mealsItem(
-                        meal: homeScreenCubit.mealsList[index],
-                        context: context,
-                        homeScreenCubit: homeScreenCubit,
-                        index: index));
-      },
-      itemCount: homeScreenCubit.mealsList.length,
-    );
+  required CameraStates cameraState,
+}) {
+  return ListView.separated(
+    physics: const BouncingScrollPhysics(),
+    padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 3.h),
+    separatorBuilder: (context, index) => SizedBox(
+      height: 3.h,
+    ),
+    itemBuilder: (context, index) {
+      bool isEven = index % 2 == 0;
+      return cameraState is AddMealLoadingState ||
+              cameraState is UploadImageLoadingState
+          ? mealsItemShimmer()
+          : isEven
+              ? SlideTransition(
+                  position: evenItem,
+                  child: mealsItem(
+                      meal: homeScreenCubit.mealsList[index],
+                      context: context,
+                      homeScreenCubit: homeScreenCubit,
+                      index: index),
+                )
+              : SlideTransition(
+                  position: oddItem,
+                  child: mealsItem(
+                      meal: homeScreenCubit.mealsList[index],
+                      context: context,
+                      homeScreenCubit: homeScreenCubit,
+                      index: index));
+    },
+    itemCount: homeScreenCubit.mealsList.length,
+  );
+}

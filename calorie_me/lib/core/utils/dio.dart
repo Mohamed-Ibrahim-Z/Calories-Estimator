@@ -24,7 +24,8 @@ class DioHelper {
   static Future<Response> postData({
     required String endPoint,
     required FormData data,
+    required CancelToken cancelToken,
   }) async {
-    return await dio!.post(endPoint, data: data);
+    return await dio!.post(endPoint, data: data,cancelToken: cancelToken);
   }
 }
