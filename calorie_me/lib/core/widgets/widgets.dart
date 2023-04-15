@@ -50,6 +50,7 @@ Widget defaultIconButton(
         Color? color,
         double? iconSize}) =>
     IconButton(
+        padding: EdgeInsets.zero,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         icon: Icon(

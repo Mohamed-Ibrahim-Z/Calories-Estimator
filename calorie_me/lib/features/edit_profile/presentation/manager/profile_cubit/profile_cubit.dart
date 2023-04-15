@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:calorie_me/core/utils/calculate_bmr.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-
 
 part 'profile_states.dart';
 
@@ -60,7 +60,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
     if (currentUserModel!.weight != updateUserModel.weight ||
         currentUserModel.height != updateUserModel.height ||
         currentUserModel.age != updateUserModel.age) {
-      updateBMR(updateUserModel: updateUserModel);
+      calculateBMR(userModel: updateUserModel);
     }
     FirebaseFirestore.instance
         .collection('users')
@@ -71,19 +71,5 @@ class ProfileCubit extends Cubit<ProfileStates> {
     }).catchError((error) {
       emit(UpdateUserDataErrorState());
     });
-  }
-
-  void updateBMR({required UserModel updateUserModel}) {
-    if (updateUserModel.gender == "Male") {
-      updateUserModel.bmr = 88.362 +
-          (13.397 * updateUserModel.weight) +
-          (4.799 * updateUserModel.height) -
-          (5.677 * updateUserModel.age!.toInt());
-    } else {
-      updateUserModel.bmr = 447.593 +
-          (9.247 * updateUserModel.weight) +
-          (3.098 * updateUserModel.height) -
-          (4.330 * updateUserModel.age!.toInt());
-    }
   }
 }

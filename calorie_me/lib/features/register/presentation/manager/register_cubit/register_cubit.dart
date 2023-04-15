@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/constants.dart';
+import '../../../../../core/utils/calculate_bmr.dart';
 import '../../../data/model/user_model.dart';
 
 part 'register_states.dart';
@@ -89,7 +90,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       height: height,
       bmr: 0,
     );
-    calculateBMR();
+    calculateBMR(userModel: userModel);
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
@@ -102,19 +103,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
     });
   }
 
-  void calculateBMR() {
-    if (userModel!.gender == "Male") {
-      userModel!.bmr = 88.362 +
-          (13.397 * userModel!.weight) +
-          (4.799 * userModel!.height) -
-          (5.677 * userModel!.age!.toInt());
-    } else {
-      userModel!.bmr = 447.593 +
-          (9.247 * userModel!.weight) +
-          (3.098 * userModel!.height) -
-          (4.330 * userModel!.age!.toInt());
-    }
-  }
 
   void clearGender() {
     gender = '';

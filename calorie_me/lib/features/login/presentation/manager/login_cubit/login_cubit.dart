@@ -1,4 +1,5 @@
 import 'package:calorie_me/core/utils/cache_helper.dart';
+import 'package:calorie_me/core/utils/calculate_bmr.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,7 +51,15 @@ class LoginCubit extends Cubit<LoginStates> {
     });
   }
 
+  String gender = "";
+
+  void changeGender(String value) {
+    gender = value;
+    emit(ChangeGenderState());
+  }
+
   final googleSignIn = GoogleSignIn();
+  UserModel? userModel;
 
   void loginWithGmail() async {
     googleSignIn.signIn().then((user) {
@@ -65,7 +74,7 @@ class LoginCubit extends Cubit<LoginStates> {
         await FirebaseAuth.instance.signInWithCredential(credential);
       }).then((value) {
         isGoogleAccount = true;
-        UserModel userModel = UserModel(
+        userModel = UserModel(
           userName: user.displayName,
           email: user.email,
           password: 'password',
@@ -81,22 +90,38 @@ class LoginCubit extends Cubit<LoginStates> {
             .doc(user.id)
             .get()
             .then((value) {
-          CacheHelper.saveData(key: 'token', value: user.id);
-          CacheHelper.saveData(key: 'isGoogleAccount', value: true);
           loggedUserID = user.id;
           if (value.exists) {
             emit(LoginSuccessState());
+            CacheHelper.saveData(key: 'token', value: user.id);
+            CacheHelper.saveData(key: 'isGoogleAccount', value: true);
           } else {
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.id)
-                .set(userModel.toMap())
-                .then((value) {
-              emit(LoginSuccessState());
-            });
+            emit(NewGoogleAccountState());
           }
         });
       });
+    });
+  }
+
+  void addNewGoogleAccount({
+    required int age,
+    required double weight,
+    required double height,
+  }) {
+    emit(LoginLoadingState());
+    userModel!.age = age;
+    userModel!.weight = weight;
+    userModel!.height = height;
+    userModel!.gender = gender;
+    calculateBMR(userModel: userModel);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel!.uId)
+        .set(userModel!.toMap())
+        .then((value) {
+      emit(LoginSuccessState());
+      CacheHelper.saveData(key: 'token', value: userModel!.uId);
+      CacheHelper.saveData(key: 'isGoogleAccount', value: true);
     });
   }
 

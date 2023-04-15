@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../core/widgets/widgets.dart';
 
@@ -17,6 +18,9 @@ Widget chooseGender({required cubit, required context}) => Row(
                 }),
             defaultText(
               text: 'Male',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 16.sp,
+              ),
             )
           ],
         ),
@@ -32,6 +36,9 @@ Widget chooseGender({required cubit, required context}) => Row(
                 }),
             defaultText(
               text: 'Female',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 16.sp,
+              ),
             )
           ],
         ),

@@ -4,13 +4,13 @@ import '../../../../../core/widgets/widgets.dart';
 
 List<Widget> regTextFormFieldsList(
         {required context,
-        required usernameController,
-        required emailController,
-        required passwordController,
+        dynamic usernameController,
+        dynamic emailController,
+        dynamic passwordController,
         required ageController,
         required weightController,
         required heightController,
-        required cubit}) =>
+        cubit}) =>
     [
       defaultTextFormField(
         context: context,
@@ -29,20 +29,22 @@ List<Widget> regTextFormFieldsList(
         validationString: 'Email',
         enableEditing: isGoogleAccount ? false : true,
       ),
-      defaultTextFormField(
-        hintText: 'Password',
-        context: context,
-        keyboardType: TextInputType.visiblePassword,
-        controller: passwordController,
-        prefixIcon: const Icon(Icons.lock_outline),
-        suffixIcon: IconButton(
-            onPressed: () {
-              cubit.changePasswordVisibility();
-            },
-            icon: Icon(cubit.suffixIcon)),
-        isPassword: cubit.isPass,
-        validationString: 'Password',
-      ),
+      cubit != null
+          ? defaultTextFormField(
+              hintText: 'Password',
+              context: context,
+              keyboardType: TextInputType.visiblePassword,
+              controller: passwordController,
+              prefixIcon: const Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    cubit.changePasswordVisibility();
+                  },
+                  icon: Icon(cubit.suffixIcon)),
+              isPassword: cubit.isPass,
+              validationString: 'Password',
+            )
+          : const SizedBox(),
       defaultTextFormField(
         hintText: 'Age',
         context: context,
