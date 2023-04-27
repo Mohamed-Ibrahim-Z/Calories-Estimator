@@ -7,28 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:rive/rive.dart';
 
+import '../../features/login/presentation/views/widgets/text_form_fields_labels.dart';
 import '../constants/constants.dart';
-
-Widget splashScreen({required Widget nextScreen}) => AnimatedSplashScreen(
-      splash: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(logoImagePath),
-          SizedBox(height: 6.h),
-          SpinKitFadingCircle(
-            color: Colors.white,
-            size: 36.0.sp,
-          ),
-        ],
-      ),
-      nextScreen: nextScreen,
-      splashTransition: SplashTransition.fadeTransition,
-      animationDuration: const Duration(seconds: 1),
-      backgroundColor: defaultColor,
-      splashIconSize: 700,
-      curve: Curves.easeInOut,
-      duration: 2000,
-    );
 
 Widget defaultText(
         {required String text,
@@ -72,9 +52,9 @@ Widget defaultButton({
       color: defaultColor,
       textColor: Colors.white,
       minWidth: 100.w,
-      height: 7.h,
+      height: 8.h,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: defaultText(text: text, style: TextStyle(fontSize: 17.sp)),
     );
@@ -103,6 +83,7 @@ Widget defaultTextFormField({
             : Theme.of(context).disabledColor,
         hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.w400,
+              color: Theme.of(context).disabledColor,
             ),
         prefixIcon: prefixIcon,
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -110,14 +91,14 @@ Widget defaultTextFormField({
         suffixIcon: suffixIcon,
         hintText: hintText,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: defaultBorderRadius,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: defaultBorderRadius,
           borderSide: BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: defaultBorderRadius,
           borderSide: BorderSide(color: borderColor),
         ),
       ),
@@ -140,7 +121,7 @@ Future<bool?> defaultToast(
     {required String msg,
     Color textColor = Colors.white,
     double fontSize = 16,
-    Color backgroundColor = defaultColor,
+    Color backgroundColor = Colors.deepOrange,
     Toast toastLength = Toast.LENGTH_SHORT}) {
   Fluttertoast.cancel();
   return Fluttertoast.showToast(
@@ -154,33 +135,47 @@ Future<bool?> defaultToast(
 }
 
 Widget textFormFieldsListView(
-    {required List<Widget> textFormFieldsList, required BuildContext context}) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
-    decoration: BoxDecoration(
-      color: Theme.of(context).cardColor,
-      borderRadius: BorderRadius.circular(15),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 8,
-          blurRadius: 7,
-          offset: const Offset(0, 4),
-        ),
-      ],
-    ),
-    child: ListView.separated(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return textFormFieldsList[index];
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(height: 3.h);
-        },
-        itemCount: textFormFieldsList.length),
-  );
+    {required List<Widget> textFormFieldsList,
+    required List<String> textFormFieldsLabels,
+    required BuildContext context}) {
+  return ListView.separated(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  loginTextFormFieldsIcons[index],
+                  size: 20.sp,
+                  color: Color(0xFF696969),
+                ),
+                SizedBox(
+                  width: 2.w,
+                ),
+                defaultText(
+                  text: textFormFieldsLabels[index],
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF696969),
+                      ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            textFormFieldsList[index],
+          ],
+        );
+      },
+      separatorBuilder: (context, index) {
+        return SizedBox(height: 3.h);
+      },
+      itemCount: textFormFieldsList.length);
 }
 
 Widget backgroundAnimationStack({required Widget screenBody}) => Stack(
@@ -203,7 +198,7 @@ Widget backgroundAnimationStack({required Widget screenBody}) => Stack(
       ],
     );
 
-Widget defaultCircularProgressIndicator() => const Center(
+Widget defaultCircularProgressIndicator() => Center(
       child: SpinKitFadingCircle(
         color: defaultColor,
       ),

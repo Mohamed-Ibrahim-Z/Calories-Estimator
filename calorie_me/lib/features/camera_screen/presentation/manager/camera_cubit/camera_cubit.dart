@@ -70,7 +70,10 @@ class CameraCubit extends Cubit<CameraStates> {
     emit(UploadImageLoadingState());
     fireStorage
         .ref()
-        .child('meals/${Uri.file(image.path).pathSegments.last}')
+        .child('meals/${Uri
+        .file(image.path)
+        .pathSegments
+        .last}')
         .putFile(image)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -136,19 +139,25 @@ class CameraCubit extends Cubit<CameraStates> {
     print("Predicting Image");
     !newVersion
         ? formData = FormData.fromMap({
-            "img_bytes": MultipartFile.fromBytes(imageCutBytes,
-                filename: Uri.file(image.path).pathSegments.last),
-            "ref_pixels": creditCardPixels.round(),
-          })
+      "img_bytes": MultipartFile.fromBytes(imageCutBytes,
+          filename: Uri
+              .file(image.path)
+              .pathSegments
+              .last),
+      "ref_pixels": creditCardPixels.round(),
+    })
         : formData = FormData.fromMap({
-            "img_bytes": MultipartFile.fromBytes(imageBytes,
-                filename: Uri.file(image.path).pathSegments.last),
-          });
+      "img_bytes": MultipartFile.fromBytes(imageBytes,
+          filename: Uri
+              .file(image.path)
+              .pathSegments
+              .last),
+    });
     try {
       await DioHelper.postData(
-              endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
-              data: formData,
-              cancelToken: cancelToken)
+          endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
+          data: formData,
+          cancelToken: cancelToken)
           .then((value) {
         // if (value.data['error'] != null) {
         //   print("HEREEEE");
@@ -201,14 +210,16 @@ class CameraCubit extends Cubit<CameraStates> {
   dynamic totalMealCalories = 0;
 
   void fillTableRows() {
-    totalMealCalories = 0;
-    mealModel.ingredients.forEach((key, value) {
-      tableRows.add(tableRow(ingredient: key, calories: value));
-      totalMealCalories += value;
-    });
-    tableRows.add(
-        tableRow(ingredient: "Total Calories", calories: totalMealCalories));
-    emit(FillTableSuccessState());
+    if (tableRows.isEmpty) {
+      totalMealCalories = 0;
+      mealModel.ingredients.forEach((key, value) {
+        tableRows.add(tableRow(ingredient: key, calories: value));
+        totalMealCalories += value;
+      });
+      tableRows.add(
+          tableRow(ingredient: "Total Calories", calories: totalMealCalories));
+    }
+    // emit(FillTableSuccessState());
   }
 
   void clearTableRowsAndMealModel() {

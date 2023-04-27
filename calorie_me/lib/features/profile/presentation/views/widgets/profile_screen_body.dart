@@ -21,24 +21,12 @@ class ProfileScreenBody extends StatefulWidget {
 class _ProfileScreenBodyState extends State<ProfileScreenBody>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<Offset> profilePhotoAnimation,personalInfoAnimation;
+  late Animation<Offset> profilePhotoAnimation, personalInfoAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    profilePhotoAnimation = Tween<Offset>(
-      begin: const Offset(0, -1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    personalInfoAnimation = Tween<Offset>(
-      begin: const Offset(0, 1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    _controller.forward();
+    animateProfileScreen();
   }
 
   @override
@@ -61,40 +49,44 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody>
             var currentUser = homeScreenCubit.userLogged!;
             List<String> userInfoTexts =
                 initUserInfoTexts(currentUser: currentUser);
-            return Padding(
-              padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 4.5.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SlideTransition(
-                    position: profilePhotoAnimation,
-                    child: Center(
-                        child: profilePhoto(
-                            cubit: profileCubit,
-                            currentUser: currentUser,
-                            context: context)),
-                  ),
-                  SlideTransition(
-                    position: personalInfoAnimation,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        defaultText(
-                          text: 'Personal Information',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: defaultColor,
-                                    fontSize: 20.sp,
-                                    letterSpacing: 1.5,
-                                  ),
-                        ),
-                        SizedBox(height: 2.h),
-                        PersonalInfo(userInfoTexts: userInfoTexts),
-                        editProfileBtn(context: context),
-                      ],
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 4.5.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SlideTransition(
+                      position: profilePhotoAnimation,
+                      child: Center(
+                          child: profilePhoto(
+                              cubit: profileCubit,
+                              currentUser: currentUser,
+                              context: context)),
                     ),
-                  ),
-                ],
+                    SlideTransition(
+                      position: personalInfoAnimation,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          defaultText(
+                            text: 'Personal Information',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: defaultColor,
+                                  fontSize: 20.sp,
+                                  letterSpacing: 1.5,
+                                ),
+                          ),
+                          SizedBox(height: 2.h),
+                          PersonalInfo(userInfoTexts: userInfoTexts),
+                          editProfileBtn(context: context),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -102,5 +94,21 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody>
         );
       },
     );
+  }
+
+  void animateProfileScreen() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    profilePhotoAnimation = Tween<Offset>(
+      begin: const Offset(0, -1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    personalInfoAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _controller.forward();
   }
 }

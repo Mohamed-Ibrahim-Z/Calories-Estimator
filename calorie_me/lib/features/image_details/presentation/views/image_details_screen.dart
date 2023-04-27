@@ -94,6 +94,6 @@ class ImageDetailsScreen extends StatelessWidget {
 
   void scrollToBottom() {
     scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }

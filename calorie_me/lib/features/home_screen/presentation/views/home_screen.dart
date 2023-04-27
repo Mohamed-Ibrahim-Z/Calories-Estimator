@@ -1,6 +1,9 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
+import 'package:calorie_me/features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/header.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/horizontal_calendar.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/meals_container.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/undo_meal_snack_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -22,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AnimationController? listController;
   Animation<Offset>? evenItemOfListAnimation;
   Animation<Offset>? oddItemOfListAnimation;
+  ScrollController calendarScrollController = ScrollController();
+  bool isScreenBuilt = false;
 
   @override
   void initState() {
@@ -41,8 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         }
       },
-      builder: (context,cameraState)
-      {
+      builder: (context, cameraState) {
         return BlocConsumer<HomeScreenCubit, HomeScreenStates>(
           listener: (context, state) {
             if (state is DeleteMealSuccessState) {
@@ -57,35 +61,59 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   state is! GetMealsLoadingState,
               builder: (context) {
                 var currentUser = homeScreenCubit.userLogged;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    customPercentIndicator(
-                        animationOfIcon, context, currentUser!),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                          padding: EdgeInsets.only(left: 4.w),
-                          child: defaultText(
-                              text: 'Meals',
-                              style: Theme.of(context).textTheme.bodyMedium)),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    mealsContainer(
-                        context: context,
-                        homeScreenCubit: homeScreenCubit,
-                        screenState: state,
-                        cameraState: cameraState,
-                        listController: listController!,
-                        evenItemOfListAnimation: evenItemOfListAnimation!,
-                        oddItemOfListAnimation: oddItemOfListAnimation!),
-                  ],
+
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      header(
+                          context: context,
+                          currentUser: currentUser!,
+                          profileCubit: ProfileCubit.get(context)),
+                      customPercentIndicator(
+                          animationOfIcon, context, currentUser),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      Builder(builder: (context) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!isScreenBuilt) {
+                            scrollToRight();
+                          }
+                        });
+                        return horizontalCalendar(
+                            homeScreenCubit: homeScreenCubit,
+                            calendarScrollController: calendarScrollController);
+                      }),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 4.w),
+                            child: defaultText(
+                                text: 'Daily Meals',
+                                style: Theme.of(context).textTheme.bodyMedium)),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      state is ChangeSelectedDateLoadingState
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 5.h),
+                              child: defaultCircularProgressIndicator())
+                          : mealsContainer(
+                              context: context,
+                              homeScreenCubit: homeScreenCubit,
+                              screenState: state,
+                              cameraState: cameraState,
+                              listController: listController!,
+                              evenItemOfListAnimation: evenItemOfListAnimation!,
+                              oddItemOfListAnimation: oddItemOfListAnimation!),
+                    ],
+                  ),
                 );
               },
               fallback: (context) => defaultCircularProgressIndicator(),
@@ -130,6 +158,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       begin: const Offset(1, 0),
       end: Offset.zero,
     ).animate(listController!);
+  }
+
+  void scrollToRight() {
+    if (calendarScrollController.hasClients) {
+      calendarScrollController.animateTo(
+        6 * 11.w,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+      isScreenBuilt = true;
+    }
   }
 
   @override

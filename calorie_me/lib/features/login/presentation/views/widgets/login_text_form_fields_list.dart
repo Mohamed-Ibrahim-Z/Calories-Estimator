@@ -13,7 +13,6 @@ List<Widget> loginTextFormFieldsList(
         hintText: 'Email',
         context: context,
         keyboardType: TextInputType.emailAddress,
-        prefixIcon: const Icon(Icons.email_outlined),
         controller: emailController,
         validationString: 'Email',
       ),
@@ -22,7 +21,6 @@ List<Widget> loginTextFormFieldsList(
         context: context,
         keyboardType: TextInputType.visiblePassword,
         controller: passwordController,
-        prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
             onPressed: () {
               cubit.changePasswordVisibility();

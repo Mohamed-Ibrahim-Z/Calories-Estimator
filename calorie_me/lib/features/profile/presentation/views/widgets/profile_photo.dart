@@ -18,7 +18,7 @@ Widget profilePhoto(
       ),
       child: AvatarGlow(
         glowColor: defaultColor,
-        endRadius: endRadius ?? 12.0.h,
+        endRadius: endRadius ?? 7.0.h,
         child: CircleAvatar(
           radius: radius ?? 9.0.h,
           backgroundImage: cubit.profileImagePath == null

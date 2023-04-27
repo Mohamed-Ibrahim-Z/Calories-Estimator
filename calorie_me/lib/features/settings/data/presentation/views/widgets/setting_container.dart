@@ -23,7 +23,7 @@ Widget settingsContainer(
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
           borderRadius: BorderRadius.circular(23),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(color: defaultColor, offset: Offset(3, 3), blurRadius: 4)
           ],
         ),
@@ -58,7 +58,7 @@ Widget appearanceContainer(AppThemeCubit cubit, context) {
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(23),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(color: defaultColor, offset: Offset(3, 3), blurRadius: 4)
         ],
       ),

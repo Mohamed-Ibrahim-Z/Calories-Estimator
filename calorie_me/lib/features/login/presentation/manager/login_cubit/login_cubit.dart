@@ -58,49 +58,80 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangeGenderState());
   }
 
-  final googleSignIn = GoogleSignIn();
+  final googleSignIn = GoogleSignIn(scopes: [
+    'email',
+  ]);
+
   UserModel? userModel;
 
-  void loginWithGmail() async {
-    googleSignIn.signIn().then((user) {
-      // authenticate user
-      user!.authentication.then((googleKey) async {
-        emit(LoginLoadingState());
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleKey.accessToken,
-          idToken: googleKey.idToken,
-        );
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-        await FirebaseAuth.instance.signInWithCredential(credential);
-      }).then((value) {
-        isGoogleAccount = true;
-        userModel = UserModel(
-          userName: user.displayName,
-          email: user.email,
-          password: 'password',
-          gender: 'Male',
-          uId: user.id,
-          age: 0,
-          profilePhoto: user.photoUrl,
-          weight: 0,
-          height: 0,
-        );
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.id)
-            .get()
-            .then((value) {
-          loggedUserID = user.id;
-          if (value.exists) {
-            emit(LoginSuccessState());
-            CacheHelper.saveData(key: 'token', value: user.id);
-            CacheHelper.saveData(key: 'isGoogleAccount', value: true);
-          } else {
-            emit(NewGoogleAccountState());
-          }
+  // Future<void> loginWithGmail() async {
+  //   try {
+  //     await _googleSignIn.signIn().then((user) {
+  //       emit(LoginLoadingState());
+  //       print("Logged in");
+  //       defaultToast(msg: 'Logged in');
+  //       emit(LoginSuccessState());
+  //     });
+  //   } catch (e) {
+  //     print(e.toString());
+  //     defaultToast(msg: e.toString());
+  //     emit(LoginErrorState());
+  //   }
+  // }
+
+  void loginWithGmail() async {
+    try {
+      await googleSignIn.signIn().then((user) async {
+        // authenticate user
+        await user!.authentication.then((googleKey) async {
+          emit(LoginLoadingState());
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleKey.accessToken,
+            idToken: googleKey.idToken,
+          );
+
+          await FirebaseAuth.instance.signInWithCredential(credential);
+        }).then((value) {
+          isGoogleAccount = true;
+          userModel = UserModel(
+            userName: user.displayName,
+            email: user.email,
+            password: 'password',
+            gender: 'Male',
+            uId: user.id,
+            age: 0,
+            profilePhoto: user.photoUrl,
+            weight: 0,
+            height: 0,
+          );
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.id)
+              .get()
+              .then((value) {
+            loggedUserID = user.id;
+            if (value.exists) {
+              emit(LoginSuccessState());
+              CacheHelper.saveData(key: 'token', value: user.id);
+              CacheHelper.saveData(key: 'isGoogleAccount', value: true);
+            } else {
+              emit(NewGoogleAccountState());
+            }
+          });
         });
       });
-    });
+    } catch (e) {
+      print(e.toString());
+      if (e.toString().contains('network')) {
+        errorMessage = 'No Internet Connection';
+      } else {
+        errorMessage = 'Something went wrong please try again later';
+      }
+      emit(LoginErrorState());
+    }
   }
 
   void addNewGoogleAccount({
@@ -125,7 +156,7 @@ class LoginCubit extends Cubit<LoginStates> {
     });
   }
 
-  void signOutFromGmail() async {
+  Future<void> signOutFromGmail() async {
     await googleSignIn.signOut();
     isGoogleAccount = false;
     CacheHelper.sharedPreferences!.remove('isGoogleAccount');

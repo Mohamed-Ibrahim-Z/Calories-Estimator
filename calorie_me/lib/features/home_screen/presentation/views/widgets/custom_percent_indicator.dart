@@ -17,7 +17,7 @@ Widget customPercentIndicator(animation, context, UserModel currentUser) {
         percent: (caloriesRemaining / currentUser.bmr!).clamp(0.0, 1.0),
         backgroundWidth: 8,
         lineWidth: 15,
-        linearGradient: const LinearGradient(
+        linearGradient: LinearGradient(
           colors: [
             Colors.amber,
             defaultColor,
@@ -31,7 +31,7 @@ Widget customPercentIndicator(animation, context, UserModel currentUser) {
             Icon(
               shadows: [
                 BoxShadow(
-                  color: defaultColor[800]!,
+                  color: defaultColor,
                   blurRadius: animation!.value,
                   spreadRadius: animation!.value,
                 ),

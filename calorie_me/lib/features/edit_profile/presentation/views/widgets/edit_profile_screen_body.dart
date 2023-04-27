@@ -1,4 +1,5 @@
 import 'package:calorie_me/features/edit_profile/presentation/views/widgets/edit_profile_photo.dart';
+import 'package:calorie_me/features/edit_profile/presentation/views/widgets/text_form_fields_labels.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/register/data/model/user_model.dart';
 import 'package:flutter/material.dart';
@@ -70,11 +71,12 @@ class EditProfileScreenBody extends StatelessWidget {
                         weightController: weightController,
                         heightController: heightController,
                         loginCubit: loginCubit,
+                        textFormFieldsLabels: textFormFieldsLabels
                       ),
                       SizedBox(height: 3.h),
                       if (profileState is UpdateUserDataLoadingState ||
                           profileState is UploadProfileImageLoadingState)
-                        const Center(
+                         Center(
                             child: SpinKitFadingCircle(
                           color: defaultColor,
                         )),

@@ -14,26 +14,25 @@ Widget mealsContainer({
   required Animation<Offset> evenItemOfListAnimation,
   required Animation<Offset> oddItemOfListAnimation,
 }) =>
-    Expanded(
-        child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: homeScreenCubit.mealsList.isEmpty
-                ? Center(
-                    child: defaultText(
-                      text: "No Meals Added Yet",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  )
-                : shaderMask(
-                    homeScreenCubit: homeScreenCubit,
-                    listViewAnimationController: listController,
-                    evenItem: evenItemOfListAnimation,
-                    oddItem: oddItemOfListAnimation,
-                    cameraState: cameraState,
-                  )));
+    Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: homeScreenCubit.mealsList.isEmpty
+            ? Center(
+                child: defaultText(
+                  text: "No Meals Added Yet",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              )
+            : shaderMask(
+                homeScreenCubit: homeScreenCubit,
+                listViewAnimationController: listController,
+                evenItem: evenItemOfListAnimation,
+                oddItem: oddItemOfListAnimation,
+                cameraState: cameraState,
+              ));

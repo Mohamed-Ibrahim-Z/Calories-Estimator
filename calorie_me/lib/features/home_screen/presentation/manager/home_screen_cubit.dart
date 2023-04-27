@@ -45,15 +45,19 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
           .listen((event) {
         for (var element in event.docChanges) {
           if (element.type == DocumentChangeType.added) {
-            mealIndex == -1
-                ? mealsList.add(MealModel.fromFireStore(
-                    element.doc.data()!, element.doc.id))
-                : mealsList.insert(
-                    mealIndex,
-                    MealModel.fromFireStore(
-                        element.doc.data()!, element.doc.id));
-            caloriesConsumed += mealsList.last.mealCalories;
-            mealsIDs.add(element.doc.id);
+            if (!mealsIDs.contains(element.doc.id) &&
+                DateTime.parse(element.doc.data()!['dateTime']).day ==
+                    days.last.day) {
+              mealIndex == -1
+                  ? mealsList.add(MealModel.fromFireStore(
+                      element.doc.data()!, element.doc.id))
+                  : mealsList.insert(
+                      mealIndex,
+                      MealModel.fromFireStore(
+                          element.doc.data()!, element.doc.id));
+              caloriesConsumed += mealsList.last.mealCalories;
+              mealsIDs.add(element.doc.id);
+            }
           }
         }
         emit(GetMealsSuccessState());
@@ -102,6 +106,7 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     mealsIDs.clear();
     userLogged = null;
     caloriesConsumed = 0;
+    mealIndex = -1;
   }
 
   String getTimeDifference({required String dateTime}) {
@@ -135,5 +140,31 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
           '${(DateTime.now().difference(DateTime.parse(dateTime)).inDays / 30).floor()}m';
     }
     return time;
+  }
+
+  List<DateTime> days = List.generate(7, (index) {
+    return DateTime.now().subtract(Duration(days: 6 - index));
+  });
+  int selectedDateIndex = 6;
+
+  void changeSelectedDate(index) {
+    selectedDateIndex = index;
+    emit(ChangeSelectedDateLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(loggedUserID)
+        .collection('meals')
+        .get()
+        .then((value) {
+      mealsIDs.clear();
+      mealsList.clear();
+      value.docs.forEach((element) {
+        if (DateTime.parse(element.data()['dateTime']).day == days[index].day) {
+          mealsList.add(MealModel.fromFireStore(element.data(), element.id));
+          mealsIDs.add(element.id);
+        }
+      });
+      emit(ChangeSelectedDateSuccessState());
+    });
   }
 }

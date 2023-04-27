@@ -46,7 +46,7 @@ class ResetPasswordBody extends StatelessWidget {
                   context: context),
               SizedBox(height: 5.h),
               if (state is ResetPasswordLoadingState)
-                const SpinKitFadingCircle(
+                 SpinKitFadingCircle(
                   color: defaultColor,
                 ),
               if (state is! ResetPasswordLoadingState)

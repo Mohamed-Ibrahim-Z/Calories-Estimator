@@ -26,7 +26,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                   radius: 23,
                   backgroundColor: defaultColor,
                   child: Icon(
@@ -47,7 +47,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
               ),
               SizedBox(height: 1.h),
               ListTile(
-                leading: const CircleAvatar(
+                leading:  CircleAvatar(
                   radius: 23,
                   backgroundColor: defaultColor,
                   child: Icon(

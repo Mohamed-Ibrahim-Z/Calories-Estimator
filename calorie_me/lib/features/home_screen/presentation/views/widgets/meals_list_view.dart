@@ -44,7 +44,8 @@ Widget mealsListView({
   required CameraStates cameraState,
 }) {
   return ListView.separated(
-    physics: const BouncingScrollPhysics(),
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
     padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 3.h),
     separatorBuilder: (context, index) => SizedBox(
       height: 3.h,

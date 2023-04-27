@@ -7,6 +7,41 @@ import '../../../../register/presentation/views/register_screen.dart';
 
 Widget rowBelowLoginBtn(context, cubit) => Column(
       children: [
+        Container(
+          width: 90.w,
+          height: 8.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                defaultColor,
+                Colors.blue[900]!,
+              ],
+            ),
+          ),
+          child: InkWell(
+            onTap: () async {
+              await cubit.loginWithGmail();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  googleImagePath,
+                  width: 5.w,
+                  height: 5.w,
+                ),
+                SizedBox(width: 2.w),
+                defaultText(
+                    text: 'Continue with Gmail',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Colors.white,
+                      fontSize: 16.sp,
+                    )),
+              ],
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -22,7 +57,7 @@ Widget rowBelowLoginBtn(context, cubit) => Column(
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(color: defaultColor),
+                    side:  BorderSide(color: defaultColor),
                   ),
                 ),
                 onPressed: () {
@@ -37,41 +72,6 @@ Widget rowBelowLoginBtn(context, cubit) => Column(
                         ))),
           ],
         ),
-        SizedBox(height: 2.h),
-        Container(
-          width: 80.w,
-          height: 7.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              colors: [
-                defaultColor,
-                Colors.blue[900]!,
-              ],
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              cubit.loginWithGmail();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  googleImagePath,
-                  width: 5.w,
-                  height: 5.w,
-                ),
-                SizedBox(width: 2.w),
-                defaultText(
-                    text: 'Continue with Gmail',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                        )),
-              ],
-            ),
-          ),
-        )
+
       ],
     );

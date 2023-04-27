@@ -50,7 +50,7 @@ ThemeData darkMode = ThemeData(
 
 ThemeData lightMode = ThemeData(
   primarySwatch: defaultColor,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Color(0xFFFAF8F1),
   canvasColor: Colors.grey[300],
   cardColor: Colors.white.withOpacity(0.8),
   iconTheme: const IconThemeData(

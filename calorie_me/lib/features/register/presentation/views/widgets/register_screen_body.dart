@@ -11,6 +11,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/utils/page_transition.dart';
 import '../../../../../core/widgets/widgets.dart';
+import '../../../../edit_profile/presentation/views/widgets/text_form_fields_labels.dart';
 import '../../../../login/presentation/views/login_screen.dart';
 
 class RegisterScreenBody extends StatelessWidget {
@@ -48,8 +49,8 @@ class RegisterScreenBody extends StatelessWidget {
       builder: (context, state) {
         return SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(
-                top: 10.h, left: 5.w, right: 5.w, bottom: 5.h),
+            padding:
+                EdgeInsets.only(top: 10.h, left: 5.w, right: 5.w, bottom: 5.h),
             child: Form(
               key: formKey,
               child: Column(
@@ -59,8 +60,10 @@ class RegisterScreenBody extends StatelessWidget {
                   SizedBox(height: 4.h),
                   textFormFieldsListView(
                     context: context,
+                    textFormFieldsLabels: textFormFieldsLabels,
                     textFormFieldsList: regTextFormFieldsList(
                         context: context,
+                        textFormFieldsLabels: textFormFieldsLabels,
                         usernameController: usernameController,
                         emailController: emailController,
                         passwordController: passwordController,
@@ -73,7 +76,7 @@ class RegisterScreenBody extends StatelessWidget {
                   chooseGender(cubit: cubit, context: context),
                   SizedBox(height: 1.h),
                   if (state is RegisterLoadingState)
-                    const Center(
+                    Center(
                         child: SpinKitFadingCircle(
                       color: defaultColor,
                     )),

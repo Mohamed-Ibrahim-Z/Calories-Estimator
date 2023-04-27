@@ -1,7 +1,6 @@
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/cache_helper.dart';
 import 'package:calorie_me/core/utils/theme.dart';
-import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/login/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:calorie_me/features/login/presentation/views/login_screen.dart';
@@ -16,6 +15,7 @@ import 'features/camera_screen/presentation/manager/camera_cubit/camera_cubit.da
 import 'features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'features/home_layout/presentation/manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home_layout/presentation/views/home_layout.dart';
+import 'features/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

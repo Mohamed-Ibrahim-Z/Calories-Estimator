@@ -35,26 +35,26 @@ class HomeLayout extends StatelessWidget {
         var cameraCubit = CameraCubit.get(context);
         return SafeArea(
           child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(80),
-              child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
-                builder: (context, homeState) {
-                  return ConditionalBuilder(
-                    condition: homeScreenCubit.userLogged != null &&
-                        homeScreenCubit.userLogged!.profilePhoto != null,
-                    builder: (context) {
-                      return homeAppBar(
-                          context: context,
-                          homeScreenCubit: homeScreenCubit,
-                          profileCubit: profileCubit);
-                    },
-                    fallback: (context) {
-                      return shimmerHomeAppBar();
-                    },
-                  );
-                },
-              ),
-            ),
+            // appBar: PreferredSize(
+            //   preferredSize: const Size.fromHeight(80),
+            //   child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
+            //     builder: (context, homeState) {
+            //       return ConditionalBuilder(
+            //         condition: homeScreenCubit.userLogged != null &&
+            //             homeScreenCubit.userLogged!.profilePhoto != null,
+            //         builder: (context) {
+            //           return homeAppBar(
+            //               context: context,
+            //               homeScreenCubit: homeScreenCubit,
+            //               profileCubit: profileCubit);
+            //         },
+            //         fallback: (context) {
+            //           return shimmerHomeAppBar();
+            //         },
+            //       );
+            //     },
+            //   ),
+            // ),
             resizeToAvoidBottomInset: false,
             body: WillPopScope(
               onWillPop: () async {

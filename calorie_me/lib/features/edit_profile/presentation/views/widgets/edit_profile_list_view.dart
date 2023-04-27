@@ -11,10 +11,12 @@ Widget editProfileListView(
         required ageController,
         required weightController,
         required heightController,
-        required loginCubit,}) =>
+        required loginCubit,
+        required List<String> textFormFieldsLabels}) =>
     BlocBuilder<LoginCubit, LoginStates>(
       builder: (context, state) {
         return textFormFieldsListView(
+            textFormFieldsLabels: textFormFieldsLabels,
             context: context,
             textFormFieldsList: regTextFormFieldsList(
                 context: context,
@@ -24,6 +26,7 @@ Widget editProfileListView(
                 ageController: ageController,
                 weightController: weightController,
                 heightController: heightController,
-                cubit: loginCubit));
+                cubit: loginCubit,
+                textFormFieldsLabels: textFormFieldsLabels));
       },
     );
