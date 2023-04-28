@@ -52,6 +52,7 @@ dependencies:
   showcaseview: ^2.0.2
   camera: ^0.10.3+2
   fl_chart: ^0.61.0
+  google_fonts: ^4.0.4
   # Firebase
   firebase_core: ^2.5.0
   firebase_auth: ^4.2.6

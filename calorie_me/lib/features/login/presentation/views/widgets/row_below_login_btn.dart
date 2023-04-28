@@ -7,71 +7,32 @@ import '../../../../register/presentation/views/register_screen.dart';
 
 Widget rowBelowLoginBtn(context, cubit) => Column(
       children: [
-        Container(
-          width: 90.w,
-          height: 8.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              colors: [
-                defaultColor,
-                Colors.blue[900]!,
-              ],
-            ),
-          ),
-          child: InkWell(
-            onTap: () async {
-              await cubit.loginWithGmail();
+        TextButton(
+            onPressed: () {
+              cubit.loginWithGmail();
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  googleImagePath,
-                  width: 5.w,
-                  height: 5.w,
+                Image.asset(googleImagePath, width: 7.w, height: 7.h),
+                SizedBox(
+                  width: 2.w,
                 ),
-                SizedBox(width: 2.w),
                 defaultText(
-                    text: 'Continue with Gmail',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    )),
-              ],
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            defaultText(
-                text: 'Don\'t have an account? ',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 16.sp,
-                    )),
-            SizedBox(
-              width: 1.w,
-            ),
-            TextButton(
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side:  BorderSide(color: defaultColor),
+                  text: "Continue with Google",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 18.sp,
+                    color: Colors.black,
+                    shadows: [
+                      Shadow(
+                        color: Colors.grey,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
                   ),
                 ),
-                onPressed: () {
-                  navigateTo(
-                      nextPage: const RegisterScreen(), context: context);
-                },
-                child: defaultText(
-                    text: 'Register',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 17.sp,
-                          color: defaultColor,
-                        ))),
-          ],
-        ),
-
+              ],
+            )),
       ],
     );

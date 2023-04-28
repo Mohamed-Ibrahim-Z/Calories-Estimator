@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants/constants.dart';
 
 ThemeData darkMode = ThemeData(
@@ -56,6 +57,7 @@ ThemeData lightMode = ThemeData(
   iconTheme: const IconThemeData(
     color: Colors.black,
   ),
+  fontFamily: GoogleFonts.lato().fontFamily,
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 25,

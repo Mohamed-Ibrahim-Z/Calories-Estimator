@@ -11,25 +11,20 @@ import '../../../../login/presentation/views/login_screen.dart';
 Widget rowBelowRegBtn(context, RegisterCubit cubit) => Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        defaultText(
-            text: 'Already have an account? ',
-            style: Theme.of(context).textTheme.bodySmall),
         TextButton(
-            onPressed: () {
-              navigateTo(
-                  nextPage: const LoginScreen(),
-                  context: context,
-                  pageTransitionType: PageTransitionType.leftToRight);
-              cubit.clearGender();
-              if (!cubit.isPass) {
-                cubit.changePasswordVisibility();
-              }
-            },
-            child: defaultText(
-                text: 'Login',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: defaultColor,
-                      fontSize: 17.sp,
-                    ))),
+          onPressed: () {
+            navigateTo(
+                nextPage: const LoginScreen(),
+                context: context,
+                pageTransitionType: PageTransitionType.leftToRight);
+            cubit.clearGender();
+            if (!cubit.isPass) {
+              cubit.changePasswordVisibility();
+            }
+          },
+          child: defaultText(
+              text: 'Already have an account',
+              style: Theme.of(context).textTheme.bodySmall),
+        ),
       ],
     );

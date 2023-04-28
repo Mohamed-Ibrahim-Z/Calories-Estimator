@@ -103,7 +103,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
     });
   }
 
-
   void clearGender() {
     gender = '';
   }

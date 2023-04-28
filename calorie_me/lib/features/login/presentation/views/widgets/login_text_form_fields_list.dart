@@ -28,5 +28,9 @@ List<Widget> loginTextFormFieldsList(
             icon: Icon(cubit.suffixIcon)),
         isPassword: cubit.isPass,
         validationString: 'Password',
+        onFieldSubmitted: (value) {
+          cubit.userLogin(
+              email: emailController.text, password: passwordController.text);
+        },
       ),
     ];

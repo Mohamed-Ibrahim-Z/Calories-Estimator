@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 Map<int, Color> color = {
-  50: Color.fromRGBO(136, 14, 79, .1),
-  100: Color.fromRGBO(136, 14, 79, .2),
-  200: Color.fromRGBO(136, 14, 79, .3),
-  300: Color.fromRGBO(136, 14, 79, .4),
-  400: Color.fromRGBO(136, 14, 79, .5),
-  500: Color.fromRGBO(136, 14, 79, .6),
-  600: Color.fromRGBO(136, 14, 79, .7),
-  700: Color.fromRGBO(136, 14, 79, .8),
-  800: Color.fromRGBO(136, 14, 79, .9),
-  900: Color.fromRGBO(136, 14, 79, 1),
+  50: Color.fromRGBO(213, 251, 215, 1),
+  100: Color.fromRGBO(213, 251, 215, 1),
+  200: Color.fromRGBO(213, 251, 215, 1),
+  300: Color.fromRGBO(213, 251, 215, 1),
+  400: Color.fromRGBO(213, 251, 215, 1),
+  500: Color.fromRGBO(213, 251, 215, 1),
+  600: Color.fromRGBO(213, 251, 215, 1),
+  700: Color.fromRGBO(213, 251, 215, 1),
+  800: Color.fromRGBO(213, 251, 215, 1),
+  900: Color.fromRGBO(213, 251, 215, 1),
 };
-MaterialColor defaultColor = MaterialColor(0xFFC58940, color);
+MaterialColor defaultColor = MaterialColor(0xd5fbd758, color);
 
 const logoImagePath = 'assets/images/logo.png';
 const googleImagePath = 'assets/images/Google.png';
@@ -31,3 +31,19 @@ dynamic caloriesRemaining = 0;
 bool newVersion = false;
 int mealIndex = -1;
 BorderRadius defaultBorderRadius = BorderRadius.circular(10);
+List<String> loginTextFormFieldsLabels = [
+  "Email",
+  "Password",
+];
+List<IconData> loginTextFormFieldsIcons = [
+  Icons.email_outlined,
+  Icons.lock_outline,
+];
+List<IconData> registerTextFormFieldsIcons = [
+  Icons.person_outline,
+  Icons.email_outlined,
+  Icons.lock_outline,
+  Icons.calendar_month,
+  Icons.line_weight_outlined,
+  Icons.height_outlined,
+];

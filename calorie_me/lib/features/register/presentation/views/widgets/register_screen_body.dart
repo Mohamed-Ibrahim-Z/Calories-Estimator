@@ -1,5 +1,6 @@
 import 'package:calorie_me/features/register/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:calorie_me/features/register/presentation/views/widgets/choose_gender.dart';
+import 'package:calorie_me/features/register/presentation/views/widgets/register_button.dart';
 import 'package:calorie_me/features/register/presentation/views/widgets/row_below_reg_btn.dart';
 import 'package:calorie_me/features/register/presentation/views/widgets/reg_text_form_fields_list.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class RegisterScreenBody extends StatelessWidget {
     TextEditingController ageController = TextEditingController();
     TextEditingController weightController = TextEditingController();
     TextEditingController heightController = TextEditingController();
-    var cubit = RegisterCubit.get(context);
+    var registerCubit = RegisterCubit.get(context);
     var formKey = GlobalKey<FormState>();
     return BlocConsumer<RegisterCubit, RegisterStates>(
       listener: (context, state) {
@@ -35,76 +36,109 @@ class RegisterScreenBody extends StatelessWidget {
               context: context,
               nextPage: const LoginScreen(),
               pageTransitionType: PageTransitionType.fade);
-          cubit.clearGender();
-          if (!cubit.isPass) {
-            cubit.changePasswordVisibility();
+          registerCubit.clearGender();
+          if (!registerCubit.isPass) {
+            registerCubit.changePasswordVisibility();
           }
         } else if (state is RegisterErrorState) {
           defaultToast(
-              msg: cubit.errorMessage,
+              msg: registerCubit.errorMessage,
               backgroundColor: Colors.black,
               toastLength: Toast.LENGTH_LONG);
         }
       },
       builder: (context, state) {
         return SingleChildScrollView(
-          child: Padding(
-            padding:
-                EdgeInsets.only(top: 10.h, left: 5.w, right: 5.w, bottom: 5.h),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  logoImage(),
-                  SizedBox(height: 4.h),
-                  textFormFieldsListView(
-                    context: context,
-                    textFormFieldsLabels: textFormFieldsLabels,
-                    textFormFieldsList: regTextFormFieldsList(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 2.w, top: 5.h),
+                  child: defaultIconButton(
+                      icon: Icons.arrow_back_ios_new,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ),
+                SizedBox(
+                  height: 2.5.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 5.w),
+                  child: defaultText(
+                      text: "Register",
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontSize: 25.sp,
+                          )),
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                  child: Column(
+                    children: [
+                      textFormFieldsListView(
                         context: context,
                         textFormFieldsLabels: textFormFieldsLabels,
-                        usernameController: usernameController,
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        ageController: ageController,
-                        weightController: weightController,
-                        heightController: heightController,
-                        cubit: cubit),
+                        textFormFieldsIcons: registerTextFormFieldsIcons,
+                        textFormFieldsList: regTextFormFieldsList(
+                            context: context,
+                            textFormFieldsLabels: textFormFieldsLabels,
+                            usernameController: usernameController,
+                            emailController: emailController,
+                            passwordController: passwordController,
+                            ageController: ageController,
+                            weightController: weightController,
+                            heightController: heightController,
+                            cubit: registerCubit),
+                      ),
+                      SizedBox(height: 2.h),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.person_add_sharp,
+                            size: 19.sp,
+                            color: Color(0xFF696969),
+                          ),
+                          SizedBox(width: 2.w),
+                          defaultText(
+                            text: "Gender",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF696969),
+                                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 1.h),
+                      chooseGender(cubit: registerCubit, context: context),
+                      SizedBox(height: 4.h),
+                      if (state is RegisterLoadingState)
+                        Center(
+                            child: SpinKitFadingCircle(
+                          color: defaultColor,
+                        )),
+                      if (state is! RegisterLoadingState)
+                        registerButton(
+                            registerCubit: registerCubit,
+                            usernameController: usernameController,
+                            emailController: emailController,
+                            passwordController: passwordController,
+                            ageController: ageController,
+                            weightController: weightController,
+                            heightController: heightController,
+                            formKey: formKey),
+                      SizedBox(height: 1.h),
+                      rowBelowRegBtn(context, registerCubit),
+                    ],
                   ),
-                  SizedBox(height: 1.h),
-                  chooseGender(cubit: cubit, context: context),
-                  SizedBox(height: 1.h),
-                  if (state is RegisterLoadingState)
-                    Center(
-                        child: SpinKitFadingCircle(
-                      color: defaultColor,
-                    )),
-                  if (state is! RegisterLoadingState)
-                    defaultButton(
-                        text: 'Register',
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            if (cubit.gender.isNotEmpty) {
-                              cubit.userRegister(
-                                userName: usernameController.text,
-                                email: emailController.text,
-                                password: passwordController.text,
-                                age: int.parse(ageController.text),
-                                weight: double.parse(weightController.text),
-                                height: double.parse(heightController.text),
-                              );
-                            } else {
-                              defaultToast(
-                                  msg: 'Please Select Your Gender',
-                                  backgroundColor: Colors.red);
-                            }
-                          }
-                        }),
-                  SizedBox(height: 1.h),
-                  rowBelowRegBtn(context, cubit),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

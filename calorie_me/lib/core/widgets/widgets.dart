@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:rive/rive.dart';
 
-import '../../features/login/presentation/views/widgets/text_form_fields_labels.dart';
 import '../constants/constants.dart';
 
 Widget defaultText(
@@ -46,13 +45,14 @@ Widget defaultIconButton(
 Widget defaultButton({
   required String text,
   required Function() onPressed,
+  Color textColor = Colors.black,
 }) =>
     MaterialButton(
       onPressed: onPressed,
       color: defaultColor,
-      textColor: Colors.white,
-      minWidth: 100.w,
-      height: 8.h,
+      textColor: textColor,
+      minWidth: 80.w,
+      height: 7.h,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -70,12 +70,16 @@ Widget defaultTextFormField({
   required BuildContext context,
   Color borderColor = Colors.grey,
   bool enableEditing = true,
+  Function(String)? onFieldSubmitted,
 }) =>
     TextFormField(
       style: Theme.of(context).textTheme.bodySmall,
       obscureText: isPassword,
       keyboardType: keyboardType,
       enabled: enableEditing,
+      onFieldSubmitted: (value) {
+        onFieldSubmitted!(value);
+      },
       decoration: InputDecoration(
         filled: true,
         fillColor: enableEditing
@@ -114,7 +118,6 @@ Widget defaultTextFormField({
 Widget logoImage() => Image.asset(
       logoImagePath,
       width: 67.w,
-      color: defaultColor,
     );
 
 Future<bool?> defaultToast(
@@ -134,10 +137,12 @@ Future<bool?> defaultToast(
   );
 }
 
-Widget textFormFieldsListView(
-    {required List<Widget> textFormFieldsList,
-    required List<String> textFormFieldsLabels,
-    required BuildContext context}) {
+Widget textFormFieldsListView({
+  required List<Widget> textFormFieldsList,
+  required List<String> textFormFieldsLabels,
+  required List<IconData> textFormFieldsIcons,
+  required BuildContext context,
+}) {
   return ListView.separated(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
@@ -149,8 +154,8 @@ Widget textFormFieldsListView(
             Row(
               children: [
                 Icon(
-                  loginTextFormFieldsIcons[index],
-                  size: 20.sp,
+                  textFormFieldsIcons[index],
+                  size: 19.sp,
                   color: Color(0xFF696969),
                 ),
                 SizedBox(
@@ -173,7 +178,7 @@ Widget textFormFieldsListView(
         );
       },
       separatorBuilder: (context, index) {
-        return SizedBox(height: 3.h);
+        return SizedBox(height: 3.5.h);
       },
       itemCount: textFormFieldsList.length);
 }

@@ -34,7 +34,7 @@ Widget header(
           ),
         ),
         profilePhoto(
-            radius: 10.w,
+            radius: 6.w,
             cubit: ProfileCubit.get(context),
             currentUser: currentUser,
             context: context),

@@ -8,54 +8,58 @@ import '../../../../../core/constants/constants.dart';
 Widget customPercentIndicator(animation, context, UserModel currentUser) {
   caloriesRemaining = currentUser.bmr!.round() - caloriesConsumed;
   if (caloriesRemaining < 0) caloriesRemaining = 0;
-  return Center(
-    child: CircularPercentIndicator(
-        backgroundColor: Colors.grey[300]!,
-        animation: true,
-        animationDuration: 1200,
-        animateFromLastPercent: true,
-        percent: (caloriesRemaining / currentUser.bmr!).clamp(0.0, 1.0),
-        backgroundWidth: 8,
-        lineWidth: 15,
-        linearGradient: LinearGradient(
-          colors: [
-            Colors.amber,
-            defaultColor,
-          ],
-        ),
-        circularStrokeCap: CircularStrokeCap.round,
-        radius: 135.0,
-        center: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              shadows: [
-                BoxShadow(
-                  color: defaultColor,
-                  blurRadius: animation!.value,
-                  spreadRadius: animation!.value,
-                ),
-              ],
-              Icons.bolt,
-              // Make the color glow with the gradient
-              color: defaultColor,
-              size: 50,
-            ),
-            defaultText(
-                text: "$caloriesRemaining",
-                style: Theme.of(context).textTheme.displayLarge),
-            defaultText(
-                text: 'kcal', style: Theme.of(context).textTheme.bodyMedium),
-            SizedBox(
-              height: 1.h,
-            ),
-            defaultText(
-                text: 'REMAINING',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.grey,
-                      fontStyle: FontStyle.italic,
-                    )),
-          ],
-        )),
+  return Padding(
+    padding: EdgeInsets.only(right: 5.w,),
+    child: Align(
+      alignment: Alignment.topRight,
+      child: CircularPercentIndicator(
+          backgroundColor: Colors.grey[300]!,
+          animation: true,
+          animationDuration: 1200,
+          animateFromLastPercent: true,
+          percent: (caloriesRemaining / currentUser.bmr!).clamp(0.0, 1.0),
+          backgroundWidth: 8,
+          lineWidth: 15,
+          linearGradient: LinearGradient(
+            colors: [
+              Colors.amber,
+              defaultColor,
+            ],
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          radius: 110.0,
+          center: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                shadows: [
+                  BoxShadow(
+                    color: defaultColor,
+                    blurRadius: animation!.value,
+                    spreadRadius: animation!.value,
+                  ),
+                ],
+                Icons.bolt,
+                // Make the color glow with the gradient
+                color: defaultColor,
+                size: 50,
+              ),
+              defaultText(
+                  text: "$caloriesRemaining",
+                  style: Theme.of(context).textTheme.displayLarge),
+              defaultText(
+                  text: 'kcal', style: Theme.of(context).textTheme.bodyMedium),
+              SizedBox(
+                height: 1.h,
+              ),
+              defaultText(
+                  text: 'REMAINING',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.grey,
+                        fontStyle: FontStyle.italic,
+                      )),
+            ],
+          )),
+    ),
   );
 }

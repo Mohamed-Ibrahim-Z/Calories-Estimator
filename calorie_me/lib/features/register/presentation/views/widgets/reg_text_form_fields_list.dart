@@ -14,9 +14,8 @@ List<Widget> regTextFormFieldsList(
     [
       defaultTextFormField(
         context: context,
-        hintText: 'username',
+        hintText: 'Username',
         keyboardType: TextInputType.name,
-        prefixIcon: const Icon(Icons.person_outline),
         controller: usernameController,
         validationString: 'Username',
       ),
@@ -24,7 +23,6 @@ List<Widget> regTextFormFieldsList(
         hintText: 'Email',
         context: context,
         keyboardType: TextInputType.emailAddress,
-        prefixIcon: const Icon(Icons.email_outlined),
         controller: emailController,
         validationString: 'Email',
         enableEditing: isGoogleAccount ? false : true,
@@ -35,7 +33,6 @@ List<Widget> regTextFormFieldsList(
               context: context,
               keyboardType: TextInputType.visiblePassword,
               controller: passwordController,
-              prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
                   onPressed: () {
                     cubit.changePasswordVisibility();
@@ -49,7 +46,6 @@ List<Widget> regTextFormFieldsList(
         hintText: 'Age',
         context: context,
         keyboardType: TextInputType.number,
-        prefixIcon: const Icon(Icons.numbers),
         controller: ageController,
         validationString: 'Age',
       ),
@@ -57,7 +53,6 @@ List<Widget> regTextFormFieldsList(
         hintText: 'Weight',
         context: context,
         keyboardType: TextInputType.number,
-        prefixIcon: const Icon(Icons.line_weight),
         controller: weightController,
         validationString: 'Weight',
       ),
@@ -65,7 +60,6 @@ List<Widget> regTextFormFieldsList(
         hintText: 'Height',
         context: context,
         keyboardType: TextInputType.number,
-        prefixIcon: const Icon(Icons.height),
         controller: heightController,
         validationString: 'Height',
       ),
