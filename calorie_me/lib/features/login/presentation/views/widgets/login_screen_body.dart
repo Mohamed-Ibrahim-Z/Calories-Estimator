@@ -3,16 +3,16 @@ import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/features/edit_profile/presentation/views/widgets/text_form_fields_labels.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/home_layout.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
+import 'package:calorie_me/features/login/presentation/views/widgets/dont_have_an_acc.dart';
 import 'package:calorie_me/features/login/presentation/views/widgets/extra_info_dialog.dart';
+import 'package:calorie_me/features/login/presentation/views/widgets/forgot_password.dart';
 import 'package:calorie_me/features/login/presentation/views/widgets/login_text_form_fields_list.dart';
-import 'package:calorie_me/features/login/presentation/views/widgets/row_below_login_btn.dart';
+import 'package:calorie_me/features/login/presentation/views/widgets/continue_with_google.dart';
 import 'package:calorie_me/features/login/presentation/views/widgets/login_button.dart';
-import 'package:calorie_me/features/reset_password/presentation/views/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/widgets/widgets.dart';
-import '../../../../register/presentation/views/register_screen.dart';
 import '../../../../register/presentation/views/widgets/reg_text_form_fields_list.dart';
 import '../../manager/login_cubit/login_cubit.dart';
 
@@ -26,6 +26,7 @@ class LoginScreenBody extends StatelessWidget {
         ageController = TextEditingController(),
         weightController = TextEditingController(),
         heightController = TextEditingController();
+
     var loginCubit = LoginCubit.get(context);
 
     List<Widget> extraInfoTextFormFieldsList = regTextFormFieldsList(
@@ -36,6 +37,7 @@ class LoginScreenBody extends StatelessWidget {
       heightController: heightController,
     ).sublist(3);
     var homeScreenCubit = HomeScreenCubit.get(context);
+
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is NewGoogleAccountState) {
@@ -54,7 +56,6 @@ class LoginScreenBody extends StatelessWidget {
             context: context,
             nextPage: const HomeLayout(),
           );
-          defaultToast(msg: 'Login Successfully');
         } else if (state is LoginErrorState && loginCubit.errorMessage != "") {
           defaultToast(
               msg: loginCubit.errorMessage, backgroundColor: Colors.red);
@@ -63,7 +64,7 @@ class LoginScreenBody extends StatelessWidget {
       builder: (context, state) {
         return Padding(
           padding:
-              EdgeInsets.only(top: 12.h, left: 5.w, right: 5.w, bottom: 2.h),
+              EdgeInsets.only(top: 12.h, left: 6.w, right: 6.w, bottom: 2.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -93,33 +94,14 @@ class LoginScreenBody extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(
-                      onPressed: () {
-                        navigateTo(
-                            nextPage: RegisterScreen(), context: context);
-                      },
-                      child: defaultText(
-                          text: 'Don\'t have an account? ',
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontSize: 15.sp,
-                                  ))),
-                  TextButton(
-                      onPressed: () {
-                        navigateTo(
-                            nextPage: const ResetPasswordScreen(),
-                            context: context);
-                      },
-                      child: defaultText(
-                          text: 'Forgot Password',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontSize: 15.sp,
-                                  ))),
+                  dontHaveAnAcc(context: context),
+                  forgotPassword(context: context),
                 ],
               ),
               if (state is LoginLoadingState)
-                defaultCircularProgressIndicator(),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: defaultProgressIndicator()),
               if (state is! LoginLoadingState)
                 loginButton(
                     loginCubit: loginCubit,
@@ -138,7 +120,7 @@ class LoginScreenBody extends StatelessWidget {
                       ),
                 ),
               ),
-              rowBelowLoginBtn(context, loginCubit),
+              continueWithGoogle(context, loginCubit),
             ],
           ),
         );

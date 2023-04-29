@@ -1,7 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
@@ -32,14 +31,14 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
                   child: Icon(
                     Icons.camera_alt,
                     size: 25,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 title: defaultText(
                     text: 'Camera',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontStyle: FontStyle.italic,
-                    )),
+                          fontStyle: FontStyle.italic,
+                        )),
                 onTap: () {
                   Navigator.pop(context);
                   cubit.pickImage(isCamera: true);
@@ -47,20 +46,20 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
               ),
               SizedBox(height: 1.h),
               ListTile(
-                leading:  CircleAvatar(
+                leading: CircleAvatar(
                   radius: 23,
                   backgroundColor: defaultColor,
                   child: Icon(
                     Icons.image,
                     size: 25,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 title: defaultText(
                     text: 'Gallery',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontStyle: FontStyle.italic,
-                    )),
+                          fontStyle: FontStyle.italic,
+                        )),
                 onTap: () {
                   Navigator.pop(context);
                   cubit.pickImage(isCamera: false);

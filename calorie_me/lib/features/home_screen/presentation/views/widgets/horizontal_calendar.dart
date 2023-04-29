@@ -10,7 +10,7 @@ Widget horizontalCalendar(
         required ScrollController calendarScrollController}) =>
     Container(
       height: 10.h,
-      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      padding: EdgeInsets.symmetric(horizontal: 1.w),
       child: ListView.separated(
         controller: calendarScrollController,
         physics: const BouncingScrollPhysics(),
@@ -28,14 +28,23 @@ Widget horizontalCalendar(
               width: 20.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 2,
+                    spreadRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
                 border: Border.all(
-                  color: defaultColor,
-                  width: 2,
+                  color:homeScreenCubit.selectedDateIndex == index
+                      ?  Color(0xFFC58940) : Color(0xFFE5BA73),
+                  width: 3,
                 ),
                 color: homeScreenCubit.selectedDateIndex == index
-                    ? Color(0xFFE5BA73)
+                    ? defaultColor
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: defaultBorderRadius,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

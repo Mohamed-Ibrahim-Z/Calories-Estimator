@@ -39,12 +39,11 @@ class EditProfileScreenBody extends StatelessWidget {
         listener: (context, state) {
           if (state is UpdateUserDataSuccessState) {
             homeScreenCubit.getUserData();
-            defaultToast(msg: 'Profile Updated Successfully');
             Navigator.pop(context);
           } else if (state is UpdateUserDataErrorState &&
               loginCubit.errorMessage != "") {
             defaultToast(
-                msg: loginCubit.errorMessage, backgroundColor: Colors.black);
+                msg: loginCubit.errorMessage, backgroundColor: Colors.red);
           }
         },
         builder: (context, profileState) {
@@ -60,26 +59,22 @@ class EditProfileScreenBody extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
                   decoration: BoxDecoration(
                       color: Theme.of(context).canvasColor,
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: defaultBorderRadius),
                   child: Column(
                     children: [
                       editProfileListView(
-                        usernameController: usernameController,
-                        passwordController: passwordController,
-                        emailController: emailController,
-                        ageController: ageController,
-                        weightController: weightController,
-                        heightController: heightController,
-                        loginCubit: loginCubit,
-                        textFormFieldsLabels: textFormFieldsLabels
-                      ),
+                          usernameController: usernameController,
+                          passwordController: passwordController,
+                          emailController: emailController,
+                          ageController: ageController,
+                          weightController: weightController,
+                          heightController: heightController,
+                          loginCubit: loginCubit,
+                          textFormFieldsLabels: textFormFieldsLabels),
                       SizedBox(height: 3.h),
                       if (profileState is UpdateUserDataLoadingState ||
                           profileState is UploadProfileImageLoadingState)
-                         Center(
-                            child: SpinKitFadingCircle(
-                          color: defaultColor,
-                        )),
+                        defaultProgressIndicator(),
                       if (profileState is! UpdateUserDataLoadingState &&
                           profileState is! UploadProfileImageLoadingState)
                         Padding(

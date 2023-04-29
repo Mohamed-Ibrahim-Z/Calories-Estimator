@@ -26,10 +26,10 @@ Widget mealsItem(
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: defaultColor,
+                  color: Colors.black.withOpacity(0.6),
                   spreadRadius: 1,
                   blurRadius: 1,
-                  offset: Offset(0, 1), // changes position of shadow
+                  offset: Offset(0, 1),
                 ),
               ],
             ),
@@ -76,7 +76,7 @@ Widget mealsItem(
                                       .textTheme
                                       .bodySmall!
                                       .copyWith(
-                                        color: defaultColor,
+                                        color: Color(0xFFC58940),
                                       ),
                                 ),
                               ],
@@ -86,8 +86,12 @@ Widget mealsItem(
                       ),
                     ],
                   ),
-                  defaultText(
-                      text: time, style: Theme.of(context).textTheme.bodySmall),
+                  Container(
+                    width: 10.w,
+                    child: defaultText(
+                        text: time,
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ),
                 ],
               ),
             ),
@@ -95,7 +99,7 @@ Widget mealsItem(
         )
       : Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(

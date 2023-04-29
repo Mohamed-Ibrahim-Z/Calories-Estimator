@@ -10,25 +10,30 @@ import '../edit_profile_screen.dart';
 Widget editProfileBtn({required context}) => Center(
       child: TextButton.icon(
         onPressed: () {
-          navigateTo(nextPage: const EditProfileScreen(), context: context,
+          navigateTo(
+              nextPage: const EditProfileScreen(),
+              context: context,
               pageTransitionType: PageTransitionType.bottomToTop);
         },
         icon: const Icon(
           Icons.edit,
-          color: Colors.white,
+          color: Colors.black,
         ),
         style: TextButton.styleFrom(
-          minimumSize: Size(41.w, 5.h),
+          elevation: 5,
+          minimumSize: Size(75.w, 7.h),
           backgroundColor: defaultColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: defaultBorderRadius,
           ),
         ),
         label: defaultText(
           text: 'Edit Profile',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 17.sp,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.3,
           ),
         ),
       ),

@@ -46,44 +46,41 @@ class ImageDetailsScreen extends StatelessWidget {
           },
           child: SafeArea(
             child: Scaffold(
-              body: backgroundAnimationStack(
-                screenBody: CustomScrollView(
-                  controller: scrollController,
-                  slivers: [
-                    SliverAppBar(
-                      expandedHeight: cubit.cameraHeight,
-                      pinned: true,
-                      flexibleSpace: FlexibleSpaceBar(
+              body: CustomScrollView(
+                controller: scrollController,
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: cubit.cameraHeight,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
                         background: Image.file(
-                          cubit.image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          ConditionalBuilder(
-                            condition: cubit.tableRows.isNotEmpty,
-                            builder: (context) {
-                              // To wait for the table to be built before scrolling to the bottom
-                              WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) => scrollToBottom());
-                              return imageDetailsBody(
-                                context: context,
-                                cameraCubit: cubit,
-                              );
-                            },
-                            fallback: (context) => Padding(
-                              padding: EdgeInsets.only(top: 7.h),
-                              child: defaultCircularProgressIndicator(),
-                            ),
+                      cubit.image,
+                      fit: BoxFit.cover,
+                    )),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        ConditionalBuilder(
+                          condition: cubit.tableRows.isNotEmpty,
+                          builder: (context) {
+                            // To wait for the table to be built before scrolling to the bottom
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) => scrollToBottom());
+                            return imageDetailsBody(
+                              context: context,
+                              cameraCubit: cubit,
+                            );
+                          },
+                          fallback: (context) => Padding(
+                            padding: EdgeInsets.only(bottom:6.h),
+                            child: defaultProgressIndicator(),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

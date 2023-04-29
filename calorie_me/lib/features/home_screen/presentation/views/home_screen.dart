@@ -1,10 +1,11 @@
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
-import 'package:calorie_me/features/home_screen/presentation/views/widgets/custom_percent_indicator.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/header.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/horizontal_calendar.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/meals_container.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/middle_bar.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/painter.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/undo_meal_snack_bar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  AnimationController? iconController;
-  Animation<double>? animationOfIcon;
   AnimationController? listController;
   Animation<Offset>? evenItemOfListAnimation;
   Animation<Offset>? oddItemOfListAnimation;
@@ -31,21 +30,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    iconAnimation();
     listViewAnimation();
   }
 
   @override
   Widget build(BuildContext context) {
     var homeScreenCubit = HomeScreenCubit.get(context);
-    return BlocConsumer<CameraCubit, CameraStates>(
-      listener: (context, cameraState) {
-        if (cameraState is AddMealSuccessState) {
-          defaultToast(
-            msg: 'Meal Added Successfully',
-          );
-        }
-      },
+    return BlocBuilder<CameraCubit, CameraStates>(
       builder: (context, cameraState) {
         return BlocConsumer<HomeScreenCubit, HomeScreenStates>(
           listener: (context, state) {
@@ -63,60 +54,79 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 var currentUser = homeScreenCubit.userLogged;
 
                 return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      header(
-                          context: context,
-                          currentUser: currentUser!,
-                          profileCubit: ProfileCubit.get(context)),
-                      customPercentIndicator(
-                          animationOfIcon, context, currentUser),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      Builder(builder: (context) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (!isScreenBuilt) {
-                            scrollToRight();
-                          }
-                        });
-                        return horizontalCalendar(
-                            homeScreenCubit: homeScreenCubit,
-                            calendarScrollController: calendarScrollController);
-                      }),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                            padding: EdgeInsets.only(left: 4.w),
-                            child: defaultText(
-                                text: 'Daily Meals',
-                                style: Theme.of(context).textTheme.bodyMedium)),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      state is ChangeSelectedDateLoadingState
-                          ? Padding(
-                              padding: EdgeInsets.only(top: 5.h),
-                              child: defaultCircularProgressIndicator())
-                          : mealsContainer(
-                              context: context,
+                  child: Container(
+                    height:
+                        homeScreenCubit.mealsList.length <= 2 ? 100.h : null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomPaint(
+                          painter: Painter(),
+                          child: Column(
+                            children: [
+                              header(
+                                  context: context,
+                                  currentUser: currentUser!,
+                                  profileCubit: ProfileCubit.get(context)),
+                              SizedBox(
+                                height: 3.h,
+                              ),
+                              middleBar(
+                                  context: context, currentUser: currentUser),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Builder(builder: (context) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (!isScreenBuilt) {
+                              scrollToRight();
+                            }
+                          });
+                          return horizontalCalendar(
                               homeScreenCubit: homeScreenCubit,
-                              screenState: state,
-                              cameraState: cameraState,
-                              listController: listController!,
-                              evenItemOfListAnimation: evenItemOfListAnimation!,
-                              oddItemOfListAnimation: oddItemOfListAnimation!),
-                    ],
+                              calendarScrollController:
+                                  calendarScrollController);
+                        }),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.only(left: 4.w),
+                              child: defaultText(
+                                  text: 'Daily Meals',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        fontSize: 20.sp,
+                                      ))),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        state is ChangeSelectedDateLoadingState
+                            ? defaultProgressIndicator()
+                            : mealsContainer(
+                                context: context,
+                                homeScreenCubit: homeScreenCubit,
+                                screenState: state,
+                                cameraState: cameraState,
+                                listController: listController!,
+                                evenItemOfListAnimation:
+                                    evenItemOfListAnimation!,
+                                oddItemOfListAnimation:
+                                    oddItemOfListAnimation!),
+                      ],
+                    ),
                   ),
                 );
               },
-              fallback: (context) => defaultCircularProgressIndicator(),
+              fallback: (context) => defaultProgressIndicator(),
             );
           },
         );
@@ -126,23 +136,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    iconController!.dispose();
     listController!.dispose();
     super.dispose();
-  }
-
-  void iconAnimation() {
-    iconController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
-    iconController!.repeat(reverse: true);
-    animationOfIcon = Tween<double>(begin: 2, end: 50).animate(iconController!)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      });
   }
 
   void listViewAnimation() {

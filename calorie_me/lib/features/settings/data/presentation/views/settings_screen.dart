@@ -14,60 +14,84 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appThemeCubit = AppThemeCubit.get(context);
-    return Column(
-      children: [
-        appearanceContainer(appThemeCubit, context),
-        SizedBox(height: 2.h),
-        settingsContainer(
-            context: context,
-            text: 'Logout',
-            icon: Icons.logout_outlined,
-            onTap: () {
-              CacheHelper.signOut(context);
-            }),
-        BlocBuilder<AppThemeCubit, AppThemeStates>(
-          builder: (context, state) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.5.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Radio(
-                          fillColor: MaterialStateProperty.all(
-                              Theme.of(context).iconTheme.color),
-                          value: false,
-                          groupValue: newVersion,
-                          onChanged: (value) {
-                            appThemeCubit.changeAppVersion(value);
-                          }),
-                      defaultText(
-                        text: 'Version 1',
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Radio(
-                          fillColor: MaterialStateProperty.all(
-                              Theme.of(context).iconTheme.color),
-                          value: true,
-                          groupValue: newVersion,
-                          onChanged: (value) {
-                            appThemeCubit.changeAppVersion(value);
-                          }),
-                      defaultText(
-                        text: 'Version 2',
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.5.w, vertical: 2.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          defaultText(
+            text: "Settings",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          SizedBox(height: 2.h),
+          appearanceContainer(appThemeCubit, context),
+          SizedBox(height: 2.h),
+          settingsContainer(
+              context: context,
+              text: 'Logout',
+              icon: Icons.logout_outlined,
+              onTap: () {
+                CacheHelper.signOut(context);
+              }),
+          BlocBuilder<AppThemeCubit, AppThemeStates>(
+            builder: (context, state) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.5.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Radio(
+                            fillColor: MaterialStateProperty.all(newVersion
+                                ? Colors.grey
+                                : Theme.of(context).iconTheme.color),
+                            value: false,
+                            groupValue: newVersion,
+                            onChanged: (value) {
+                              appThemeCubit.changeAppVersion(value);
+                            }),
+                        defaultText(
+                            text: 'Version 1',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                                    color: newVersion
+                                        ? Colors.grey
+                                        : Theme.of(context).iconTheme.color))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                            fillColor: MaterialStateProperty.all(!newVersion
+                                ? Colors.grey
+                                : Theme.of(context).iconTheme.color),
+                            value: true,
+                            groupValue: newVersion,
+                            onChanged: (value) {
+                              appThemeCubit.changeAppVersion(value);
+                            }),
+                        defaultText(
+                          text: 'Version 2',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  color: !newVersion
+                                      ? Colors.grey
+                                      : Theme.of(context).iconTheme.color),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

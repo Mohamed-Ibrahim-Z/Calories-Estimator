@@ -3,16 +3,10 @@ import 'package:animations/animations.dart';
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
-import 'package:calorie_me/features/camera_screen/presentation/views/camera_screen.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/choose_image_dialog.dart';
-import 'package:calorie_me/features/home_layout/presentation/views/widgets/home_app_bar.dart';
-import 'package:calorie_me/features/home_layout/presentation/views/widgets/shimmer_home_app_bar.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
-import '../../../edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
-import '../../../home_screen/presentation/manager/home_screen_cubit.dart';
 import '../../../image_details/presentation/views/image_details_screen.dart';
 import '../manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 
@@ -30,31 +24,9 @@ class HomeLayout extends StatelessWidget {
       },
       builder: (context, bottomNavState) {
         var bottomNavCubit = BottomNavCubit.get(context);
-        var profileCubit = ProfileCubit.get(context);
-        var homeScreenCubit = HomeScreenCubit.get(context);
         var cameraCubit = CameraCubit.get(context);
         return SafeArea(
           child: Scaffold(
-            // appBar: PreferredSize(
-            //   preferredSize: const Size.fromHeight(80),
-            //   child: BlocBuilder<HomeScreenCubit, HomeScreenStates>(
-            //     builder: (context, homeState) {
-            //       return ConditionalBuilder(
-            //         condition: homeScreenCubit.userLogged != null &&
-            //             homeScreenCubit.userLogged!.profilePhoto != null,
-            //         builder: (context) {
-            //           return homeAppBar(
-            //               context: context,
-            //               homeScreenCubit: homeScreenCubit,
-            //               profileCubit: profileCubit);
-            //         },
-            //         fallback: (context) {
-            //           return shimmerHomeAppBar();
-            //         },
-            //       );
-            //     },
-            //   ),
-            // ),
             resizeToAvoidBottomInset: false,
             body: WillPopScope(
               onWillPop: () async {
@@ -90,7 +62,9 @@ class HomeLayout extends StatelessWidget {
                   cameraCubit.clearTableRowsAndMealModel();
                   if (!newVersion) {
                     navigateTo(
-                        nextPage: const CameraScreen(), context: context);
+                        nextPage: ImageDetailsScreen(), context: context);
+                    // navigateTo(
+                    //     nextPage: const CameraScreen(), context: context);
                   } else {
                     chooseImageDialog(
                         context: context, cubit: CameraCubit.get(context));

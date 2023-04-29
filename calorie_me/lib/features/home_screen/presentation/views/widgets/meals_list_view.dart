@@ -5,37 +5,6 @@ import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit
 import 'meals_item_shimmer.dart';
 import 'meals_list_view_item.dart';
 
-Widget shaderMask({
-  required HomeScreenCubit homeScreenCubit,
-  required AnimationController listViewAnimationController,
-  required Animation<Offset> evenItem,
-  required Animation<Offset> oddItem,
-  required CameraStates cameraState,
-}) =>
-    ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.white,
-            Colors.white,
-            Colors.transparent
-          ],
-          stops: [0.0, 0.03, 0.9, 1.0],
-        ).createShader(bounds);
-      },
-      blendMode: BlendMode.dstIn,
-      child: mealsListView(
-        homeScreenCubit: homeScreenCubit,
-        listViewAnimationController: listViewAnimationController,
-        evenItem: evenItem,
-        oddItem: oddItem,
-        cameraState: cameraState,
-      ),
-    );
-
 Widget mealsListView({
   required HomeScreenCubit homeScreenCubit,
   required AnimationController listViewAnimationController,

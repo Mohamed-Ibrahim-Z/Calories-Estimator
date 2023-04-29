@@ -9,6 +9,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/utils/dio.dart';
 import '../../../../image_details/data/models/meal_model.dart';
@@ -70,10 +71,7 @@ class CameraCubit extends Cubit<CameraStates> {
     emit(UploadImageLoadingState());
     fireStorage
         .ref()
-        .child('meals/${Uri
-        .file(image.path)
-        .pathSegments
-        .last}')
+        .child('meals/${Uri.file(image.path).pathSegments.last}')
         .putFile(image)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -137,36 +135,35 @@ class CameraCubit extends Cubit<CameraStates> {
     cancelToken = CancelToken();
     emit(PredictImageLoadingState());
     print("Predicting Image");
+
     !newVersion
         ? formData = FormData.fromMap({
-      "img_bytes": MultipartFile.fromBytes(imageCutBytes,
-          filename: Uri
-              .file(image.path)
-              .pathSegments
-              .last),
-      "ref_pixels": creditCardPixels.round(),
-    })
+            "img_bytes": MultipartFile.fromBytes(imageCutBytes,
+                filename: Uri.file(image.path).pathSegments.last),
+            "ref_pixels": creditCardPixels.round(),
+          })
         : formData = FormData.fromMap({
-      "img_bytes": MultipartFile.fromBytes(imageBytes,
-          filename: Uri
-              .file(image.path)
-              .pathSegments
-              .last),
-    });
+            "img_bytes": MultipartFile.fromBytes(imageBytes,
+                filename: Uri.file(image.path).pathSegments.last),
+          });
     try {
       await DioHelper.postData(
-          endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
-          data: formData,
-          cancelToken: cancelToken)
+              endPoint: !newVersion ? "/CalorieMe-V1" : "/CalorieMe-V2",
+              data: formData,
+              cancelToken: cancelToken)
           .then((value) {
-        // if (value.data['error'] != null) {
-        //   print("HEREEEE");
-        //   print(value.data['error']);
-        //   emit(PredictImageErrorState());
-        // }
-        mealModel = MealModel.fromJson(value.data);
-        fillTableRows();
-        emit(PredictImageSuccessState());
+        if (value.data['error'] != null) {
+          if (value.data['error'].toString().contains("None")) {
+            errorMessage = "Image is not clear enough";
+          } else {
+            errorMessage = value.data['error'].toString();
+          }
+          emit(PredictImageErrorState());
+        } else {
+          mealModel = MealModel.fromJson(value.data);
+          fillTableRows();
+          emit(PredictImageSuccessState());
+        }
       });
     } on DioError catch (error) {
       handleAPIError(error);
@@ -219,7 +216,7 @@ class CameraCubit extends Cubit<CameraStates> {
       tableRows.add(
           tableRow(ingredient: "Total Calories", calories: totalMealCalories));
     }
-    // emit(FillTableSuccessState());
+    emit(FillTableSuccessState());
   }
 
   void clearTableRowsAndMealModel() {

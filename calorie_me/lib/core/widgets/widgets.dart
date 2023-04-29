@@ -1,12 +1,8 @@
-import 'dart:ui';
-
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:rive/rive.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../constants/constants.dart';
 
 Widget defaultText(
@@ -51,12 +47,14 @@ Widget defaultButton({
       onPressed: onPressed,
       color: defaultColor,
       textColor: textColor,
-      minWidth: 80.w,
+      minWidth: 90.w,
       height: 7.h,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: defaultText(text: text, style: TextStyle(fontSize: 17.sp)),
+      child: defaultText(
+          text: text,
+          style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold)),
     );
 
 Widget defaultTextFormField({
@@ -87,7 +85,7 @@ Widget defaultTextFormField({
             : Theme.of(context).disabledColor,
         hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.w400,
-              color: Theme.of(context).disabledColor,
+              color: Colors.grey,
             ),
         prefixIcon: prefixIcon,
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -124,14 +122,14 @@ Future<bool?> defaultToast(
     {required String msg,
     Color textColor = Colors.white,
     double fontSize = 16,
-    Color backgroundColor = Colors.deepOrange,
+    Color? backgroundColor,
     Toast toastLength = Toast.LENGTH_SHORT}) {
   Fluttertoast.cancel();
   return Fluttertoast.showToast(
     msg: msg,
     toastLength: toastLength,
     gravity: ToastGravity.BOTTOM,
-    backgroundColor: backgroundColor,
+    backgroundColor: backgroundColor ?? Color(0xFFE5BA73),
     textColor: textColor,
     fontSize: fontSize,
   );
@@ -144,6 +142,7 @@ Widget textFormFieldsListView({
   required BuildContext context,
 }) {
   return ListView.separated(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
@@ -183,28 +182,25 @@ Widget textFormFieldsListView({
       itemCount: textFormFieldsList.length);
 }
 
-Widget backgroundAnimationStack({required Widget screenBody}) => Stack(
-      children: [
-        const RiveAnimation.asset(
-          shapesRivePath,
-        ),
-        Positioned.fill(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 15,
-              sigmaY: 15,
-            ),
-            child: Container(
-              color: Colors.black.withOpacity(0.2),
-            ),
-          ),
-        ),
-        screenBody
-      ],
-    );
-
-Widget defaultCircularProgressIndicator() => Center(
-      child: SpinKitFadingCircle(
-        color: defaultColor,
+Widget defaultProgressIndicator({double? height}) => Center(
+      child: ColorFiltered(
+        colorFilter: ColorFilter.mode(Color(0xFFC58940), BlendMode.srcIn),
+        child: Lottie.asset(
+            alignment: Alignment.bottomCenter,
+            height: height ?? 32.h,
+            "assets/loading.json"),
       ),
     );
+
+Widget defaultTextButton(
+        {required BuildContext context,
+        required Widget child,
+        required Function onPressed}) =>
+    TextButton(
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        ),
+        onPressed: () {
+          onPressed();
+        },
+        child: child);

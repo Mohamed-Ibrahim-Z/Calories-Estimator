@@ -10,17 +10,17 @@ Widget header(
         {required BuildContext context,
         required UserModel currentUser,
         required ProfileCubit profileCubit}) =>
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 5.w),
-          child: Column(
+    Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               defaultText(
                   text: "CalorieMe",
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black)),
               SizedBox(
                 height: .5.h,
               ),
@@ -29,14 +29,13 @@ Widget header(
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
-                      .copyWith(fontSize: 17.sp)),
+                      .copyWith(fontSize: 17.sp,color: Colors.black)),
             ],
           ),
-        ),
-        profilePhoto(
-            radius: 6.w,
-            cubit: ProfileCubit.get(context),
-            currentUser: currentUser,
-            context: context),
-      ],
+          profilePhoto(
+              cubit: ProfileCubit.get(context),
+              currentUser: currentUser,
+              context: context),
+        ],
+      ),
     );

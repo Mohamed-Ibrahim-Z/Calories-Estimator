@@ -33,14 +33,15 @@ Widget loginButton(
                   size: 20.sp,
                 ),
                 SizedBox(
-                  width: 30.w,
+                  width: 28.w,
                 ),
                 defaultText(
                   text: 'Get In',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 17.sp,
-                      ),
+                  style: TextStyle(
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

@@ -70,15 +70,13 @@ class RegisterScreenBody extends StatelessWidget {
                   padding: EdgeInsets.only(left: 5.w),
                   child: defaultText(
                       text: "Register",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: 25.sp,
-                          )),
+                      style: Theme.of(context).textTheme.bodyLarge),
                 ),
                 SizedBox(
                   height: 5.h,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.h),
                   child: Column(
                     children: [
                       textFormFieldsListView(

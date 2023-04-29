@@ -62,7 +62,7 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storeFile file("C:/Users/Waleed/Documents/GitHub/Calories-Estimator/calorie_me/android/key.jks")
             storePassword keystoreProperties['storePassword']
         }
     }
@@ -70,8 +70,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            // Enabling ProGuard prevents Flutter from obfuscating the code in release mode.
-            minifyEnabled true
         }
     }
 }

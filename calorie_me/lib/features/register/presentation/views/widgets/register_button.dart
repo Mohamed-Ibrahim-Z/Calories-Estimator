@@ -16,7 +16,6 @@ Widget registerButton({
     Center(
       child: defaultButton(
           text: 'Register',
-
           onPressed: () {
             if (formKey.currentState!.validate()) {
               if (registerCubit.gender.isNotEmpty) {

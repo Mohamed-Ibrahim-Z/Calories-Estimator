@@ -58,14 +58,9 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangeGenderState());
   }
 
-  final googleSignIn = GoogleSignIn(scopes: [
-    'email',
-  ]);
-
   UserModel? userModel;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Future<void> loginWithGmail() async {
   //   try {
@@ -81,54 +76,55 @@ class LoginCubit extends Cubit<LoginStates> {
   //     emit(LoginErrorState());
   //   }
   // }
+  final googleSignIn = GoogleSignIn();
 
   void loginWithGmail() async {
+    GoogleSignInAccount? user = (await googleSignIn.signIn());
     try {
-      await googleSignIn.signIn().then((user) async {
-        // authenticate user
-        await user!.authentication.then((googleKey) async {
-          emit(LoginLoadingState());
-          final credential = GoogleAuthProvider.credential(
-            accessToken: googleKey.accessToken,
-            idToken: googleKey.idToken,
-          );
-
-          await FirebaseAuth.instance.signInWithCredential(credential);
-        }).then((value) {
-          isGoogleAccount = true;
-          userModel = UserModel(
-            userName: user.displayName,
-            email: user.email,
-            password: 'password',
-            gender: 'Male',
-            uId: user.id,
-            age: 0,
-            profilePhoto: user.photoUrl,
-            weight: 0,
-            height: 0,
-          );
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.id)
-              .get()
-              .then((value) {
-            loggedUserID = user.id;
-            if (value.exists) {
-              emit(LoginSuccessState());
-              CacheHelper.saveData(key: 'token', value: user.id);
-              CacheHelper.saveData(key: 'isGoogleAccount', value: true);
-            } else {
-              emit(NewGoogleAccountState());
-            }
-          });
+      await user!.authentication.then((googleKey) async {
+        emit(LoginLoadingState());
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleKey.accessToken,
+          idToken: googleKey.idToken,
+        );
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      }).then((value) {
+        isGoogleAccount = true;
+        userModel = UserModel(
+          userName: user.displayName,
+          email: user.email,
+          password: 'password',
+          gender: 'Male',
+          uId: user.id,
+          age: 0,
+          profilePhoto: user.photoUrl,
+          weight: 0,
+          height: 0,
+        );
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.id)
+            .get()
+            .then((value) {
+          loggedUserID = user.id;
+          if (value.exists) {
+            emit(LoginSuccessState());
+            CacheHelper.saveData(key: 'token', value: user.id);
+            CacheHelper.saveData(key: 'isGoogleAccount', value: true);
+          } else {
+            emit(NewGoogleAccountState());
+          }
         });
       });
     } catch (e) {
       print(e.toString());
       if (e.toString().contains('network')) {
         errorMessage = 'No Internet Connection';
+        emit(LoginErrorState());
+      } else if (e.toString().contains('Null')) {
       } else {
-        errorMessage = 'Something went wrong please try again later';
+        errorMessage = e.toString();
+        emit(LoginErrorState());
       }
       emit(LoginErrorState());
     }

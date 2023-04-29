@@ -7,6 +7,8 @@ ThemeData darkMode = ThemeData(
   scaffoldBackgroundColor: const Color(0xff242527),
   canvasColor: Colors.black,
   cardColor: Colors.black,
+  fontFamily: GoogleFonts.lato().fontFamily,
+
   // default Color for Whole the App
   primarySwatch: defaultColor,
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -53,7 +55,7 @@ ThemeData lightMode = ThemeData(
   primarySwatch: defaultColor,
   scaffoldBackgroundColor: Color(0xFFFAF8F1),
   canvasColor: Colors.grey[300],
-  cardColor: Colors.white.withOpacity(0.8),
+  cardColor: Color(0xFFE5BA73),
   iconTheme: const IconThemeData(
     color: Colors.black,
   ),
@@ -65,7 +67,7 @@ ThemeData lightMode = ThemeData(
       color: Colors.black,
     ),
     bodyLarge: TextStyle(
-      fontSize: 22,
+      fontSize: 25,
       fontWeight: FontWeight.bold,
       color: Colors.black,
     ),

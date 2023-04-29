@@ -21,27 +21,35 @@ Widget settingsContainer(
         padding: EdgeInsets.symmetric(horizontal: 4.w),
         height: 8.h,
         decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
+          color: Color(0xFFE5BA73),
           borderRadius: BorderRadius.circular(23),
           boxShadow: [
-            BoxShadow(color: defaultColor, offset: Offset(3, 3), blurRadius: 4)
+            BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
           ],
         ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.grey[200],
+              backgroundColor: Theme.of(context).cardColor,
               child: Icon(
                 icon,
                 size: 24,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
             SizedBox(width: 3.w),
             defaultText(
-                text: text, style: Theme.of(context).textTheme.bodySmall),
+                text: text,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Colors.black)),
             const Spacer(),
-            const Icon(Icons.arrow_forward_ios_rounded)
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.black,
+            )
           ],
         ),
       ),
@@ -56,28 +64,32 @@ Widget appearanceContainer(AppThemeCubit cubit, context) {
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       height: 8.h,
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFE5BA73),
         borderRadius: BorderRadius.circular(23),
         boxShadow: [
-          BoxShadow(color: defaultColor, offset: Offset(3, 3), blurRadius: 4)
+          BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
         ],
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundColor: Colors.grey[200],
-            child: const Icon(
+            backgroundColor: Theme.of(context).cardColor,
+            child: Icon(
               Icons.dark_mode_outlined,
               size: 24,
+              color: Theme.of(context).iconTheme.color,
             ),
           ),
           SizedBox(width: 3.w),
           defaultText(
-              text: 'Appearance', style: Theme.of(context).textTheme.bodySmall),
+              text: 'Appearance', style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: Colors.black
+          )),
           const Spacer(),
           Switch(
               value: cubit.isDark,
+              activeColor: Colors.black,
               onChanged: (
                 bool value,
               ) {

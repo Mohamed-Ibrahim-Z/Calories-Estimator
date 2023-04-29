@@ -1,3 +1,4 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -9,12 +10,15 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> undoMealSnackBar(
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      backgroundColor: Colors.black,
       behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.zero,
       padding: EdgeInsets.symmetric(horizontal: 5.w),
-      content: defaultText(text: "Meal Deleted Successfully"),
+      content: defaultText(
+        text: "Meal Deleted Successfully",
+      ),
       action: SnackBarAction(
         label: 'Undo',
+        textColor: defaultColor.withOpacity(1),
         onPressed: () {
           homeScreenCubit.undoDeleteMeal();
         },

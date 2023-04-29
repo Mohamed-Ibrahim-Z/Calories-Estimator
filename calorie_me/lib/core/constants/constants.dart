@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 Map<int, Color> color = {
   50: Color.fromRGBO(213, 251, 215, 1),
@@ -47,3 +48,13 @@ List<IconData> registerTextFormFieldsIcons = [
   Icons.line_weight_outlined,
   Icons.height_outlined,
 ];
+List<IconData> profileInfoIcons = [
+  Icons.line_weight_outlined,
+  Icons.height_outlined,
+  Icons.calendar_month,
+  Icons.person_add,
+];
+extension EmptyPadding on num {
+  SizedBox get ph => SizedBox(height: toDouble().h);
+  SizedBox get pw => SizedBox(width: toDouble().w);
+}
