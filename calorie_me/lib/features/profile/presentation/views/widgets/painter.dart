@@ -1,7 +1,7 @@
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
-class profilePainter extends CustomPainter{
+class profilePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
@@ -9,13 +9,13 @@ class profilePainter extends CustomPainter{
     paint.style = PaintingStyle.fill;
 
     Path path = Path();
-    path.moveTo(0, size.height );
-    path.quadraticBezierTo(size.width * 0.5, size.height *1.1, size.width, size.height );
+    path.moveTo(0, size.height);
+    path.quadraticBezierTo(
+        size.width * 0.5, size.height * 1.1, size.width, size.height);
     path.lineTo(size.width, 0);
     path.lineTo(0, 0);
     path.close();
     canvas.drawPath(path, paint);
-
   }
 
   @override

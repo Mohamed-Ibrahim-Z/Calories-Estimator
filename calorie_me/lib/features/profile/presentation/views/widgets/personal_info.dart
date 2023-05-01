@@ -11,8 +11,10 @@ class PersonalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var headerStyle =
-        Theme.of(context).textTheme.bodyMedium!.copyWith(letterSpacing: 1.3);
+    var headerStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
+          letterSpacing: 1.3,
+          color: Colors.black,
+        );
     var normalStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
           color: Colors.grey[500],
           fontSize: 17.sp,
@@ -48,7 +50,10 @@ class PersonalInfo extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(profileInfoIcons[index]),
+                  Icon(
+                    profileInfoIcons[index],
+                    color: Colors.black,
+                  ),
                   1.5.pw,
                   defaultText(
                     text: headerTexts[index],

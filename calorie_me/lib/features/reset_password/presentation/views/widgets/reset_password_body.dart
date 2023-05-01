@@ -1,8 +1,7 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../login/presentation/manager/login_cubit/login_cubit.dart';
 
@@ -22,41 +21,45 @@ class ResetPasswordBody extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Padding(
-          padding:
-              EdgeInsets.only(top: 7.h, left: 5.w, right: 5.w, bottom: 5.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              defaultIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              SizedBox(height: 5.h),
-              defaultText(
-                  text: 'Enter your email address to reset your password'),
-              SizedBox(height: 5.h),
-              defaultTextFormField(
-                  hintText: 'Email',
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  borderColor: Colors.black,
-                  context: context),
-              SizedBox(height: 5.h),
-              if (state is ResetPasswordLoadingState)
-                 SpinKitFadingCircle(
-                  color: defaultColor,
-                ),
-              if (state is! ResetPasswordLoadingState)
-                defaultButton(
-                  text: 'Reset Password',
+        return SingleChildScrollView(
+          child: Padding(
+            padding:
+                EdgeInsets.only(top: 7.h, left: 5.w, right: 5.w, bottom: 5.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                defaultIconButton(
+                  icon: Icons.arrow_back,
                   onPressed: () {
-                    resetPassCubit.resetPassword(email: emailController.text);
+                    Navigator.pop(context);
                   },
                 ),
-            ],
+                5.ph,
+                defaultText(
+                    text: 'Enter your email address to reset your password'),
+                5.ph,
+                defaultTextFormField(
+                    hintText: 'Email',
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    borderColor: Colors.black,
+                    context: context),
+                5.ph,
+                if (state is ResetPasswordLoadingState)
+                  defaultProgressIndicator(
+                    boxFit: BoxFit.contain,
+                    width: 50.w,
+                    height: 35.h,
+                  ),
+                if (state is! ResetPasswordLoadingState)
+                  defaultButton(
+                    text: 'Reset Password',
+                    onPressed: () {
+                      resetPassCubit.resetPassword(email: emailController.text);
+                    },
+                  ),
+              ],
+            ),
           ),
         );
       },

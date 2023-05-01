@@ -62,66 +62,58 @@ class LoginScreenBody extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Padding(
-          padding:
-              EdgeInsets.only(top: 12.h, left: 6.w, right: 6.w, bottom: 2.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              defaultText(
-                  text: "Login",
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontSize: 25.sp,
-                      )),
-              SizedBox(
-                height: 10.h,
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              textFormFieldsListView(
-                  textFormFieldsLabels: loginTextFormFieldsLabels,
-                  textFormFieldsIcons: loginTextFormFieldsIcons,
-                  context: context,
-                  textFormFieldsList: loginTextFormFieldsList(
-                      context: context,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      cubit: loginCubit)),
-              SizedBox(
-                height: 1.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  dontHaveAnAcc(context: context),
-                  forgotPassword(context: context),
-                ],
-              ),
-              if (state is LoginLoadingState)
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: defaultProgressIndicator()),
-              if (state is! LoginLoadingState)
+        return SingleChildScrollView(
+          child: Padding(
+            padding:
+                EdgeInsets.only(top: 12.h, left: 6.w, right: 6.w, ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                defaultText(
+                    text: "Login",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontSize: 25.sp,
+                        )),
+                12.ph,
+                loginTextFormFieldsList(
+                    context: context,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    cubit: loginCubit),
+                1.ph,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    dontHaveAnAcc(context: context),
+                    forgotPassword(context: context),
+                  ],
+                ),
+                state is LoginLoadingState ? 12.ph : 18.ph,
                 loginButton(
                     loginCubit: loginCubit,
                     emailController: emailController,
                     passwordController: passwordController,
-                    context: context),
-              SizedBox(
-                height: 2.h,
-              ),
-              Center(
-                child: defaultText(
-                  text: ' or ',
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontSize: 17.sp,
-                        color: Colors.grey,
+                    context: context,
+                    state: state),
+                if (state is! LoginLoadingState)
+                  Column(
+                    children: [
+                      2.5.ph,
+                      Center(
+                        child: defaultText(
+                          text: ' or ',
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontSize: 17.sp,
+                                color: Colors.grey,
+                              ),
+                        ),
                       ),
-                ),
-              ),
-              continueWithGoogle(context, loginCubit),
-            ],
+                      // .5.ph,
+                      continueWithGoogle(context, loginCubit),
+                    ],
+                  ),
+              ],
+            ),
           ),
         );
       },

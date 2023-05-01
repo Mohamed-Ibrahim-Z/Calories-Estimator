@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget screen = const LoginScreen();
+    Widget nextScreen = const LoginScreen();
     if (loggedUserID != null) {
-      screen = const HomeLayout();
+      nextScreen = const HomeLayout();
     }
     isGoogleAccount ??= false;
     return MultiBlocProvider(
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               home: splashScreen(
-                nextScreen: screen,
+                nextScreen: nextScreen,
               ),
               themeMode: AppThemeCubit.get(context).isDark
                   ? ThemeMode.dark

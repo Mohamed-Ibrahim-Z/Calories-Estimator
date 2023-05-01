@@ -14,7 +14,7 @@ Map<int, Color> color = {
   900: Color.fromRGBO(213, 251, 215, 1),
 };
 MaterialColor defaultColor = MaterialColor(0xd5fbd758, color);
-
+Color backgroundColor = Color(0xFFFAF8F1);
 const logoImagePath = 'assets/images/logo.png';
 const googleImagePath = 'assets/images/Google.png';
 const shapesRivePath = 'assets/shapes.riv';
@@ -36,10 +36,10 @@ List<String> loginTextFormFieldsLabels = [
   "Email",
   "Password",
 ];
-List<IconData> loginTextFormFieldsIcons = [
-  Icons.email_outlined,
-  Icons.lock_outline,
-];
+// List<IconData> loginTextFormFieldsIcons = [
+//   Icons.email_outlined,
+//   Icons.lock_outline,
+// ];
 List<IconData> registerTextFormFieldsIcons = [
   Icons.person_outline,
   Icons.email_outlined,
@@ -54,7 +54,9 @@ List<IconData> profileInfoIcons = [
   Icons.calendar_month,
   Icons.person_add,
 ];
+
 extension EmptyPadding on num {
   SizedBox get ph => SizedBox(height: toDouble().h);
+
   SizedBox get pw => SizedBox(width: toDouble().w);
 }

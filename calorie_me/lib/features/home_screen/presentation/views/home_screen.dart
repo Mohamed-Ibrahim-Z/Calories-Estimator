@@ -1,3 +1,4 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
@@ -106,11 +107,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         fontSize: 20.sp,
                                       ))),
                         ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
+                        1.ph,
                         state is ChangeSelectedDateLoadingState
-                            ? defaultProgressIndicator()
+                            ? defaultProgressIndicator(
+                                boxFit: BoxFit.cover,
+                                width: 47.w,
+                                height: 15.h,
+                              )
                             : mealsContainer(
                                 context: context,
                                 homeScreenCubit: homeScreenCubit,
@@ -126,7 +129,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 );
               },
-              fallback: (context) => defaultProgressIndicator(),
+              fallback: (context) => defaultProgressIndicator(
+                boxFit: BoxFit.contain,
+                height: 80.h,
+                width: 80.w,
+              ),
             );
           },
         );

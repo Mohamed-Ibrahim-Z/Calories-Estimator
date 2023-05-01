@@ -46,6 +46,8 @@ class LoginCubit extends Cubit<LoginStates> {
         errorMessage = 'No Internet Connection';
       } else if (errorMessage.contains('password')) {
         errorMessage = 'Wrong Password';
+      } else if (errorMessage.contains("Given")) {
+        errorMessage = "Please Complete All Fields";
       }
       emit(LoginErrorState());
     });
@@ -121,7 +123,7 @@ class LoginCubit extends Cubit<LoginStates> {
       if (e.toString().contains('network')) {
         errorMessage = 'No Internet Connection';
         emit(LoginErrorState());
-      } else if (e.toString().contains('Null')) {
+      } else if (e.toString().contains('Null check')) {
       } else {
         errorMessage = e.toString();
         emit(LoginErrorState());

@@ -16,15 +16,17 @@ Widget editProfilePhoto(
         alignment: AlignmentDirectional.bottomEnd,
         children: [
           profilePhoto(
-              cubit: profileCubit,
-              currentUser: currentUser,
-              endRadius: 9.h,
-              radius: 8.h,
-              context: context),
+            cubit: profileCubit,
+            currentUser: currentUser,
+            radius: 7.h,
+            context: context,
+          ),
           !isGoogleAccount
               ? CircleAvatar(
+                  backgroundColor: Colors.white,
                   child: defaultIconButton(
                       icon: Icons.camera_alt_outlined,
+                      color: Colors.black,
                       onPressed: () {
                         profileCubit.changeProfilePhoto();
                       }))

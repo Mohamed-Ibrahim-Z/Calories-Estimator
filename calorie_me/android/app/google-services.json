@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "150405689389-nus1f5q1q0q2oqcvfdvgnnp47mph6u10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.calorie_me",
+            "certificate_hash": "9705ffe3aaafa321aa7142176181c4c5764379b1"
+          }
+        },
+        {
           "client_id": "150405689389-2l4q3c2uj2cph2350b235jg6m1hhnuui.apps.googleusercontent.com",
           "client_type": 3
         }

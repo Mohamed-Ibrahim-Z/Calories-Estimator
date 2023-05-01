@@ -5,7 +5,6 @@ import 'package:calorie_me/features/register/presentation/views/widgets/row_belo
 import 'package:calorie_me/features/register/presentation/views/widgets/reg_text_form_fields_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -115,24 +114,26 @@ class RegisterScreenBody extends StatelessWidget {
                       ),
                       SizedBox(height: 1.h),
                       chooseGender(cubit: registerCubit, context: context),
-                      SizedBox(height: 4.h),
+                      state is RegisterLoadingState ? 0.ph : 4.ph,
                       if (state is RegisterLoadingState)
-                        Center(
-                            child: SpinKitFadingCircle(
-                          color: defaultColor,
-                        )),
+                        defaultProgressIndicator(
+                            boxFit: BoxFit.contain, height: 22.h, width: 60.w),
                       if (state is! RegisterLoadingState)
-                        registerButton(
-                            registerCubit: registerCubit,
-                            usernameController: usernameController,
-                            emailController: emailController,
-                            passwordController: passwordController,
-                            ageController: ageController,
-                            weightController: weightController,
-                            heightController: heightController,
-                            formKey: formKey),
-                      SizedBox(height: 1.h),
-                      rowBelowRegBtn(context, registerCubit),
+                        Column(
+                          children: [
+                            registerButton(
+                                registerCubit: registerCubit,
+                                usernameController: usernameController,
+                                emailController: emailController,
+                                passwordController: passwordController,
+                                ageController: ageController,
+                                weightController: weightController,
+                                heightController: heightController,
+                                formKey: formKey),
+                            SizedBox(height: 1.h),
+                            rowBelowRegBtn(context, registerCubit),
+                          ],
+                        ),
                     ],
                   ),
                 ),

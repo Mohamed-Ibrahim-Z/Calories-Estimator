@@ -5,6 +5,7 @@ import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 
 Widget continueWithGoogle(context, LoginCubit cubit) => defaultTextButton(
+
       context: context,
       onPressed: () {
         cubit.loginWithGmail();
@@ -13,9 +14,7 @@ Widget continueWithGoogle(context, LoginCubit cubit) => defaultTextButton(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(googleImagePath, width: 6.w, height: 6.h),
-          SizedBox(
-            width: 2.w,
-          ),
+          2.pw,
           defaultText(
             text: "Continue with Google",
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(

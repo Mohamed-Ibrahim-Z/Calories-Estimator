@@ -23,36 +23,35 @@ class ProfileInfo extends StatelessWidget {
           alignment: Alignment.center,
           child: FittedBox(
             child: defaultText(
-              text: "Waleed Mohamed",
+              text: currentUser.userName!,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
                   .copyWith(
                 color: Colors.black,
-                fontSize: 23.sp,
+                fontSize: 20.sp,
                 letterSpacing: 1.5,
               ),
             ),
           ),
         ),
         1.ph,
-        Row(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-          children: [
-            defaultText(
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.w),
+          child: FittedBox(
+            child: defaultText(
               text: currentUser.email,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
                   .copyWith(
-                fontSize: 18.sp,
+                fontSize: 17.sp,
                 color: Colors.black54,
                 fontFamily: GoogleFonts.roboto()
                     .fontFamily,
               ),
             ),
-          ],
+          ),
         ),
       ],
     );

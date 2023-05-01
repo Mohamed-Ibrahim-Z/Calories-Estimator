@@ -27,7 +27,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
 
   Future<void> updateProfilePhoto(
       {required UserModel updateUserModel, UserModel? currentUser}) async {
-    emit(UploadProfileImageLoadingState());
     FirebaseStorage.instance
         .ref()
         .child('users/${Uri.file(profileImagePath!.path).pathSegments.last}')
@@ -48,8 +47,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
     required UserModel updateUserModel,
     UserModel? currentUserModel,
   }) async {
-    emit(UpdateUserDataLoadingState());
-
     if (updateUserModel.email != updateUserModel.email) {
       FirebaseAuth.instance.currentUser!.updateEmail(updateUserModel.email);
     }
@@ -71,5 +68,19 @@ class ProfileCubit extends Cubit<ProfileStates> {
     }).catchError((error) {
       emit(UpdateUserDataErrorState());
     });
+  }
+
+  void updateUserInfo({
+    required UserModel updateUserModel,
+    UserModel? currentUserModel,
+  }) async {
+    emit(UpdateUserDataLoadingState());
+    if (profileImagePath != null) {
+      await updateProfilePhoto(
+          updateUserModel: updateUserModel, currentUser: currentUserModel);
+    } else {
+      await updateProfile(
+          updateUserModel: updateUserModel, currentUserModel: currentUserModel);
+    }
   }
 }

@@ -14,21 +14,31 @@ Widget mealsContainer({
   required AnimationController listController,
   required Animation<Offset> evenItemOfListAnimation,
   required Animation<Offset> oddItemOfListAnimation,
-}) =>
-    homeScreenCubit.mealsList.isEmpty
-        ? Padding(
+}) {
+  return homeScreenCubit.mealsList.isEmpty &&
+          cameraState is! UploadImageLoadingState
+      ? Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: Center(
-              child: defaultText(
-                text: "No Meals Found",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+            child: defaultText(
+              text: "No Meals Found",
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
+          ),
         )
-        : mealsListView(
-            homeScreenCubit: homeScreenCubit,
-            listViewAnimationController: listController,
-            evenItem: evenItemOfListAnimation,
-            oddItem: oddItemOfListAnimation,
-            cameraState: cameraState,
-          );
+      // first meal is being uploaded
+      : homeScreenCubit.mealsList.isEmpty &&
+              cameraState is UploadImageLoadingState
+          ? defaultProgressIndicator(
+              boxFit: BoxFit.cover,
+              width: 47.w,
+              height: 15.h,
+            )
+          : mealsListView(
+              homeScreenCubit: homeScreenCubit,
+              listViewAnimationController: listController,
+              evenItem: evenItemOfListAnimation,
+              oddItem: oddItemOfListAnimation,
+              cameraState: cameraState,
+            );
+}

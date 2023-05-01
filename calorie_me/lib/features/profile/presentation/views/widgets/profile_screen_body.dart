@@ -29,63 +29,69 @@ class ProfileScreenBody extends StatelessWidget {
             var currentUser = homeScreenCubit.userLogged!;
             List<String> userInfoTexts =
                 initUserInfoTexts(currentUser: currentUser);
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomPaint(
-                    painter: profilePainter(),
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 6.h, bottom: 2.h),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 3.w),
-                            child: defaultIconButton(
-                                icon: Icons.arrow_back_ios_new,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: 6.h,
-                              bottom: 1.h,
+            return WillPopScope(
+              onWillPop: () async {
+                profileCubit.profileImagePath = null;
+                return true;
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomPaint(
+                      painter: profilePainter(),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 6.h, bottom: 2.h),
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 3.w),
+                              child: defaultIconButton(
+                                  icon: Icons.arrow_back_ios_new,
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    profileCubit.profileImagePath = null;
+                                    Navigator.pop(context);
+                                  }),
                             ),
-                            child: Column(
-                              children: [
-                                Center(
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 6.h,
+                                bottom: 1.h,
+                              ),
+                              child: Column(
+                                children: [
+                                  Center(
                                     child: profilePhoto(
-                                  cubit: profileCubit,
-                                  currentUser: currentUser,
-                                  context: context,
-                                  endRadius: 13.0.h,
-                                  radius: 18.w,
-                                  isProfileScreen: true,
-                                )),
-                                3.ph,
-                                ProfileInfo(currentUser: currentUser),
-                              ],
+                                        currentUser: currentUser,
+                                        cubit: profileCubit,
+                                        context: context,
+                                        radius: 9.0.h),
+                                  ),
+                                  3.ph,
+                                  ProfileInfo(currentUser: currentUser),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          5.ph,
+                          PersonalInfo(userInfoTexts: userInfoTexts),
+                          11.ph,
+                          editProfileBtn(context: context),
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        5.ph,
-                        PersonalInfo(userInfoTexts: userInfoTexts),
-                        7.ph,
-                        editProfileBtn(context: context),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

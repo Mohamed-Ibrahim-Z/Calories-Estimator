@@ -6,6 +6,7 @@ import '../../../../../core/widgets/widgets.dart';
 import '../../../../register/presentation/views/register_screen.dart';
 
 Widget dontHaveAnAcc({required BuildContext context}) => defaultTextButton(
+  padding: EdgeInsets.only(left: 1.w),
     context: context,
     child: defaultText(
         text: 'Don\'t have an account? ',

@@ -10,7 +10,8 @@ List<Widget> regTextFormFieldsList(
         required ageController,
         required weightController,
         required heightController,
-        cubit, required List<String> textFormFieldsLabels}) =>
+        cubit,
+        required List<String> textFormFieldsLabels}) =>
     [
       defaultTextFormField(
         context: context,

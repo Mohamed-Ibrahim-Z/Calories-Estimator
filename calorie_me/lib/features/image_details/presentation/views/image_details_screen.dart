@@ -1,3 +1,4 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/home_layout.dart';
@@ -72,9 +73,10 @@ class ImageDetailsScreen extends StatelessWidget {
                               cameraCubit: cubit,
                             );
                           },
-                          fallback: (context) => Padding(
-                            padding: EdgeInsets.only(bottom:6.h),
-                            child: defaultProgressIndicator(),
+                          fallback: (context) => defaultProgressIndicator(
+                            boxFit: BoxFit.cover,
+                            width: 47.w,
+                            height: 15.h,
                           ),
                         ),
                       ],

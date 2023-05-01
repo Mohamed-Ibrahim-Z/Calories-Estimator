@@ -1,4 +1,6 @@
-class UserModel {
+import 'package:equatable/equatable.dart';
+
+class UserModel extends Equatable {
   String email = "";
   String? userName = "";
   int? age = 0;
@@ -10,17 +12,18 @@ class UserModel {
   double height = 0;
   double? bmr = 0;
 
-  UserModel(
-      {required this.userName,
-      required this.email,
-      this.password,
-      required this.weight,
-      this.uId,
-      this.profilePhoto,
-      required this.height,
-      this.age,
-      this.gender,
-      this.bmr = 0,});
+  UserModel({
+    required this.userName,
+    required this.email,
+    this.password,
+    required this.weight,
+    this.uId,
+    this.profilePhoto,
+    required this.height,
+    this.age,
+    this.gender,
+    this.bmr = 0,
+  });
 
   UserModel.fromFireStore(Map<String, dynamic> map) {
     userName = map['username'];
@@ -47,4 +50,16 @@ class UserModel {
         'password': password,
         'profilePhoto': profilePhoto,
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        userName,
+        email,
+        password,
+        weight,
+        height,
+        profilePhoto,
+        age,
+      ];
 }

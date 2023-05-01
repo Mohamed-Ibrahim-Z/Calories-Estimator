@@ -9,11 +9,12 @@ Widget loginButton(
         {required LoginCubit loginCubit,
         required TextEditingController emailController,
         required TextEditingController passwordController,
-        required BuildContext context}) =>
-    Expanded(
-      child: Align(
-          alignment: Alignment.bottomCenter,
-          child: MaterialButton(
+        required BuildContext context,
+        state}) =>
+    state is LoginLoadingState
+        ? defaultProgressIndicator(
+            boxFit: BoxFit.cover, height: 15.h, width: 60.w)
+        : MaterialButton(
             color: defaultColor,
             elevation: 10,
             height: 7.h,
@@ -45,5 +46,4 @@ Widget loginButton(
                 ),
               ],
             ),
-          )),
-    );
+          );
