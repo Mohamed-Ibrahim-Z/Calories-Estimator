@@ -34,15 +34,15 @@ Future extraInfoDialog({
               children: [
                 defaultText(
                   text: "Extra Info",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 CircleAvatar(
                   radius: 15,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   child: Center(
                     child: defaultIconButton(
                         icon: Icons.close,
+                        color: Theme.of(context).iconTheme.color!,
                         onPressed: () {
                           Navigator.pop(context);
                           ageController.clear();

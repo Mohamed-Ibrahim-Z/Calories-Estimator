@@ -1,15 +1,16 @@
-import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/page_transition.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/home_layout.dart';
+import 'package:calorie_me/features/image_details/presentation/views/widgets/select_meal_type.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../core/widgets/widgets.dart';
-import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
-import '../../../../home_layout/presentation/manager/bottom_nav_cubit/bottom_nav_cubit.dart';
+import '../../manager/camera_cubit/camera_cubit.dart';
 
-Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
+Widget footerButtons(
+        {required BuildContext context,
+        required CameraCubit cameraCubit}) =>
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
       child: Row(
@@ -30,10 +31,7 @@ Widget footerButtons({required context, required CameraCubit cameraCubit}) =>
               child: defaultButton(
                   text: 'Add to Meals',
                   onPressed: () {
-                    BottomNavCubit.get(context).changeBottomNavScreen(0);
-                    cameraCubit.uploadFullImage();
-                    navigateToAndRemoveUntil(
-                        nextPage: const HomeLayout(), context: context);
+                    selectMealType(context: context, cameraCubit: cameraCubit);
                   })),
         ],
       ),

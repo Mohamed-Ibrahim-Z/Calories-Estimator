@@ -21,3 +21,4 @@ class ChangeSelectedDateSuccessState extends HomeScreenStates {}
 class ChangeSelectedDateErrorState extends HomeScreenStates {}
 class OnCategorySelectState extends HomeScreenStates {}
 class ChangeCategoryOpacityState extends HomeScreenStates {}
+class MealTypeSelectedState extends HomeScreenStates {}

@@ -6,7 +6,7 @@ import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/home_layout/presentation/views/widgets/choose_image_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
+import '../../../image_details/presentation/manager/camera_cubit/camera_cubit.dart';
 import '../../../image_details/presentation/views/image_details_screen.dart';
 import '../manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 
@@ -50,9 +50,7 @@ class HomeLayout extends StatelessWidget {
                 if (state is ImagePickedSuccessState) {
                   navigateToAndRemoveUntil(
                       nextPage: ImageDetailsScreen(), context: context);
-                  !newVersion
-                      ? cameraCubit.cutImage()
-                      : cameraCubit.predictImage();
+                  cameraCubit.predictImage();
                 }
               },
               child: FloatingActionButton(
@@ -60,15 +58,8 @@ class HomeLayout extends StatelessWidget {
                 child: const Icon(Icons.camera_alt, size: 30),
                 onPressed: () {
                   cameraCubit.clearTableRowsAndMealModel();
-                  if (!newVersion) {
-                    navigateTo(
-                        nextPage: ImageDetailsScreen(), context: context);
-                    // navigateTo(
-                    //     nextPage: const CameraScreen(), context: context);
-                  } else {
-                    chooseImageDialog(
-                        context: context, cubit: CameraCubit.get(context));
-                  }
+                  chooseImageDialog(
+                      context: context, cubit: CameraCubit.get(context));
                 },
               ),
             ),

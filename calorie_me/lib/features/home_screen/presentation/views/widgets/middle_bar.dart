@@ -6,8 +6,10 @@ import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
 import 'custom_percent_indicator.dart';
 
-Widget middleBar(
-        {required BuildContext context, required UserModel currentUser}) =>
+Widget middleBar({
+  required BuildContext context,
+  required UserModel currentUser,
+}) =>
     Padding(
       padding: EdgeInsets.only(
         left: 3.w,

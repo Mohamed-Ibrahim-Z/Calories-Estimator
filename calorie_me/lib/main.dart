@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'core/utils/dio.dart';
-import 'features/camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'features/edit_profile/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'features/home_layout/presentation/manager/bottom_nav_cubit/bottom_nav_cubit.dart';
 import 'features/home_layout/presentation/views/home_layout.dart';
+import 'features/image_details/presentation/manager/camera_cubit/camera_cubit.dart';
 import 'features/splash_screen/splash_screen.dart';
 
 void main() async {

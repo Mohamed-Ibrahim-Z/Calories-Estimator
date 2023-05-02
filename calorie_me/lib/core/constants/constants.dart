@@ -28,7 +28,6 @@ dynamic loggedUserID = '';
 const baseUrl = 'http://calorieme.francecentral.cloudapp.azure.com:5000';
 dynamic caloriesConsumed = 0;
 dynamic caloriesRemaining = 0;
-bool newVersion = false;
 int mealIndex = -1;
 BorderRadius defaultBorderRadius = BorderRadius.circular(10);
 List<String> loginTextFormFieldsLabels = [
@@ -53,11 +52,13 @@ List<String> mealsCategories = [
   "Breakfast",
   "Lunch",
   "Dinner",
+  "Snacks",
 ];
 List<String> mealsCategoriesImages = [
   "https://media.istockphoto.com/id/533645537/photo/breakfast-with-bacon-eggs-pancakes-and-toast.jpg?s=612x612&w=0&k=20&c=TumrEwImmLi4TIVeirgynvTpHhyvt9LeiDXLci45NWg=",
   "https://s3-ap-south-1.amazonaws.com/betterbutterbucket-silver/chitra-sendhil1453210035569e39b33b9db.jpeg",
-  "https://c.ndtvimg.com/2022-03/jcliv9dg_shahi-paneer_625x300_15_March_22.jpg?im=FaceCrop,algorithm=dnn,width=620,height=350"
+  "https://c.ndtvimg.com/2022-03/jcliv9dg_shahi-paneer_625x300_15_March_22.jpg?im=FaceCrop,algorithm=dnn,width=620,height=350",
+  "https://www.eatthis.com/wp-content/uploads/sites/4/2019/11/healthy-snacks-meal-prep.jpg?quality=82&strip=1"
 ];
 
 extension EmptyPadding on num {

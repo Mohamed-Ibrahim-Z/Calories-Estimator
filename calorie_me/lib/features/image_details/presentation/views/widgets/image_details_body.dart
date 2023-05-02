@@ -1,8 +1,9 @@
+import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/features/image_details/presentation/views/widgets/footer_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/widgets/widgets.dart';
-import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
+import '../../manager/camera_cubit/camera_cubit.dart';
 
 Widget imageDetailsBody({required context, required CameraCubit cameraCubit}) =>
     Column(
@@ -22,18 +23,17 @@ Widget imageDetailsBody({required context, required CameraCubit cameraCubit}) =>
             ],
           ),
         ),
-        SizedBox(
-          height: 1.h,
-        ),
+        1.ph,
         Table(
           border: TableBorder.all(
             color: Theme.of(context).iconTheme.color!,
           ),
           children: cameraCubit.tableRows,
         ),
-        SizedBox(
-          height: 4.h,
+        4.ph,
+        footerButtons(
+          context: context,
+          cameraCubit: cameraCubit,
         ),
-        footerButtons(context: context, cameraCubit: cameraCubit),
       ],
     );

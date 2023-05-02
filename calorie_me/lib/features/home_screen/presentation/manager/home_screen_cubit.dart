@@ -33,53 +33,67 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   List<MealModel> breakFastMeals = [];
   List<MealModel> lunchMeals = [];
   List<MealModel> dinnerMeals = [];
-  List<dynamic> categoryCaloriesConsumed = [0, 0, 0];
-  List<String> mealsIDs = [];
+  List<MealModel> snacksMeals = [];
+  List<String> mealsIds = [];
+  List<dynamic> categoryCaloriesConsumed = [0, 0, 0, 0];
+  var subscription;
 
   Future<void> getMealsList({int? day}) async {
     if (loggedUserID != null) {
-      emit(GetMealsLoadingState());
-      FirebaseFirestore.instance
+      if (day == null) {
+        emit(GetMealsLoadingState());
+      }
+      final userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(loggedUserID)
-          .get()
-          .then((value) {
-        // Getting breakFast meals
-        value.reference
-            .collection("Breakfast")
-            .orderBy('dateTime', descending: true)
-            .snapshots()
-            .listen((event) {
-          getCategoryMeals(
-            mealsList: breakFastMeals,
-            event: event,
-            day: day,
-          );
-        });
-        // Getting lunch meals
-        value.reference
-            .collection("Lunch")
-            .orderBy('dateTime', descending: true)
-            .snapshots()
-            .listen((event) {
-          getCategoryMeals(
-            mealsList: lunchMeals,
-            event: event,
-            day: day,
-          );
-        });
-        // Getting dinner meals
-        value.reference
-            .collection("Dinner")
-            .orderBy('dateTime', descending: true)
-            .snapshots()
-            .listen((event) {
-          getCategoryMeals(
-            mealsList: dinnerMeals,
-            event: event,
-            day: day,
-          );
-        });
+          .get();
+      // Getting breakfast meals
+      subscription = userSnapshot.reference
+          .collection("Breakfast")
+          .orderBy('dateTime', descending: true)
+          .snapshots()
+          .listen((event) {
+        getCategoryMeals(
+          mealsList: breakFastMeals,
+          event: event,
+          day: day,
+        );
+      });
+      // Getting lunch meals
+      userSnapshot.reference
+          .collection("Lunch")
+          .orderBy('dateTime', descending: true)
+          .snapshots()
+          .listen((event) {
+        getCategoryMeals(
+          mealsList: lunchMeals,
+          event: event,
+          day: day,
+        );
+      });
+      // Getting dinner meals
+      userSnapshot.reference
+          .collection("Dinner")
+          .orderBy('dateTime', descending: true)
+          .snapshots()
+          .listen((event) {
+        getCategoryMeals(
+          mealsList: dinnerMeals,
+          event: event,
+          day: day,
+        );
+      });
+      // Getting snacks meals
+      userSnapshot.reference
+          .collection("Snacks")
+          .orderBy('dateTime', descending: true)
+          .snapshots()
+          .listen((event) {
+        getCategoryMeals(
+          mealsList: snacksMeals,
+          event: event,
+          day: day,
+        );
       });
     }
   }
@@ -93,44 +107,76 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     }
     for (var element in event.docChanges) {
       if (element.type == DocumentChangeType.added) {
-        if (!mealsIDs.contains(element.doc.id) &&
-            DateTime.parse(element.doc.data()!['dateTime']).day == day) {
-          mealIndex == -1
-              ? mealsList.add(
-                  MealModel.fromFireStore(element.doc.data()!, element.doc.id))
-              : mealsList.insert(mealIndex,
-                  MealModel.fromFireStore(element.doc.data()!, element.doc.id));
-          caloriesConsumed += mealsList.last.mealCalories;
-          if (mealsList == breakFastMeals) {
-            categoryCaloriesConsumed[0] += caloriesConsumed;
-          } else if (mealsList == lunchMeals) {
-            categoryCaloriesConsumed[1] += caloriesConsumed;
-          } else {
-            categoryCaloriesConsumed[2] += caloriesConsumed;
+        if (DateTime.parse(element.doc.data()!['dateTime']).day == day &&
+            !mealsIds.contains(element.doc.id)) {
+          // New meal
+          if (mealIndex == -1) {
+            mealsList.add(
+                MealModel.fromFireStore(element.doc.data()!, element.doc.id));
+            meals.add(mealsList.last);
+            updateCaloriesConsumed(
+                mealsList: mealsList, calories: meals.last.mealCalories);
           }
-          mealsIDs.add(element.doc.id);
+          // Undo meal
+          else {
+            mealsList.insert(mealIndex,
+                MealModel.fromFireStore(element.doc.data()!, element.doc.id));
+            meals.insert(mealIndex, mealsList.elementAt(mealIndex));
+            updateCaloriesConsumed(
+                mealsList: mealsList,
+                calories: meals.elementAt(mealIndex).mealCalories);
+          }
+          mealsIds.add(element.doc.id);
         }
       }
     }
     emit(GetMealsSuccessState());
   }
 
+  void updateCaloriesConsumed(
+      {required List<MealModel> mealsList, required int calories}) {
+    caloriesConsumed += calories;
+    if (mealsList == breakFastMeals) {
+      categoryCaloriesConsumed[0] += calories;
+    } else if (mealsList == lunchMeals) {
+      categoryCaloriesConsumed[1] += calories;
+    } else if (mealsList == dinnerMeals) {
+      categoryCaloriesConsumed[2] += calories;
+    } else {
+      categoryCaloriesConsumed[3] += calories;
+    }
+  }
+
   MealModel? deletedMeal;
 
-  void deleteMeal({required int index}) {
-    // deletedMeal = mealsList[index];
-    // caloriesConsumed -= mealsList[index].mealCalories;
-    // mealsList.removeAt(index);
+  void deleteMeal({required int index, required MealModel meal}) {
+    if (selectedCategoryIndex == 0) {
+      categoryCaloriesConsumed[0] -= meal.mealCalories;
+      breakFastMeals.removeAt(index);
+    } else if (selectedCategoryIndex == 1) {
+      categoryCaloriesConsumed[1] -= meal.mealCalories;
+      lunchMeals.removeAt(index);
+    } else if (selectedCategoryIndex == 2) {
+      categoryCaloriesConsumed[2] -= meal.mealCalories;
+      dinnerMeals.removeAt(index);
+    } else {
+      categoryCaloriesConsumed[3] -= meal.mealCalories;
+      snacksMeals.removeAt(index);
+    }
+    meals.removeAt(index);
+    mealsIds.removeAt(index);
+    deletedMeal = meal;
+    caloriesConsumed -= meal.mealCalories;
     mealIndex = index;
     emit(DeleteMealLoadingState());
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
-        .collection('meals')
-        .doc(mealsIDs[index])
+        .collection(selectedCategory)
+        .doc(meal.mealID)
         .delete()
         .then((value) {
-      mealsIDs.removeAt(index);
       emit(DeleteMealSuccessState());
     }).catchError((error) {
       emit(DeleteMealErrorState());
@@ -142,12 +188,14 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     FirebaseFirestore.instance
         .collection('users')
         .doc(loggedUserID)
-        .collection('meals')
+        .collection(selectedCategory)
         .doc()
         .set(deletedMeal!.toMap())
         .then((value) {
       mealIndex = -1;
       emit(UndoDeleteMealSuccessState());
+    }).catchError((error) {
+      emit(UndoDeleteMealErrorState());
     });
   }
 
@@ -155,10 +203,15 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     breakFastMeals.clear();
     lunchMeals.clear();
     dinnerMeals.clear();
-    mealsIDs.clear();
+    snacksMeals.clear();
+    meals.clear();
+    mealsIds.clear();
     userLogged = null;
     caloriesConsumed = 0;
     mealIndex = -1;
+    selectedCategoryIndex = 0;
+    isCategorySelected = false;
+    categoryCaloriesConsumed = [0, 0, 0, 0];
   }
 
   String getTimeDifference({required String dateTime}) {
@@ -205,22 +258,20 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     breakFastMeals.clear();
     lunchMeals.clear();
     dinnerMeals.clear();
-    mealsIDs.clear();
-    categoryCaloriesConsumed = [0, 0, 0];
+    snacksMeals.clear();
+    meals.clear();
+    mealsIds.clear();
+    categoryCaloriesConsumed = [0, 0, 0, 0];
     caloriesConsumed = 0;
     categoryOpacity = 1;
+    isCategorySelected = false;
+    if (subscription != null) {
+      subscription!.cancel();
+    }
     await getMealsList(day: days[index].day);
     emit(ChangeSelectedDateSuccessState());
   }
 
-  // mealsIDs.clear();
-  // mealsList.clear();
-  // value.docs.forEach((element) {
-  //   if (DateTime.parse(element.data()['dateTime']).day == days[index].day) {
-  //     // mealsList.add(MealModel.fromFireStore(element.data(), element.id));
-  //     mealsIDs.add(element.id);
-  //   }
-  // });
   double categoryOpacity = 1;
 
   void changeCategoryOpacity() {
@@ -249,15 +300,22 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   }
 
   List<MealModel> meals = [];
+  String selectedCategory = '';
 
   void getCurrentCategoryMeals() {
     meals.clear();
     if (selectedCategoryIndex == 0) {
       meals.addAll(breakFastMeals);
+      selectedCategory = 'Breakfast';
     } else if (selectedCategoryIndex == 1) {
       meals.addAll(lunchMeals);
-    } else {
+      selectedCategory = 'Lunch';
+    } else if (selectedCategoryIndex == 2) {
       meals.addAll(dinnerMeals);
+      selectedCategory = 'Dinner';
+    } else {
+      selectedCategory = 'Snacks';
+      meals.addAll(snacksMeals);
     }
   }
 }

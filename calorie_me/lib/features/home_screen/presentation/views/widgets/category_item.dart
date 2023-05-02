@@ -10,18 +10,17 @@ Widget categoryItem({
   required HomeScreenCubit homeScreenCubit,
   required int index,
 }) {
-  print(homeScreenCubit.categoryCaloriesConsumed[index]);
   return GestureDetector(
     onTap: () {
       homeScreenCubit.changeCategoryOpacity();
       homeScreenCubit.selectedCategoryIndex = index;
+      homeScreenCubit.getCurrentCategoryMeals();
     },
     child: AnimatedOpacity(
       duration: Duration(milliseconds: 500),
       opacity: homeScreenCubit.categoryOpacity,
       onEnd: () {
         homeScreenCubit.onCategorySelect();
-        homeScreenCubit.getCurrentCategoryMeals();
       },
       child: Container(
         decoration: BoxDecoration(

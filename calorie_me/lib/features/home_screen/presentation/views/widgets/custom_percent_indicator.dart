@@ -18,7 +18,7 @@ Widget customPercentIndicator(context, UserModel currentUser) {
         animationDuration: 1200,
         animateFromLastPercent: true,
         percent: (caloriesRemaining / currentUser.bmr!).clamp(0.0, 1.0),
-        backgroundWidth: 28,
+        backgroundWidth: 27,
         lineWidth: 13,
         linearGradient: LinearGradient(
           colors: [

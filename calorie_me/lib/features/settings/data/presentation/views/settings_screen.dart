@@ -1,9 +1,7 @@
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/core/utils/cache_helper.dart';
-import 'package:calorie_me/features/settings/data/presentation/manager/app_theme_cubit/app_theme_states.dart';
 import 'package:calorie_me/features/settings/data/presentation/views/widgets/setting_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/widgets/widgets.dart';
 import '../manager/app_theme_cubit/app_theme_cubit.dart';
@@ -23,9 +21,9 @@ class SettingsScreen extends StatelessWidget {
             text: "Settings",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          SizedBox(height: 2.h),
+          2.ph,
           appearanceContainer(appThemeCubit, context),
-          SizedBox(height: 2.h),
+          2.ph,
           settingsContainer(
               context: context,
               text: 'Logout',
@@ -33,63 +31,6 @@ class SettingsScreen extends StatelessWidget {
               onTap: () {
                 CacheHelper.signOut(context);
               }),
-          BlocBuilder<AppThemeCubit, AppThemeStates>(
-            builder: (context, state) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.5.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Radio(
-                            fillColor: MaterialStateProperty.all(newVersion
-                                ? Colors.grey
-                                : Theme.of(context).iconTheme.color),
-                            value: false,
-                            groupValue: newVersion,
-                            onChanged: (value) {
-                              appThemeCubit.changeAppVersion(value);
-                            }),
-                        defaultText(
-                            text: 'Version 1',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: newVersion
-                                        ? Colors.grey
-                                        : Theme.of(context).iconTheme.color))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                            fillColor: MaterialStateProperty.all(!newVersion
-                                ? Colors.grey
-                                : Theme.of(context).iconTheme.color),
-                            value: true,
-                            groupValue: newVersion,
-                            onChanged: (value) {
-                              appThemeCubit.changeAppVersion(value);
-                            }),
-                        defaultText(
-                          text: 'Version 2',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  color: !newVersion
-                                      ? Colors.grey
-                                      : Theme.of(context).iconTheme.color),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
         ],
       ),
     );

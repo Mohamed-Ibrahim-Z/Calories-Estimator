@@ -12,7 +12,8 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
+
+import '../../../image_details/presentation/manager/camera_cubit/camera_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -66,17 +67,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 context: context,
                                 currentUser: currentUser!,
                                 profileCubit: ProfileCubit.get(context)),
-                            SizedBox(
-                              height: 3.h,
-                            ),
+                            3.ph,
                             middleBar(
                                 context: context, currentUser: currentUser),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 5.h,
-                      ),
+                      5.ph,
                       Builder(builder: (context) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (!isScreenBuilt) {
@@ -87,9 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             homeScreenCubit: homeScreenCubit,
                             calendarScrollController: calendarScrollController);
                       }),
-                      SizedBox(
-                        height: 3.h,
-                      ),
+                      3.ph,
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -104,7 +99,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ))),
                       ),
                       1.ph,
-                      state is ChangeSelectedDateLoadingState
+                      state is ChangeSelectedDateLoadingState ||
+                              cameraState is UploadImageLoadingState
                           ? defaultProgressIndicator(
                               boxFit: BoxFit.cover,
                               width: 47.w,
@@ -114,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               context: context,
                               homeScreenCubit: homeScreenCubit,
                               screenState: state,
-                              cameraState: cameraState,
                               listController: listController!,
                               evenItem: evenItemOfListAnimation!,
                               oddItem: oddItemOfListAnimation!),
+                      3.ph,
                     ],
                   ),
                 );

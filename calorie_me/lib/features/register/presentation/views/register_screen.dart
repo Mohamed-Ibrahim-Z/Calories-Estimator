@@ -1,4 +1,3 @@
-import 'package:calorie_me/core/widgets/widgets.dart';
 import 'package:calorie_me/features/register/presentation/views/widgets/register_screen_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

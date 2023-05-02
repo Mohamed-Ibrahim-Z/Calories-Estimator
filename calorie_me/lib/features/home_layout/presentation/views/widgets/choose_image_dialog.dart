@@ -1,9 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/widgets/widgets.dart';
-import '../../../../camera_screen/presentation/manager/camera_cubit/camera_cubit.dart';
+import '../../../../image_details/presentation/manager/camera_cubit/camera_cubit.dart';
 
 Future chooseImageDialog({required context, required CameraCubit cubit}) =>
     showModal(
@@ -16,7 +15,7 @@ Future chooseImageDialog({required context, required CameraCubit cubit}) =>
         return AlertDialog(
           backgroundColor: Theme.of(context).canvasColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: defaultBorderRadius,
           ),
           title: defaultText(
               text: 'Choose an option',

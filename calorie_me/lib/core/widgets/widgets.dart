@@ -25,8 +25,7 @@ Widget defaultIconButton(
         double? iconSize}) =>
     IconButton(
         padding: EdgeInsets.zero,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+        splashRadius: 1,
         icon: Icon(
           icon,
           color: color,
@@ -138,11 +137,6 @@ Widget defaultTextFormField({
           },
         ),
       ],
-    );
-
-Widget logoImage() => Image.asset(
-      logoImagePath,
-      width: 67.w,
     );
 
 Future<bool?> defaultToast(

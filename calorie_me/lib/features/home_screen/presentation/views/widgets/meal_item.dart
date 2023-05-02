@@ -10,80 +10,170 @@ import 'meal_image.dart';
 Widget mealItem(
     {required HomeScreenCubit homeScreenCubit,
     required BuildContext context,
-    required MealModel meal}) {
+    required MealModel meal,
+    required int index}) {
   String time = homeScreenCubit.getTimeDifference(dateTime: meal.dateTime);
 
   return AnimatedOpacity(
     opacity: homeScreenCubit.isCategorySelected ? 1 : 0,
     duration: Duration(milliseconds: 500),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
-        child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            Row(
-              children: [
-                mealImage(mealImageUrl: meal.imageUrl),
-                3.pw,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 50.w,
-                        child: defaultText(
-                          text: meal.ingredients.keys.join(', ').toString(),
-                          maxLines: 15,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Row(
-                        children: [
-                          defaultText(
-                            text: "Calories: ",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          SizedBox(
-                            width: 1.w,
-                          ),
-                          defaultText(
-                            text: "${meal.mealCalories} Kcal",
-                            style:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      color: Color(0xFFC58940),
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ],
+    child: DateTime.parse(meal.dateTime).day == homeScreenCubit.days.last.day
+        ? Dismissible(
+            key: Key(meal.mealID),
+            behavior: HitTestBehavior.deferToChild,
+            onDismissed: (direction) {
+              homeScreenCubit.deleteMeal(index: index, meal: meal);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.6),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 1),
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Row(
+                      children: [
+                        mealImage(mealImageUrl: meal.imageUrl),
+                        3.pw,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 50.w,
+                                child: defaultText(
+                                  text: meal.ingredients.keys
+                                      .join(', ')
+                                      .toString(),
+                                  maxLines: 15,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Row(
+                                children: [
+                                  defaultText(
+                                    text: "Calories: ",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  SizedBox(
+                                    width: 1.w,
+                                  ),
+                                  defaultText(
+                                    text: "${meal.mealCalories} Kcal",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          color: Color(0xFFC58940),
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 10.w,
+                      child: defaultText(
+                          text: time,
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.6),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: Offset(0, 1),
                 ),
               ],
             ),
-            Container(
-              width: 10.w,
-              child: defaultText(
-                  text: time, style: Theme.of(context).textTheme.bodySmall),
+            child: Padding(
+              padding:
+                  EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Row(
+                    children: [
+                      mealImage(mealImageUrl: meal.imageUrl),
+                      3.pw,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 50.w,
+                              child: defaultText(
+                                text:
+                                    meal.ingredients.keys.join(', ').toString(),
+                                maxLines: 15,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Row(
+                              children: [
+                                defaultText(
+                                  text: "Calories: ",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                defaultText(
+                                  text: "${meal.mealCalories} Kcal",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                        color: Color(0xFFC58940),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 10.w,
+                    child: defaultText(
+                        text: time,
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    ),
+          ),
   );
 }
