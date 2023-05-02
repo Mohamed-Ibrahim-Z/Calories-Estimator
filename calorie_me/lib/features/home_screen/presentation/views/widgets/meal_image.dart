@@ -3,12 +3,12 @@ import 'package:calorie_me/features/image_details/data/models/meal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-Widget mealImage({required MealModel meal}) => ClipRRect(
+Widget mealImage({required String mealImageUrl}) => ClipRRect(
       borderRadius: BorderRadius.circular(50),
       child: CachedNetworkImage(
         fadeInCurve: Curves.easeIn,
         fadeOutCurve: Curves.easeOut,
-        imageUrl: meal.imageUrl,
+        imageUrl: mealImageUrl,
         fit: BoxFit.cover,
         height: 20.w,
         width: 20.w,

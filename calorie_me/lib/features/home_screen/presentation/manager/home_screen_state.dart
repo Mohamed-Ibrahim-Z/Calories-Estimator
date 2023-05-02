@@ -19,3 +19,5 @@ class UndoDeleteMealErrorState extends HomeScreenStates {}
 class ChangeSelectedDateLoadingState extends HomeScreenStates {}
 class ChangeSelectedDateSuccessState extends HomeScreenStates {}
 class ChangeSelectedDateErrorState extends HomeScreenStates {}
+class OnCategorySelectState extends HomeScreenStates {}
+class ChangeCategoryOpacityState extends HomeScreenStates {}

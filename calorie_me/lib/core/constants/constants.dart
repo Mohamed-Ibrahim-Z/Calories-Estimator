@@ -26,7 +26,6 @@ String defaultFemaleProfilePhoto =
 dynamic isGoogleAccount = false;
 dynamic loggedUserID = '';
 const baseUrl = 'http://calorieme.francecentral.cloudapp.azure.com:5000';
-// const baseUrl = 'http://192.168.1.10:5000';
 dynamic caloriesConsumed = 0;
 dynamic caloriesRemaining = 0;
 bool newVersion = false;
@@ -36,10 +35,6 @@ List<String> loginTextFormFieldsLabels = [
   "Email",
   "Password",
 ];
-// List<IconData> loginTextFormFieldsIcons = [
-//   Icons.email_outlined,
-//   Icons.lock_outline,
-// ];
 List<IconData> registerTextFormFieldsIcons = [
   Icons.person_outline,
   Icons.email_outlined,
@@ -53,6 +48,16 @@ List<IconData> profileInfoIcons = [
   Icons.height_outlined,
   Icons.calendar_month,
   Icons.person_add,
+];
+List<String> mealsCategories = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+];
+List<String> mealsCategoriesImages = [
+  "https://media.istockphoto.com/id/533645537/photo/breakfast-with-bacon-eggs-pancakes-and-toast.jpg?s=612x612&w=0&k=20&c=TumrEwImmLi4TIVeirgynvTpHhyvt9LeiDXLci45NWg=",
+  "https://s3-ap-south-1.amazonaws.com/betterbutterbucket-silver/chitra-sendhil1453210035569e39b33b9db.jpeg",
+  "https://c.ndtvimg.com/2022-03/jcliv9dg_shahi-paneer_625x300_15_March_22.jpg?im=FaceCrop,algorithm=dnn,width=620,height=350"
 ];
 
 extension EmptyPadding on num {

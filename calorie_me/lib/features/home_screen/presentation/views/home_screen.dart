@@ -4,7 +4,7 @@ import 'package:calorie_me/features/edit_profile/presentation/manager/profile_cu
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/header.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/horizontal_calendar.dart';
-import 'package:calorie_me/features/home_screen/presentation/views/widgets/meals_container.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/meal_container.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/middle_bar.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/painter.dart';
 import 'package:calorie_me/features/home_screen/presentation/views/widgets/undo_meal_snack_bar.dart';
@@ -55,77 +55,70 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 var currentUser = homeScreenCubit.userLogged;
 
                 return SingleChildScrollView(
-                  child: Container(
-                    height:
-                        homeScreenCubit.mealsList.length <= 2 ? 100.h : null,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CustomPaint(
-                          painter: Painter(),
-                          child: Column(
-                            children: [
-                              header(
-                                  context: context,
-                                  currentUser: currentUser!,
-                                  profileCubit: ProfileCubit.get(context)),
-                              SizedBox(
-                                height: 3.h,
-                              ),
-                              middleBar(
-                                  context: context, currentUser: currentUser),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Builder(builder: (context) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (!isScreenBuilt) {
-                              scrollToRight();
-                            }
-                          });
-                          return horizontalCalendar(
-                              homeScreenCubit: homeScreenCubit,
-                              calendarScrollController:
-                                  calendarScrollController);
-                        }),
-                        SizedBox(
-                          height: 3.h,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.only(left: 4.w),
-                              child: defaultText(
-                                  text: 'Daily Meals',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        fontSize: 20.sp,
-                                      ))),
-                        ),
-                        1.ph,
-                        state is ChangeSelectedDateLoadingState
-                            ? defaultProgressIndicator(
-                                boxFit: BoxFit.cover,
-                                width: 47.w,
-                                height: 15.h,
-                              )
-                            : mealsContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomPaint(
+                        painter: Painter(),
+                        child: Column(
+                          children: [
+                            header(
                                 context: context,
-                                homeScreenCubit: homeScreenCubit,
-                                screenState: state,
-                                cameraState: cameraState,
-                                listController: listController!,
-                                evenItemOfListAnimation:
-                                    evenItemOfListAnimation!,
-                                oddItemOfListAnimation:
-                                    oddItemOfListAnimation!),
-                      ],
-                    ),
+                                currentUser: currentUser!,
+                                profileCubit: ProfileCubit.get(context)),
+                            SizedBox(
+                              height: 3.h,
+                            ),
+                            middleBar(
+                                context: context, currentUser: currentUser),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Builder(builder: (context) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!isScreenBuilt) {
+                            scrollToRight();
+                          }
+                        });
+                        return horizontalCalendar(
+                            homeScreenCubit: homeScreenCubit,
+                            calendarScrollController: calendarScrollController);
+                      }),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 4.w),
+                            child: defaultText(
+                                text: 'Daily Meals',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      fontSize: 20.sp,
+                                    ))),
+                      ),
+                      1.ph,
+                      state is ChangeSelectedDateLoadingState
+                          ? defaultProgressIndicator(
+                              boxFit: BoxFit.cover,
+                              width: 47.w,
+                              height: 15.h,
+                            )
+                          : mealContainer(
+                              context: context,
+                              homeScreenCubit: homeScreenCubit,
+                              screenState: state,
+                              cameraState: cameraState,
+                              listController: listController!,
+                              evenItem: evenItemOfListAnimation!,
+                              oddItem: oddItemOfListAnimation!),
+                    ],
                   ),
                 );
               },
