@@ -68,10 +68,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 context: context,
                                 currentUser: currentUser!,
                                 profileCubit: ProfileCubit.get(context)),
-                            3.ph,
+                            1.ph,
                             middleBar(
                                 context: context, currentUser: currentUser),
-
                           ],
                         ),
                       ),

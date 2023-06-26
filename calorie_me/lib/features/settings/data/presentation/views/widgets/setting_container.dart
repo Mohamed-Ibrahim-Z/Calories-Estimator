@@ -22,7 +22,7 @@ Widget settingsContainer(
         height: 8.h,
         decoration: BoxDecoration(
           color: defaultColor,
-          borderRadius: BorderRadius.circular(23),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
           ],
@@ -65,7 +65,7 @@ Widget appearanceContainer(AppThemeCubit cubit, context) {
       height: 8.h,
       decoration: BoxDecoration(
         color: defaultColor,
-        borderRadius: BorderRadius.circular(23),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
         ],

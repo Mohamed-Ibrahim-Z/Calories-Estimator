@@ -12,6 +12,7 @@ Widget customPercentIndicator(context, UserModel currentUser) {
   return Padding(
     padding: EdgeInsets.only(
       right: 2.w,
+      top: 2.h,
     ),
     child: CircularPercentIndicator(
         backgroundColor: Color(0xFFFAF8F1),

@@ -91,6 +91,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       bmr: 0,
     );
     calculateBMR(userModel: userModel);
+    calculateUserGoals();
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
@@ -103,7 +104,11 @@ class RegisterCubit extends Cubit<RegisterStates> {
     });
   }
 
-
+  void calculateUserGoals() {
+    userModel!.proteinGoal = (userModel!.bmr! * 0.4) / 4;
+    userModel!.carbsGoal = (userModel!.bmr! * 0.4) / 4;
+    userModel!.fatsGoal = (userModel!.bmr! * 0.2) / 9;
+  }
   void clearGender() {
     gender = '';
   }

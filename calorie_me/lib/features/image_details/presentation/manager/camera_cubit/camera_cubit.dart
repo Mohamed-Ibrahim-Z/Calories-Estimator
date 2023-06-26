@@ -181,8 +181,8 @@ class CameraCubit extends Cubit<CameraStates> {
           totalMealCalories += value;
         }
       });
-      tableRows.add(
-          tableRow(ingredient: "Total Calories", calories: '${totalMealCalories} kcal'));
+      tableRows.add(tableRow(
+          ingredient: "Total Calories", calories: '${totalMealCalories} kcal'));
       // Add total macros
       tableRows.add(tableRow(
           ingredient: "Total Protein",
