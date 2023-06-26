@@ -36,6 +36,9 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   List<MealModel> snacksMeals = [];
   List<String> mealsIds = [];
   List<dynamic> categoryCaloriesConsumed = [0, 0, 0, 0];
+  List<dynamic> categoryProteinConsumed = [0, 0, 0, 0];
+  List<dynamic> categoryCarbsConsumed = [0, 0, 0, 0];
+  List<dynamic> categoryFatsConsumed = [0, 0, 0, 0];
   var subscription;
 
   Future<void> getMealsList({int? day}) async {
@@ -115,7 +118,11 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
                 MealModel.fromFireStore(element.doc.data()!, element.doc.id));
             meals.add(mealsList.last);
             updateCaloriesConsumed(
-                mealsList: mealsList, calories: meals.last.mealCalories);
+                mealsList: mealsList,
+                calories: meals.last.mealCalories,
+                protein: meals.last.ingredients['total_protein'],
+                carbs: meals.last.ingredients['total_carb'],
+                fat: meals.last.ingredients['total_fat']);
           }
           // Undo meal
           else {
@@ -124,7 +131,11 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
             meals.insert(mealIndex, mealsList.elementAt(mealIndex));
             updateCaloriesConsumed(
                 mealsList: mealsList,
-                calories: meals.elementAt(mealIndex).mealCalories);
+                calories: meals.elementAt(mealIndex).mealCalories,
+                protein:
+                    meals.elementAt(mealIndex).ingredients['total_protein'],
+                carbs: meals.elementAt(mealIndex).ingredients['total_carb'],
+                fat: meals.elementAt(mealIndex).ingredients['total_fat']);
           }
           mealsIds.add(element.doc.id);
         }
@@ -134,16 +145,39 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   }
 
   void updateCaloriesConsumed(
-      {required List<MealModel> mealsList, required int calories}) {
+      {required List<MealModel> mealsList,
+      required int calories,
+      required double protein,
+      required double carbs,
+      required double fat}) {
     caloriesConsumed += calories;
+    proteinConsumed += protein;
+    carbConsumed += carbs;
+    fatsConsumed += fat;
     if (mealsList == breakFastMeals) {
       categoryCaloriesConsumed[0] += calories;
+      categoryProteinConsumed[0] += protein;
+      categoryCarbsConsumed[0] += carbs;
+      categoryFatsConsumed[0] += fat;
     } else if (mealsList == lunchMeals) {
+      print(calories);
+      print(protein);
+      print(carbs);
+      print(fat);
       categoryCaloriesConsumed[1] += calories;
+      categoryProteinConsumed[1] += protein;
+      categoryCarbsConsumed[1] += carbs;
+      categoryFatsConsumed[1] += fat;
     } else if (mealsList == dinnerMeals) {
       categoryCaloriesConsumed[2] += calories;
+      categoryProteinConsumed[2] += protein;
+      categoryCarbsConsumed[2] += carbs;
+      categoryFatsConsumed[2] += fat;
     } else {
       categoryCaloriesConsumed[3] += calories;
+      categoryProteinConsumed[3] += protein;
+      categoryCarbsConsumed[3] += carbs;
+      categoryFatsConsumed[3] += fat;
     }
   }
 
@@ -152,21 +186,36 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
   void deleteMeal({required int index, required MealModel meal}) {
     if (selectedCategoryIndex == 0) {
       categoryCaloriesConsumed[0] -= meal.mealCalories;
+      categoryCarbsConsumed[0] -= meal.ingredients['total_carb'];
+      categoryProteinConsumed[0] -= meal.ingredients['total_protein'];
+      categoryFatsConsumed[0] -= meal.ingredients['total_fat'];
       breakFastMeals.removeAt(index);
     } else if (selectedCategoryIndex == 1) {
       categoryCaloriesConsumed[1] -= meal.mealCalories;
+      categoryCarbsConsumed[1] -= meal.ingredients['total_carb'];
+      categoryProteinConsumed[1] -= meal.ingredients['total_protein'];
+      categoryFatsConsumed[1] -= meal.ingredients['total_fat'];
       lunchMeals.removeAt(index);
     } else if (selectedCategoryIndex == 2) {
       categoryCaloriesConsumed[2] -= meal.mealCalories;
+      categoryCarbsConsumed[2] -= meal.ingredients['total_carb'];
+      categoryProteinConsumed[2] -= meal.ingredients['total_protein'];
+      categoryFatsConsumed[2] -= meal.ingredients['total_fat'];
       dinnerMeals.removeAt(index);
     } else {
       categoryCaloriesConsumed[3] -= meal.mealCalories;
+      categoryCarbsConsumed[3] -= meal.ingredients['total_carb'];
+      categoryProteinConsumed[3] -= meal.ingredients['total_protein'];
+      categoryFatsConsumed[3] -= meal.ingredients['total_fat'];
       snacksMeals.removeAt(index);
     }
     meals.removeAt(index);
     mealsIds.removeAt(index);
     deletedMeal = meal;
     caloriesConsumed -= meal.mealCalories;
+    proteinConsumed -= meal.ingredients['total_protein'];
+    carbConsumed -= meal.ingredients['total_carb'];
+    fatsConsumed -= meal.ingredients['total_fat'];
     mealIndex = index;
     emit(DeleteMealLoadingState());
 
@@ -208,10 +257,16 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     mealsIds.clear();
     userLogged = null;
     caloriesConsumed = 0;
+    proteinConsumed = 0;
+    carbConsumed = 0;
+    fatsConsumed = 0;
     mealIndex = -1;
     selectedCategoryIndex = 0;
     isCategorySelected = false;
     categoryCaloriesConsumed = [0, 0, 0, 0];
+    categoryProteinConsumed = [0, 0, 0, 0];
+    categoryCarbsConsumed = [0, 0, 0, 0];
+    categoryFatsConsumed = [0, 0, 0, 0];
   }
 
   String getTimeDifference({required String dateTime}) {
@@ -262,7 +317,13 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     meals.clear();
     mealsIds.clear();
     categoryCaloriesConsumed = [0, 0, 0, 0];
+    categoryProteinConsumed = [0, 0, 0, 0];
+    categoryCarbsConsumed = [0, 0, 0, 0];
+    categoryFatsConsumed = [0, 0, 0, 0];
     caloriesConsumed = 0;
+    proteinConsumed = 0;
+    carbConsumed = 0;
+    fatsConsumed = 0;
     categoryOpacity = 1;
     isCategorySelected = false;
     if (subscription != null) {

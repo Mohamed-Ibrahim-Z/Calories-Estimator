@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 
 import '../constants/constants.dart';
+import 'dart:io';
 
 class DioHelper {
   static Dio? dio;
@@ -13,6 +15,18 @@ class DioHelper {
       },
       receiveDataWhenStatusError: true,
     ));
+
+    final httpClient = HttpClient();
+    httpClient.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+
+    (dio?.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client = httpClient;
+      client.connectionTimeout = const Duration(seconds: 60);
+      client.idleTimeout = const Duration(seconds: 60);
+      return client;
+    };
   }
 
   static Future<Response> getData({
@@ -26,6 +40,6 @@ class DioHelper {
     required FormData data,
     required CancelToken cancelToken,
   }) async {
-    return await dio!.post(endPoint, data: data,cancelToken: cancelToken);
+    return await dio!.post(endPoint, data: data, cancelToken: cancelToken);
   }
 }

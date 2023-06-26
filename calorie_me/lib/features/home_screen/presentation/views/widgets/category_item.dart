@@ -39,50 +39,94 @@ Widget categoryItem({
           padding:
               EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
           child: Stack(
-            alignment: Alignment.topRight,
+            alignment: Alignment.bottomRight,
             children: [
               Row(
                 children: [
                   mealImage(mealImageUrl: mealsCategoriesImages[index]),
                   3.pw,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 50.w,
-                          child: defaultText(
-                            text: mealsCategories[index],
-                            maxLines: 15,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 50.w,
+                        child: defaultText(
+                          text: mealsCategories[index],
+                          maxLines: 15,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                      1.ph,
+                      Row(
+                        children: [
+                          defaultText(
+                            text: "Protein: ",
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
+                          1.pw,
+                          defaultText(
+                            text:
+                                "${double.parse(homeScreenCubit.categoryProteinConsumed[index].toStringAsFixed(1))} g",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          defaultText(
+                            text: "Carbs: ",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          1.pw,
+                          defaultText(
+                            text:
+                                "${double.parse(homeScreenCubit.categoryCarbsConsumed[index].toStringAsFixed(1))} g",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          defaultText(
+                            text: "Fats: ",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          1.pw,
+                          defaultText(
+                            text:
+                                "${double.parse(homeScreenCubit.categoryFatsConsumed[index].toStringAsFixed(1))} g",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  defaultText(
+                    text: homeScreenCubit.categoryCaloriesConsumed[index]
+                        .toString(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Color(0xFFC58940),
                         ),
-                        SizedBox(
-                          height: 1.h,
+                  ),
+                  defaultText(
+                    text: "Kcal",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Color(0xFFC58940),
                         ),
-                        Row(
-                          children: [
-                            defaultText(
-                              text: "Calories: ",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            1.pw,
-                            defaultText(
-                              text: homeScreenCubit
-                                      .categoryCaloriesConsumed[index]
-                                      .toString() +
-                                  " cal",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: Color(0xFFC58940),
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -92,164 +136,4 @@ Widget categoryItem({
       ),
     ),
   );
-  //   DateTime.parse(meal.dateTime).day == homeScreenCubit.days.last.day
-  //     ? Dismissible(
-  //         key: Key(meal.mealID),
-  //         behavior: HitTestBehavior.deferToChild,
-  //         onDismissed: (direction) {
-  //           homeScreenCubit.deleteMeal(index: index);
-  //         },
-  //         child: Container(
-  //           decoration: BoxDecoration(
-  //             color: Theme.of(context).scaffoldBackgroundColor,
-  //             borderRadius: BorderRadius.circular(20),
-  //             boxShadow: [
-  //               BoxShadow(
-  //                 color: Colors.black.withOpacity(0.6),
-  //                 spreadRadius: 1,
-  //                 blurRadius: 1,
-  //                 offset: Offset(0, 1),
-  //               ),
-  //             ],
-  //           ),
-  //           child: Padding(
-  //             padding:
-  //                 EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
-  //             child: Stack(
-  //               alignment: Alignment.topRight,
-  //               children: [
-  //                 Row(
-  //                   children: [
-  //                     mealImage(meal: meal),
-  //                     SizedBox(
-  //                       width: 3.w,
-  //                     ),
-  //                     Expanded(
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           SizedBox(
-  //                             width: 50.w,
-  //                             child: defaultText(
-  //                               text:
-  //                                   meal.ingredients.keys.join(', ').toString(),
-  //                               maxLines: 15,
-  //                               style: Theme.of(context).textTheme.bodyMedium,
-  //                             ),
-  //                           ),
-  //                           SizedBox(
-  //                             height: 1.h,
-  //                           ),
-  //                           Row(
-  //                             children: [
-  //                               defaultText(
-  //                                 text: "Calories: ",
-  //                                 style: Theme.of(context).textTheme.bodySmall,
-  //                               ),
-  //                               SizedBox(
-  //                                 width: 1.w,
-  //                               ),
-  //                               defaultText(
-  //                                 text: "${meal.mealCalories} Kcal",
-  //                                 style: Theme.of(context)
-  //                                     .textTheme
-  //                                     .bodySmall!
-  //                                     .copyWith(
-  //                                       color: Color(0xFFC58940),
-  //                                     ),
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Container(
-  //                   width: 10.w,
-  //                   child: defaultText(
-  //                       text: time,
-  //                       style: Theme.of(context).textTheme.bodySmall),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       )
-  //     : Container(
-  //   decoration: BoxDecoration(
-  //     color: Theme.of(context).scaffoldBackgroundColor,
-  //     borderRadius: BorderRadius.circular(20),
-  //     boxShadow: [
-  //       BoxShadow(
-  //         color: Colors.black.withOpacity(0.6),
-  //         spreadRadius: 1,
-  //         blurRadius: 1,
-  //         offset: Offset(0, 1),
-  //       ),
-  //     ],
-  //   ),
-  //   child: Padding(
-  //     padding:
-  //     EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
-  //     child: Stack(
-  //       alignment: Alignment.topRight,
-  //       children: [
-  //         Row(
-  //           children: [
-  //             mealImage(meal: meal),
-  //             SizedBox(
-  //               width: 3.w,
-  //             ),
-  //             Expanded(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   SizedBox(
-  //                     width: 50.w,
-  //                     child: defaultText(
-  //                       text:
-  //                       meal.ingredients.keys.join(', ').toString(),
-  //                       maxLines: 15,
-  //                       style: Theme.of(context).textTheme.bodyMedium,
-  //                     ),
-  //                   ),
-  //                   SizedBox(
-  //                     height: 1.h,
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       defaultText(
-  //                         text: "Calories: ",
-  //                         style: Theme.of(context).textTheme.bodySmall,
-  //                       ),
-  //                       SizedBox(
-  //                         width: 1.w,
-  //                       ),
-  //                       defaultText(
-  //                         text: "${meal.mealCalories} Kcal",
-  //                         style: Theme.of(context)
-  //                             .textTheme
-  //                             .bodySmall!
-  //                             .copyWith(
-  //                           color: Color(0xFFC58940),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         Container(
-  //           width: 10.w,
-  //           child: defaultText(
-  //               text: time,
-  //               style: Theme.of(context).textTheme.bodySmall),
-  //         ),
-  //       ],
-  //     ),
-  //   ),
-  // );
 }

@@ -13,13 +13,25 @@ class MealModel {
   MealModel.fromJson(Map<String, dynamic> json) {
     ingredients = json;
     ingredients.forEach((key, value) {
-      mealCalories += value;
+      if (!key.toLowerCase().contains("total")) mealCalories += value;
     });
+    ingredients['total_carb'] =
+        double.parse(ingredients['total_carb'].toStringAsFixed(1));
+    ingredients['total_fat'] =
+        double.parse(ingredients['total_fat'].toStringAsFixed(1));
+    ingredients['total_protein'] =
+        double.parse(ingredients['total_protein'].toStringAsFixed(1));
     dateTime = DateTime.now().toIso8601String();
   }
 
-  MealModel.fromFireStore(Map<String, dynamic> map,String mealId) {
+  MealModel.fromFireStore(Map<String, dynamic> map, String mealId) {
     ingredients = map['ingredients'];
+    ingredients['total_carb'] =
+        double.parse(ingredients['total_carb'].toStringAsFixed(1));
+    ingredients['total_fat'] =
+        double.parse(ingredients['total_fat'].toStringAsFixed(1));
+    ingredients['total_protein'] =
+        double.parse(ingredients['total_protein'].toStringAsFixed(1));
     imageUrl = map['imageUrl'];
     dateTime = map['dateTime'];
     mealID = mealId;

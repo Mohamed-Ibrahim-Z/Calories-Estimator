@@ -25,9 +25,12 @@ String defaultFemaleProfilePhoto =
     'https://simg.nicepng.com/png/small/249-2492113_work-profile-user-default-female-suit-comments-default.png';
 dynamic isGoogleAccount = false;
 dynamic loggedUserID = '';
-const baseUrl = 'http://calorieme.francecentral.cloudapp.azure.com:5000';
+const baseUrl = 'https://calorieme.francecentral.cloudapp.azure.com:5000';
 dynamic caloriesConsumed = 0;
 dynamic caloriesRemaining = 0;
+dynamic proteinConsumed = 0;
+dynamic carbConsumed = 0;
+dynamic fatsConsumed = 0;
 int mealIndex = -1;
 BorderRadius defaultBorderRadius = BorderRadius.circular(10);
 List<String> loginTextFormFieldsLabels = [

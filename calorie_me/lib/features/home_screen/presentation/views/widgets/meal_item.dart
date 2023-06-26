@@ -1,5 +1,6 @@
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:calorie_me/features/home_screen/presentation/manager/home_screen_cubit.dart';
+import 'package:calorie_me/features/home_screen/presentation/views/widgets/meal_macros.dart';
 import 'package:calorie_me/features/image_details/data/models/meal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -13,7 +14,10 @@ Widget mealItem(
     required MealModel meal,
     required int index}) {
   String time = homeScreenCubit.getTimeDifference(dateTime: meal.dateTime);
-
+  List<String> ingredients = [];
+  meal.ingredients.forEach((key, value) {
+    if (!key.toLowerCase().contains('total')) ingredients.add(key);
+  });
   return AnimatedOpacity(
     opacity: homeScreenCubit.isCategorySelected ? 1 : 0,
     duration: Duration(milliseconds: 500),
@@ -54,36 +58,15 @@ Widget mealItem(
                               SizedBox(
                                 width: 50.w,
                                 child: defaultText(
-                                  text: meal.ingredients.keys
-                                      .join(', ')
-                                      .toString(),
+                                  text: ingredients.join(', ').toString(),
                                   maxLines: 15,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Row(
-                                children: [
-                                  defaultText(
-                                    text: "Calories: ",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(
-                                    width: 1.w,
-                                  ),
-                                  defaultText(
-                                    text: "${meal.mealCalories} Kcal",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                          color: Color(0xFFC58940),
-                                        ),
-                                  ),
-                                ],
+                              1.ph,
+                              Column(
+                                children:
+                                    mealMacros(context: context, meal: meal),
                               ),
                             ],
                           ),
@@ -91,16 +74,45 @@ Widget mealItem(
                       ],
                     ),
                     Container(
-                      width: 10.w,
-                      child: defaultText(
-                          text: time,
-                          style: Theme.of(context).textTheme.bodySmall),
+                      width: 13.w,
+                      child: Column(
+                        children: [
+                          defaultText(
+                              text: time,
+                              style: Theme.of(context).textTheme.bodySmall),
+                          4.ph,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              defaultText(
+                                text: meal.mealCalories.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                              ),
+                              defaultText(
+                                text: "Kcal",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
           )
+        // Another Day
         : Container(
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
@@ -131,34 +143,15 @@ Widget mealItem(
                             SizedBox(
                               width: 50.w,
                               child: defaultText(
-                                text:
-                                    meal.ingredients.keys.join(', ').toString(),
+                                text: ingredients.join(', ').toString(),
                                 maxLines: 15,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Row(
-                              children: [
-                                defaultText(
-                                  text: "Calories: ",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                SizedBox(
-                                  width: 1.w,
-                                ),
-                                defaultText(
-                                  text: "${meal.mealCalories} Kcal",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        color: Color(0xFFC58940),
-                                      ),
-                                ),
-                              ],
+                            1.ph,
+                            Column(
+                              children:
+                                  mealMacros(context: context, meal: meal),
                             ),
                           ],
                         ),
@@ -166,10 +159,40 @@ Widget mealItem(
                     ],
                   ),
                   Container(
-                    width: 10.w,
-                    child: defaultText(
-                        text: time,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    width: 13.w,
+                    child: Column(
+                      children: [
+                        defaultText(
+                            text: time,
+                            style: Theme.of(context).textTheme.bodySmall),
+                        4.ph,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            defaultText(
+                              text: homeScreenCubit
+                                  .categoryCaloriesConsumed[index]
+                                  .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: Color(0xFFC58940),
+                                  ),
+                            ),
+                            defaultText(
+                              text: "Kcal",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    color: Color(0xFFC58940),
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

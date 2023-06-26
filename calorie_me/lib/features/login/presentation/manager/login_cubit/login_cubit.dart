@@ -143,6 +143,7 @@ class LoginCubit extends Cubit<LoginStates> {
     userModel!.height = height;
     userModel!.gender = gender;
     calculateBMR(userModel: userModel);
+    calculateUserGoals();
     FirebaseFirestore.instance
         .collection('users')
         .doc(userModel!.uId)
@@ -152,6 +153,11 @@ class LoginCubit extends Cubit<LoginStates> {
       CacheHelper.saveData(key: 'token', value: userModel!.uId);
       CacheHelper.saveData(key: 'isGoogleAccount', value: true);
     });
+  }
+  void calculateUserGoals() {
+    userModel!.proteinGoal = (userModel!.bmr! * 0.4) / 4;
+    userModel!.carbsGoal = (userModel!.bmr! * 0.4) / 4;
+    userModel!.fatsGoal = (userModel!.bmr! * 0.2) / 9;
   }
 
   Future<void> signOutFromGmail() async {

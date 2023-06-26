@@ -11,6 +11,9 @@ class UserModel extends Equatable {
   double weight = 0;
   double height = 0;
   double? bmr = 0;
+  double? proteinGoal = 0;
+  double? fatsGoal = 0;
+  double? carbsGoal = 0;
 
   UserModel({
     required this.userName,
@@ -23,6 +26,9 @@ class UserModel extends Equatable {
     this.age,
     this.gender,
     this.bmr = 0,
+    this.proteinGoal = 0,
+    this.fatsGoal = 0,
+    this.carbsGoal = 0,
   });
 
   UserModel.fromFireStore(Map<String, dynamic> map) {
@@ -33,6 +39,9 @@ class UserModel extends Equatable {
     weight = map['weight'];
     height = map['height'];
     bmr = map['bmr'];
+    proteinGoal = map['proteinGoal'];
+    fatsGoal = map['fatsGoal'];
+    carbsGoal = map['carbsGoal'];
     uId = map['uId'];
     gender = map['gender'];
     profilePhoto = map['profilePhoto'];
@@ -46,6 +55,9 @@ class UserModel extends Equatable {
         'weight': weight,
         'height': height,
         'bmr': bmr,
+        'proteinGoal': proteinGoal,
+        'fatsGoal': fatsGoal,
+        'carbsGoal': carbsGoal,
         'uId': uId,
         'password': password,
         'profilePhoto': profilePhoto,

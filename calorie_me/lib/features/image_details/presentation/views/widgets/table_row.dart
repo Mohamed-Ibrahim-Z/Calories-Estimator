@@ -11,7 +11,7 @@ TableRow tableRow({required String ingredient, required dynamic calories}) =>
           child: defaultText(
             text: ingredient,
             textAlign: TextAlign.center,
-            style: ingredient == "Total Calories"
+            style: ingredient.contains("Total")
                 ? TextStyle(
                     fontSize: 17.sp,
                     fontWeight: FontWeight.bold,
@@ -27,9 +27,9 @@ TableRow tableRow({required String ingredient, required dynamic calories}) =>
         padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
         child: Center(
           child: defaultText(
-            text: "$calories",
+            text: ingredient.contains("Total") ? "$calories" : "$calories kcal",
             textAlign: TextAlign.center,
-            style: ingredient == "Total Calories"
+            style: ingredient.contains("Total")
                 ? TextStyle(
                     fontSize: 17.sp,
                     fontWeight: FontWeight.bold,

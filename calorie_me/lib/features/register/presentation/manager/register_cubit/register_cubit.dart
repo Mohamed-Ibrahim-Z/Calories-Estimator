@@ -75,7 +75,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       required String uId,
       required int age,
       required double weight,
-      required double height}) {
+      required double height})async {
     userModel = UserModel(
       userName: userName,
       email: email,
@@ -102,6 +102,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       emit(RegisterCreateUserErrorState());
     });
   }
+
 
   void clearGender() {
     gender = '';

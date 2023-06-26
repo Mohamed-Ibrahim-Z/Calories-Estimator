@@ -7,6 +7,7 @@ import '../../../../../core/constants/constants.dart';
 
 Widget customPercentIndicator(context, UserModel currentUser) {
   caloriesRemaining = currentUser.bmr!.round() - caloriesConsumed;
+
   if (caloriesRemaining < 0) caloriesRemaining = 0;
   return Padding(
     padding: EdgeInsets.only(

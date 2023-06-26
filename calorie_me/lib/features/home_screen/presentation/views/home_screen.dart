@@ -11,6 +11,7 @@ import 'package:calorie_me/features/home_screen/presentation/views/widgets/undo_
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../image_details/presentation/manager/camera_cubit/camera_cubit.dart';
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             3.ph,
                             middleBar(
                                 context: context, currentUser: currentUser),
+
                           ],
                         ),
                       ),

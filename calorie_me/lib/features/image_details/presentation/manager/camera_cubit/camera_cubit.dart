@@ -122,6 +122,7 @@ class CameraCubit extends Cubit<CameraStates> {
             errorMessage = "Image is not clear enough";
           } else {
             errorMessage = value.data['error'].toString();
+            print(errorMessage);
           }
           emit(PredictImageErrorState());
         } else {
@@ -175,11 +176,23 @@ class CameraCubit extends Cubit<CameraStates> {
     if (tableRows.isEmpty) {
       totalMealCalories = 0;
       mealModel.ingredients.forEach((key, value) {
-        tableRows.add(tableRow(ingredient: key, calories: value));
-        totalMealCalories += value;
+        if (!key.toLowerCase().contains("total")) {
+          tableRows.add(tableRow(ingredient: key, calories: value));
+          totalMealCalories += value;
+        }
       });
       tableRows.add(
-          tableRow(ingredient: "Total Calories", calories: totalMealCalories));
+          tableRow(ingredient: "Total Calories", calories: '${totalMealCalories} kcal'));
+      // Add total macros
+      tableRows.add(tableRow(
+          ingredient: "Total Protein",
+          calories: '${mealModel.ingredients['total_protein']} g'));
+      tableRows.add(tableRow(
+          ingredient: "Total Carbs",
+          calories: '${mealModel.ingredients['total_carb']} g'));
+      tableRows.add(tableRow(
+          ingredient: "Total Fat",
+          calories: '${mealModel.ingredients['total_fat']} g'));
     }
     emit(FillTableSuccessState());
   }

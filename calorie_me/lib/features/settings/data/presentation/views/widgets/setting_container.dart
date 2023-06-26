@@ -21,7 +21,7 @@ Widget settingsContainer(
         padding: EdgeInsets.symmetric(horizontal: 4.w),
         height: 8.h,
         decoration: BoxDecoration(
-          color: Color(0xFFE5BA73),
+          color: defaultColor,
           borderRadius: BorderRadius.circular(23),
           boxShadow: [
             BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
@@ -31,11 +31,11 @@ Widget settingsContainer(
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: Theme.of(context).cardColor,
+              backgroundColor: Colors.transparent,
               child: Icon(
                 icon,
                 size: 24,
-                color: Theme.of(context).iconTheme.color,
+                color: Colors.black,
               ),
             ),
             SizedBox(width: 3.w),
@@ -64,7 +64,7 @@ Widget appearanceContainer(AppThemeCubit cubit, context) {
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       height: 8.h,
       decoration: BoxDecoration(
-        color: Color(0xFFE5BA73),
+        color: defaultColor,
         borderRadius: BorderRadius.circular(23),
         boxShadow: [
           BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 4)
@@ -74,11 +74,11 @@ Widget appearanceContainer(AppThemeCubit cubit, context) {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor: Colors.transparent,
             child: Icon(
               Icons.dark_mode_outlined,
               size: 24,
-              color: Theme.of(context).iconTheme.color,
+              color: Colors.black,
             ),
           ),
           SizedBox(width: 3.w),

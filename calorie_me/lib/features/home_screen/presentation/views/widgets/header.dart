@@ -28,9 +28,7 @@ Widget header(
                       .textTheme
                       .bodyLarge!
                       .copyWith(color: Colors.black)),
-              SizedBox(
-                height: .5.h,
-              ),
+              .5.ph,
               defaultText(
                   text: "Hello, ${currentUser.userName!}",
                   style: Theme.of(context)
