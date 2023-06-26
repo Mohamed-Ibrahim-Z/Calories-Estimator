@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:calorie_me/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -9,11 +11,15 @@ Widget macro({
   required BuildContext context,
   required String macroName,
   required dynamic macroValue,
-  required double goal,
+  required dynamic goal,
   required Color indicatorColor,
 }) {
-  print("macroValue: $macroValue");
-  print("goal: $goal");
+  // print(macroName);
+  // print(macroValue);
+  // print(goal);
+
+  print(((macroValue / goal).clamp(0, 1)).runtimeType);
+
   return Column(
     children: [
       Row(
@@ -36,7 +42,7 @@ Widget macro({
       customLinearPercentIndicator(
         context: context,
         indicatorColor: indicatorColor,
-        percent: (macroValue / goal).clamp(0, 1),
+        percent: ((macroValue / goal).clamp(0, 1)).toDouble(),
       ),
     ],
   );

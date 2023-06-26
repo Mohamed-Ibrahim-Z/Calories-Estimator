@@ -10,23 +10,6 @@ List<Row> mealMacros(
       Row(
         children: [
           defaultText(
-            text: "Protein: ",
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          SizedBox(
-            width: 1.w,
-          ),
-          defaultText(
-            text: "${meal.ingredients['total_protein']} g",
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Color(0xFFC58940),
-                ),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          defaultText(
             text: "Carbs: ",
             style: Theme.of(context).textTheme.bodySmall,
           ),
@@ -52,6 +35,23 @@ List<Row> mealMacros(
           ),
           defaultText(
             text: "${meal.ingredients['total_fat']} g",
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Color(0xFFC58940),
+                ),
+          ),
+        ],
+      ),
+      Row(
+        children: [
+          defaultText(
+            text: "Protein: ",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          SizedBox(
+            width: 1.w,
+          ),
+          defaultText(
+            text: "${meal.ingredients['total_protein']} g",
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Color(0xFFC58940),
                 ),

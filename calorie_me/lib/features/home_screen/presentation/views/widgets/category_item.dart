@@ -60,30 +60,15 @@ Widget categoryItem({
                       Row(
                         children: [
                           defaultText(
-                            text: "Protein: ",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          1.pw,
-                          defaultText(
-                            text:
-                                "${double.parse(homeScreenCubit.categoryProteinConsumed[index].toStringAsFixed(1))} g",
-                            style:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      color: Color(0xFFC58940),
-                                    ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          defaultText(
                             text: "Carbs: ",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           1.pw,
                           defaultText(
-                            text:
-                                "${double.parse(homeScreenCubit.categoryCarbsConsumed[index].toStringAsFixed(1))} g",
+                            text: homeScreenCubit.categoryCarbsConsumed[index] <
+                                    0
+                                ? "0.0 g"
+                                : "${double.parse(homeScreenCubit.categoryCarbsConsumed[index].toStringAsFixed(1))} g",
                             style:
                                 Theme.of(context).textTheme.bodySmall!.copyWith(
                                       color: Color(0xFFC58940),
@@ -99,8 +84,30 @@ Widget categoryItem({
                           ),
                           1.pw,
                           defaultText(
-                            text:
-                                "${double.parse(homeScreenCubit.categoryFatsConsumed[index].toStringAsFixed(1))} g",
+                            text: homeScreenCubit.categoryFatsConsumed[index] <
+                                    0
+                                ? "0.0 g"
+                                : "${double.parse(homeScreenCubit.categoryFatsConsumed[index].toStringAsFixed(1))} g",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Color(0xFFC58940),
+                                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          defaultText(
+                            text: "Protein: ",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          1.pw,
+                          defaultText(
+                            text: homeScreenCubit
+                                        .categoryProteinConsumed[index] <
+                                    0
+                                ? "0.0 g"
+                                : "${double.parse(homeScreenCubit.categoryProteinConsumed[index].toStringAsFixed(1))} g",
                             style:
                                 Theme.of(context).textTheme.bodySmall!.copyWith(
                                       color: Color(0xFFC58940),

@@ -216,6 +216,10 @@ class HomeScreenCubit extends Cubit<HomeScreenStates> {
     proteinConsumed -= meal.ingredients['total_protein'];
     carbConsumed -= meal.ingredients['total_carb'];
     fatsConsumed -= meal.ingredients['total_fat'];
+    if (caloriesConsumed < 0) caloriesConsumed = 0;
+    if (proteinConsumed < 0) proteinConsumed = 0;
+    if (carbConsumed < 0) carbConsumed = 0;
+    if (fatsConsumed < 0) fatsConsumed = 0;
     mealIndex = index;
     emit(DeleteMealLoadingState());
 

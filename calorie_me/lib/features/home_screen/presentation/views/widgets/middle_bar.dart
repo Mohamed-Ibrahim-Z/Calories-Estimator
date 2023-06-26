@@ -25,7 +25,6 @@ Widget middleBar({
             kcalEatenContainer(context: context),
             2.ph,
             macrosIndicator(context: context, currentUser: currentUser),
-
           ],
         ),
         customPercentIndicator(context, currentUser),
