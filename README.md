@@ -93,6 +93,11 @@ The CalorieMe application is divided into three main phases:
 | Rice        | 198                  | 200                | 2    | 1%    |
 | Egg sunny side up        | 90                  | 158                 | 68     | 75%     |
 
+## Screenshots
+
+| Loading Screen | BMR | Server Response | Meals | Daily Report | Daily Meals | Profile Page |
+|----------|----------|----------|----------|----------|----------|----------|
+| ![laodingScreen](README%20PICS/loadingScreen.gif)  | ![BMR](README%20PICS/BMR.jpg)  | ![Response](README%20PICS/Waiting%20for%20response.gif)  | ![Meals](README%20PICS/Meal%20Selection.jpg)  | ![Daily Report](README%20PICS/Report.jpg)  | ![Categories](README%20PICS/Categories.jpg)  | ![Profile](README%20PICS/Profile.jpg)  |
 
 ## Installation
 
@@ -127,9 +132,6 @@ encourage them to do so.
 * Building a Complete Immersive system with weekly reports and goals to help the user enjoy the process.
 
 
-## Time Plan
-
-![Time Plan](README%20PICS/Time%20plan.png)
 
 ## Contributors
 
@@ -147,7 +149,7 @@ encourage them to do so.
 
 ## Contributing
 
-Contributions to the Calories Estimator application are welcome. If you would like to contribute:
+Contributions to the CalorieMe application are welcome. If you would like to contribute:
 1. Fork the repository.
 1. Make your changes.
 1. Submit a pull request, describing the changes you have made.
